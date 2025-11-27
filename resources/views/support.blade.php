@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
-    <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -317,26 +317,26 @@ body::after {
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="/foto/maskotweb.jpeg" alt="🤡"></a>
+                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ ('/images/foto/maskotweb.jpeg') }}" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="beranda.html" target="contentFrame">Home</a>
+                    <a class="nav-link" aria-current="page" href="{{ route ('beranda') }}" target="contentFrame">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="6. upload.html" target="contentFrame">Make a memory</a>
+                    <a class="nav-link" href="{{ route ('upload') }}" target="contentFrame">Make a memory</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="search.html" target="contentFrame">Hall of Shame</a>
+                    <a class="nav-link" href="{{ route ('search') }}" target="contentFrame">Hall of Shame</a>
                     </li>
                      <li class="nav-item">
-                    <a class="nav-link" href="profilepage.html" target="contentFrame">Profile</a>
+                    <a class="nav-link" href="{{ route ('profile') }}" target="contentFrame">Profile</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link  active" href="support.html" target="contentFrame">Support Us</a>
+                    <a class="nav-link  active" href="{{ route ('support') }}" target="contentFrame">Support Us</a>
                     </li>
                 </ul>
                 </div>
