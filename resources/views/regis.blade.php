@@ -362,7 +362,6 @@
         <div class="register-body">
             <div id="alertContainer"></div>
             
-            <!-- Step Indicator -->
             <div class="step-indicator">
                 <div class="step active" id="step1">1</div>
                 <div class="step" id="step2">2</div>
@@ -370,7 +369,6 @@
             </div>
             
             <form id="registerForm">
-                <!-- Step 1: Informasi Pribadi -->
                 <div class="form-step active" id="step1Form">
                     <h5 class="mb-4" style="color: var(--primary);">Informasi Pribadi</h5>
                     
@@ -412,7 +410,6 @@
                     </div>
                 </div>
                 
-                <!-- Step 2: Informasi Akun -->
                 <div class="form-step" id="step2Form">
                     <h5 class="mb-4" style="color: var(--primary);">Informasi Akun</h5>
                     
@@ -462,7 +459,6 @@
                     </div>
                 </div>
                 
-                <!-- Step 3: Persetujuan -->
                 <div class="form-step" id="step3Form">
                     <h5 class="mb-4" style="color: var(--primary);">Persetujuan</h5>
                     
@@ -522,18 +518,15 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Elemen DOM
             const registerForm = document.getElementById('registerForm');
             const steps = document.querySelectorAll('.step');
             const formSteps = document.querySelectorAll('.form-step');
             let currentStep = 0;
             
-            // Input fields
             const firstNameInput = document.getElementById('firstName');
             const lastNameInput = document.getElementById('lastName');
             const emailInput = document.getElementById('email');
@@ -544,7 +537,6 @@
             const termsAgreement = document.getElementById('termsAgreement');
             const privacyAgreement = document.getElementById('privacyAgreement');
             
-            // Buttons
             const nextToStep2Btn = document.getElementById('nextToStep2');
             const nextToStep3Btn = document.getElementById('nextToStep3');
             const prevToStep1Btn = document.getElementById('prevToStep1');
@@ -555,15 +547,12 @@
             const alertContainer = document.getElementById('alertContainer');
             const loginLink = document.getElementById('loginLink');
             
-            // Password toggles
             const passwordToggle = document.getElementById('passwordToggle');
             const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
             
-            // Password strength
             const passwordStrengthBar = document.getElementById('passwordStrengthBar');
             const passwordStrengthText = document.getElementById('passwordStrengthText');
             
-            // Navigasi step
             nextToStep2Btn.addEventListener('click', function() {
                 if (validateStep1()) {
                     goToStep(1);
@@ -584,7 +573,6 @@
                 goToStep(1);
             });
             
-            // Toggle visibilitas password
             passwordToggle.addEventListener('click', function() {
                 togglePasswordVisibility(passwordInput, this);
             });
@@ -593,12 +581,10 @@
                 togglePasswordVisibility(confirmPasswordInput, this);
             });
             
-            // Validasi real-time untuk password strength
             passwordInput.addEventListener('input', function() {
                 checkPasswordStrength(this.value);
             });
             
-            // Submit form
             registerForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -607,17 +593,13 @@
                 }
             });
             
-            // Fungsi navigasi step
             function goToStep(step) {
-                // Sembunyikan step aktif
                 formSteps[currentStep].classList.remove('active');
                 steps[currentStep].classList.remove('active');
                 
-                // Tampilkan step baru
                 formSteps[step].classList.add('active');
                 steps[step].classList.add('active');
                 
-                // Tandai step sebelumnya sebagai completed
                 if (step > currentStep) {
                     for (let i = 0; i < step; i++) {
                         steps[i].classList.add('completed');
@@ -631,12 +613,10 @@
                 currentStep = step;
             }
             
-            // Fungsi toggle password visibility
             function togglePasswordVisibility(input, toggleBtn) {
                 const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
                 input.setAttribute('type', type);
                 
-                // Ganti ikon
                 const icon = toggleBtn.querySelector('i');
                 if (type === 'password') {
                     icon.classList.remove('bi-eye-slash');
@@ -647,31 +627,26 @@
                 }
             }
             
-            // Fungsi validasi step 1
             function validateStep1() {
                 let isValid = true;
                 resetValidation();
                 
-                // Validasi nama depan
                 if (firstNameInput.value.trim() === '') {
                     showError(firstNameInput, 'firstNameError', 'Nama depan harus diisi.');
                     isValid = false;
                 }
                 
-                // Validasi nama belakang
                 if (lastNameInput.value.trim() === '') {
                     showError(lastNameInput, 'lastNameError', 'Nama belakang harus diisi.');
                     isValid = false;
                 }
                 
-                // Validasi email
                 const email = emailInput.value.trim();
                 if (!isValidEmail(email)) {
                     showError(emailInput, 'emailError', 'Harap masukkan alamat email yang valid.');
                     isValid = false;
                 }
                 
-                // Validasi telepon
                 const phone = phoneInput.value.trim();
                 if (!isValidPhone(phone)) {
                     showError(phoneInput, 'phoneError', 'Harap masukkan nomor telepon yang valid.');
@@ -681,26 +656,22 @@
                 return isValid;
             }
             
-            // Fungsi validasi step 2
             function validateStep2() {
                 let isValid = true;
                 resetValidation();
                 
-                // Validasi username
                 const username = usernameInput.value.trim();
                 if (!isValidUsername(username)) {
                     showError(usernameInput, 'usernameError', 'Username harus 3-20 karakter dan hanya boleh mengandung huruf, angka, dan underscore.');
                     isValid = false;
                 }
                 
-                // Validasi password
                 const password = passwordInput.value;
                 if (!isValidPassword(password)) {
                     showError(passwordInput, 'passwordError', 'Kata sandi harus minimal 8 karakter dan mengandung huruf besar, huruf kecil, dan angka.');
                     isValid = false;
                 }
                 
-                // Validasi konfirmasi password
                 if (password !== confirmPasswordInput.value) {
                     showError(confirmPasswordInput, 'confirmPasswordError', 'Konfirmasi kata sandi tidak cocok.');
                     isValid = false;
@@ -709,18 +680,15 @@
                 return isValid;
             }
             
-            // Fungsi validasi step 3
             function validateStep3() {
                 let isValid = true;
                 resetValidation();
                 
-                // Validasi persetujuan syarat dan ketentuan
                 if (!termsAgreement.checked) {
                     showError(termsAgreement, 'termsError', 'Anda harus menyetujui syarat dan ketentuan.');
                     isValid = false;
                 }
                 
-                // Validasi persetujuan kebijakan privasi
                 if (!privacyAgreement.checked) {
                     showError(privacyAgreement, 'privacyError', 'Anda harus menyetujui kebijakan privasi.');
                     isValid = false;
@@ -729,7 +697,6 @@
                 return isValid;
             }
             
-            // Fungsi reset validasi
             function resetValidation() {
                 const inputs = document.querySelectorAll('.form-control, .form-check-input');
                 inputs.forEach(input => {
@@ -738,24 +705,20 @@
                 clearAlert();
             }
             
-            // Fungsi menampilkan error
             function showError(input, errorId, message) {
                 input.classList.add('is-invalid');
                 document.getElementById(errorId).textContent = message;
                 
-                // Animasi shake untuk input
                 if (input.classList.contains('form-control')) {
                     input.classList.add('shake');
                     setTimeout(() => input.classList.remove('shake'), 500);
                 }
             }
             
-            // Fungsi membersihkan alert
             function clearAlert() {
                 alertContainer.innerHTML = '';
             }
             
-            // Fungsi menampilkan alert
             function showAlert(message, type) {
                 const alert = document.createElement('div');
                 alert.className = `alert alert-${type} alert-dismissible fade show`;
@@ -768,7 +731,6 @@
                 `;
                 alertContainer.appendChild(alert);
                 
-                // Auto dismiss setelah 5 detik untuk alert success
                 if (type === 'success') {
                     setTimeout(() => {
                         if (alert.parentNode) {
@@ -778,32 +740,26 @@
                 }
             }
             
-            // Fungsi validasi email
             function isValidEmail(email) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return emailRegex.test(email);
             }
             
-            // Fungsi validasi telepon
             function isValidPhone(phone) {
                 const phoneRegex = /^[0-9]{10,13}$/;
                 return phoneRegex.test(phone);
             }
             
-            // Fungsi validasi username
             function isValidUsername(username) {
                 const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
                 return usernameRegex.test(username);
             }
             
-            // Fungsi validasi password
             function isValidPassword(password) {
-                // Minimal 8 karakter, mengandung huruf besar, huruf kecil, dan angka
                 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
                 return passwordRegex.test(password);
             }
             
-            // Fungsi cek kekuatan password
             function checkPasswordStrength(password) {
                 let strength = 0;
                 let text = '';
@@ -855,31 +811,24 @@
                 passwordStrengthText.textContent = `Kekuatan kata sandi: ${text}`;
             }
             
-            // Simulasi proses registrasi
             function simulateRegistration() {
-                // Tampilkan loading state
                 buttonText.classList.add('d-none');
                 buttonSpinner.classList.remove('d-none');
                 registerButton.disabled = true;
                 
-                // Simulasi request API
                 setTimeout(() => {
-                    // Reset loading state
                     buttonText.classList.remove('d-none');
                     buttonSpinner.classList.add('d-none');
                     registerButton.disabled = false;
                     
-                    // Simulasi registrasi berhasil
                     showAlert('Registrasi berhasil! Anda akan dialihkan ke halaman login.', 'success');
                     
-                    // Dalam aplikasi nyata, ini akan mengalihkan ke halaman login
                     setTimeout(() => {
                         window.location.href = 'login.html';
                     }, 3000);
                 }, 2000);
             }
             
-            // Animasi saat halaman dimuat
             const registerContainer = document.querySelector('.register-container');
             registerContainer.style.opacity = '0';
             registerContainer.style.transform = 'translateY(30px)';

@@ -9,19 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* ---------------- VARIABEL WARNA (CUSTOM PROPERTIES) ---------------- */
         :root {
-    --yellow: #FFF6A3;   /* kuning pastel */
-    --greenlight: #C7F9CC; /* hijau muda */
-    --greenmid: #80ED99;   /* hijau sedang */
-    --greenstrong: #38A3A5; /* hijau tua lembut */
+    --yellow: #FFF6A3;   
+    --greenlight: #C7F9CC; 
+    --greenmid: #80ED99;   
+    --greenstrong: #38A3A5; 
 
     --primary: var(--greenstrong);
     --secondary: var(--greenmid);
     --accent: var(--yellow);
 }
 
-        /* ---------------- LAYOUT UMUM ---------------- */
         html {
             height: 100%;
         }
@@ -91,8 +89,6 @@
             background-color: #43B5AD !important;
         }
 
-
-        /* Styles dari kode kedua */
         .judul{
             font-size: clamp(28px, 6vw, 55px);
             font-weight: bold;
@@ -251,7 +247,6 @@
             animation-play-state: paused !important;
         }
 
-        /* ---------------- FORM CONTAINER ---------------- */
         .form-container {
             background: #ffffff;
             border-radius: 20px;
@@ -269,7 +264,6 @@
             margin-bottom: 14px;
         }
 
-        /* ---------------- FIELD DAN LABEL ---------------- */
         label {
             display: block;
             font-weight: 600;
@@ -305,8 +299,7 @@
             border-color: var(--orange);
             box-shadow: 0 0 0 4px rgba(225, 142, 46, 0.3);
         }
-        
-        /* ---------------- UPLOAD BOX ---------------- */
+
         .upload-box {
             display: block;
             width: 100%;
@@ -338,7 +331,6 @@
             margin-top: 5px;
         }
 
-        /* ---------------- BUTTON ---------------- */
         button[type="submit"] {
             width: 100%;
             padding: 14px;
@@ -484,15 +476,13 @@
         const leftCards = document.querySelectorAll('.swipe-left .card');
         const rightCards = document.querySelectorAll('.swipe-right .card');
         
-        //biar kiri berenti
         function pauseLeft() { swipeLeft.style.animationPlayState = 'paused'; }
         function resumeLeft() { swipeLeft.style.animationPlayState = 'running'; }
 
-        //biar kanan berenti
         function pauseRight() { swipeRight.style.animationPlayState = 'paused'; }
         function resumeRight() { swipeRight.style.animationPlayState = 'running'; }
 
-        //hover kiri
+
         leftCards.forEach(card => {
             card.addEventListener('mouseenter', pauseLeft);
             card.addEventListener('mouseleave', resumeLeft);
@@ -500,15 +490,11 @@
             card.addEventListener('touchend', resumeLeft, { passive: true });
             card.addEventListener('touchcancel', resumeLeft, { passive: true });
             
-            // Klik card untuk buka detail
             card.addEventListener('click', function() {
-                // Ganti dengan ID/data postingan yang sesuai
-                window.parent.location.href = 'detail.html?id=1'; // Jika di iframe
-                // atau window.location.href = 'detail.html?id=1'; // Jika tidak di iframe
+                window.parent.location.href = 'detail.html?id=1'; 
             });
         });
 
-        //hover kanan
         rightCards.forEach(card => {
             card.addEventListener('mouseenter', pauseRight);
             card.addEventListener('mouseleave', resumeRight);
@@ -516,19 +502,17 @@
             card.addEventListener('touchend', resumeRight, { passive: true });
             card.addEventListener('touchcancel', resumeRight, { passive: true });
             
-            // Klik card untuk buka detail
             card.addEventListener('click', function() {
                 window.parent.location.href = 'detail.html?id=1';
             });
         });
 
-        // Aktifkan shine effect setelah typewriter selesai
         setTimeout(() => {
             const shineElement = document.querySelector('.shine');
             if (shineElement) {
                 shineElement.style.cursor = 'pointer';
             }
-        }, 1000); // Delay sampai animasi typewriter selesai
+        }, 1000); 
     </script>
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-/* ---------------- VARIABEL WARNA (CUSTOM PROPERTIES) ---------------- */
 :root {
     --yellow: #FFE97A;
     --orange: #E18E2E;
@@ -22,7 +21,6 @@
     --danger: var(--red);
 }
 
-/* ---------------- LAYOUT UMUM ---------------- */
 html {
     height: 100%;
 }
@@ -75,8 +73,6 @@ body::after {
     100% { background-position: 0% 50%; }
 }
 
-
-
 .content {
     flex: 1;
     padding: 20px;
@@ -102,7 +98,6 @@ body::after {
             background-color: #43B5AD !important;
         }
 
-        /* Styles dari kode kedua */
         .judul{
             font-size: clamp(28px, 6vw, 55px);
             font-weight: bold;
@@ -261,7 +256,6 @@ body::after {
             animation-play-state: paused !important;
         }
 
-        /* Styles untuk halaman support */
         .support-container {
             max-width: 800px;
             margin: 0 auto;
@@ -405,32 +399,25 @@ body::after {
 
         const leftCards = document.querySelectorAll('.swipe-left .card');
         const rightCards = document.querySelectorAll('.swipe-right .card');
-        
-        //biar kiri berenti
+ 
         function pauseLeft() { swipeLeft.style.animationPlayState = 'paused'; }
         function resumeLeft() { swipeLeft.style.animationPlayState = 'running'; }
 
-        //biar kanan berenti
         function pauseRight() { swipeRight.style.animationPlayState = 'paused'; }
         function resumeRight() { swipeRight.style.animationPlayState = 'running'; }
 
-        //hover kiri
         leftCards.forEach(card => {
             card.addEventListener('mouseenter', pauseLeft);
             card.addEventListener('mouseleave', resumeLeft);
             card.addEventListener('touchstart', pauseLeft, { passive: true });
             card.addEventListener('touchend', resumeLeft, { passive: true });
             card.addEventListener('touchcancel', resumeLeft, { passive: true });
-            
-            // Klik card untuk buka detail
+          
             card.addEventListener('click', function() {
-                // Ganti dengan ID/data postingan yang sesuai
-                window.parent.location.href = 'detail.html?id=1'; // Jika di iframe
-                // atau window.location.href = 'detail.html?id=1'; // Jika tidak di iframe
+                window.parent.location.href = 'detail.html?id=1'; 
             });
         });
 
-        //hover kanan
         rightCards.forEach(card => {
             card.addEventListener('mouseenter', pauseRight);
             card.addEventListener('mouseleave', resumeRight);
@@ -438,19 +425,17 @@ body::after {
             card.addEventListener('touchend', resumeRight, { passive: true });
             card.addEventListener('touchcancel', resumeRight, { passive: true });
             
-            // Klik card untuk buka detail
             card.addEventListener('click', function() {
                 window.parent.location.href = 'detail.html?id=1';
             });
         });
 
-        // Aktifkan shine effect setelah typewriter selesai
         setTimeout(() => {
             const shineElement = document.querySelector('.shine');
             if (shineElement) {
                 shineElement.style.cursor = 'pointer';
             }
-        }, 1000); // Delay sampai animasi typewriter selesai
+        }, 1000); 
     </script>
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </body>

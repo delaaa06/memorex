@@ -21,7 +21,6 @@
             background-color: transparent;
         }
 
-        /* Background animasi */
         body::before {
             content: "";
             position: fixed;
@@ -51,14 +50,11 @@
             --color-dark-tosca: #279D9F;
             --color-light-yellow: #ffe97a;
 
-            /* gradient variables */
             --yellow: #FFE97A;
             --mint: #43B5AD;
             --teal: #279D9F;
         }
 
-
-        /* =============================== HEADER ================================ */
         #header {
             background-color: #43B5AD !important;
         }
@@ -76,8 +72,6 @@
             border-radius: 10px;
         }
 
-
-        /* =============================== MAIN CONTENT ================================ */
         .main-content {
             flex: 1;
             padding: 20px 0;
@@ -100,7 +94,6 @@
 }
 
 
-        /* =============================== POST CARD ================================ */
         .post-card {
             border: none;
             border-radius: 15px;
@@ -181,8 +174,6 @@
             transform: translateY(-2px);
         }
 
-
-        /* =============================== GRID ================================ */
         .posts-grid {
             display: grid;
             gap: 1.5rem;
@@ -199,8 +190,6 @@
             }
         }
 
-
-        /* =============================== ANIMATION ================================ */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -211,8 +200,6 @@
         .post-card:nth-child(3) { animation-delay: 0.3s; }
         .post-card:nth-child(4) { animation-delay: 0.4s; }
 
-
-        /* =============================== FORM ELEMENTS ================================ */
         .form-container {
             background: rgba(255, 255, 255, 0.25) !important;
             backdrop-filter: blur(10px) !important;
@@ -220,8 +207,6 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
         }
 
-
-        /* =============================== FOOTER ================================ */
         .footer {
             background-color: #43B5AD !important;
             margin-top: auto;
@@ -277,7 +262,6 @@
             <p class="hall-of-shame-subtitle">Lihat konten yang paling banyak dibaca dan disukai oleh pengguna.</p>
 
             <div class="posts-grid">
-                <!-- Postingan 1 -->
                 <div class="post-card bg-white">
                     <img src="https://via.placeholder.com/600x400/E18E2E/FFFFFF?text=Postingan+1" class="post-card-img" alt="Gambar Postingan 1">
                     <div class="post-card-body">
@@ -293,7 +277,6 @@
                     </div>
                 </div>
 
-                <!-- Postingan 2 -->
                 <div class="post-card bg-white">
                     <img src="https://via.placeholder.com/600x400/43B5AD/FFFFFF?text=Postingan+2" class="post-card-img" alt="Gambar Postingan 2">
                     <div class="post-card-body">
@@ -309,7 +292,6 @@
                     </div>
                 </div>
 
-                <!-- Postingan 3 -->
                 <div class="post-card bg-white">
                     <img src="https://via.placeholder.com/600x400/EA4828/FFFFFF?text=Postingan+3" class="post-card-img" alt="Gambar Postingan 3">
                     <div class="post-card-body">
@@ -325,7 +307,6 @@
                     </div>
                 </div>
 
-                <!-- Postingan 4 -->
                 <div class="post-card bg-white">
                     <img src="https://via.placeholder.com/600x400/279D9F/FFFFFF?text=Postingan+4" class="post-card-img" alt="Gambar Postingan 4">
                     <div class="post-card-body">
@@ -378,7 +359,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Menambahkan efek scroll halus untuk link
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -388,7 +368,6 @@
             });
         });
 
-        // Menambahkan kelas aktif pada navigasi
         document.addEventListener('DOMContentLoaded', function() {
             const currentPage = window.location.pathname.split('/').pop();
             const navLinks = document.querySelectorAll('.nav-link');

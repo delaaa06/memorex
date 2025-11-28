@@ -238,9 +238,6 @@
             animation-play-state: paused !important;
         }
 
-        /* ===========================
-           POST CONTAINER
-        =========================== */
         .post-container {
             width: 100%;
             max-width: 700px;
@@ -349,7 +346,7 @@
         </nav>
     </header>
 
-    <!-- Halaman Beranda -->
+
     <main class="content" id="homePage">
         <div class="container py-5">
             <div class="text-center">
@@ -428,7 +425,7 @@
                     <p class="card-text">Jatuh di depan gebetan, padahal lagi pengen kelihatan keren</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
                 </div>
-                <!-- Duplicate for infinite scroll -->
+                
                 <div class="card" data-post-id="1">
                     <p class="card-text">Hari ini aku ketemu mantan di mall, dia lagi sama pacar barunya</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
@@ -492,7 +489,7 @@
                     <p class="card-text">Ngedance sendiri di kamar ternyata curtain kebuka</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
                 </div>
-                <!-- Duplicate for infinite scroll -->
+            
                 <div class="card" data-post-id="11">
                     <p class="card-text">Lagi serius meeting tiba-tiba kucing lewat depan kamera</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
@@ -517,7 +514,7 @@
         </div>
     </main>
 
-    <!-- Halaman Detail -->
+    
     <main class="content detail-page" id="detailPage">
         <div class="post-container">
             <a href="#" class="back-button" id="backButton">
@@ -534,7 +531,7 @@
                 Kategori: Kucing
             </div>
 
-            <!-- Media Post -->
+
             <img src="{{ asset('images/4.jpg') }}" class="post-media" id="postMedia" alt="Media Postingan">
 
             <div class="post-story" id="postStory">
@@ -577,7 +574,7 @@
     </footer>
 
     <script>
-        // Data dummy untuk demo
+        
         const dummyPosts = {
             '1': {
                 title: 'Ketemu Mantan di Mall',
@@ -651,7 +648,7 @@
             }
         };
 
-        // Fungsi untuk menampilkan halaman detail
+        
         function showDetailPage(postId) {
             document.getElementById('homePage').style.display = 'none';
             document.getElementById('detailPage').style.display = 'flex';
@@ -669,13 +666,10 @@
             }
         }
 
-        // Fungsi untuk kembali ke halaman beranda
         function showHomePage() {
             document.getElementById('homePage').style.display = 'block';
             document.getElementById('detailPage').style.display = 'none';
         }
-
-        // Event listeners untuk card
         const swipeLeft = document.querySelector('.swipe-left');
         const swipeRight = document.querySelector('.swipe-right');
 
@@ -714,13 +708,13 @@
             });
         });
 
-        // Event listener untuk tombol kembali
+        
         document.getElementById('backButton').addEventListener('click', function(e) {
             e.preventDefault();
             showHomePage();
         });
 
-        // Event listener untuk link home di navbar
+    
         document.getElementById('homeLink').addEventListener('click', function(e) {
             e.preventDefault();
             showHomePage();

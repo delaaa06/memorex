@@ -44,7 +44,6 @@
             background-color: #43B5AD !important;
         }
 
-        /* Styles dari kode kedua */
         .judul{
             font-size: clamp(28px, 6vw, 55px);
             font-weight: bold;
@@ -203,8 +202,6 @@
             animation-play-state: paused !important;
         }
 
-        /* Styles untuk halaman profil */
-
         :root {
             --yellow: #FFE97A;
             --orange: #E18E2E;
@@ -226,7 +223,6 @@
             overflow-x: hidden;
     }
 
-/* BACKGROUND GRADIENT PASTEL CANDY */
         body::before {
             content: "";
             position: fixed;
@@ -244,7 +240,6 @@
     100% { background-position: 0% 50%; }
 }
 
-/* NOISE OVERLAY (opsional, seperti halaman lain) */
 body::after {
     content: "";
     position: fixed;
@@ -334,7 +329,7 @@ body::after {
         
         .post-card {
     background: transparent;
-    backdrop-filter: none; /* opsional, kalau tidak mau blur */
+    backdrop-filter: none; 
 }
 
 
@@ -567,14 +562,12 @@ body::after {
     </header>
 
     <main class="content container">
-        <!-- Notifikasi XP -->
         <div class="xp-notification" id="xpNotification">
             <i class="fas fa-star me-2"></i>
             <span id="xpNotificationText">+10 XP</span>
         </div>
         
         <div class="container mt-4">
-            <!-- Banner dan Foto Profil -->
             <div class="profile-banner" id="profileBanner">
                 <button class="edit-btn" data-bs-toggle="modal" data-bs-target="#bannerModal">
                     <i class="fas fa-camera"></i> Ubah Banner
@@ -583,8 +576,7 @@ body::after {
                     <img src="https://i.pravatar.cc/120" alt="Foto Profil" id="profileImg">
                 </div>
             </div>
-            
-            <!-- Info Profil -->
+
             <div class="profile-info">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
@@ -608,7 +600,6 @@ body::after {
                             Halo! Saya pengguna baru di platform ini. Saya suka bermain game dan coding.
                         </div>
                         
-                        <!-- Statistik -->
                         <div class="stats-container">
                             <div class="stat-item">
                                 <div class="stat-value" id="postCount">12</div>
@@ -633,13 +624,11 @@ body::after {
                     </button>
                 </div>
             </div>
-            
-            <!-- Tombol Login Harian -->
+           
             <button class="btn daily-login-btn w-100" id="dailyLoginBtn">
                 <i class="fas fa-calendar-day me-2"></i> Klaim XP Login Harian
             </button>
             
-            <!-- Tab Navigasi -->
             <ul class="nav nav-tabs mb-3" id="profileTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab" aria-controls="posts" aria-selected="true">Postingan</button>
@@ -648,12 +637,9 @@ body::after {
                     <button class="nav-link" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity" type="button" role="tab" aria-controls="activity" aria-selected="false">Aktivitas</button>
                 </li>
             </ul>
-            
-            <!-- Konten Tab -->
+           
             <div class="tab-content" id="profileTabContent">
-                <!-- Tab Postingan -->
                 <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-                    <!-- Postingan 1 -->
                     <div class="post-card" data-post-id="1">
                         <div class="post-header">
                             <img src="https://i.pravatar.cc/40" class="post-avatar" alt="Avatar">
@@ -676,7 +662,6 @@ body::after {
                         </div>
                     </div>
                     
-                    <!-- Postingan 2 -->
                     <div class="post-card" data-post-id="2">
                         <div class="post-header">
                             <img src="https://i.pravatar.cc/40" class="post-avatar" alt="Avatar">
@@ -700,7 +685,6 @@ body::after {
                     </div>
                 </div>
                 
-                <!-- Tab Aktivitas -->
                 <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
                     <div class="activity-item">
                         <i class="fas fa-comment text-info me-2"></i>
@@ -765,7 +749,6 @@ body::after {
         </div>
     </footer>
 
-    <!-- Modal Ubah Avatar -->
     <div class="modal fade" id="avatarModal" tabindex="-1" aria-labelledby="avatarModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -790,7 +773,6 @@ body::after {
         </div>
     </div>
     
-    <!-- Modal Ubah Banner -->
     <div class="modal fade" id="bannerModal" tabindex="-1" aria-labelledby="bannerModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -815,7 +797,6 @@ body::after {
         </div>
     </div>
     
-    <!-- Modal Edit Profil -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -848,15 +829,12 @@ body::after {
         const leftCards = document.querySelectorAll('.swipe-left .card');
         const rightCards = document.querySelectorAll('.swipe-right .card');
         
-        //biar kiri berenti
         function pauseLeft() { swipeLeft.style.animationPlayState = 'paused'; }
         function resumeLeft() { swipeLeft.style.animationPlayState = 'running'; }
 
-        //biar kanan berenti
         function pauseRight() { swipeRight.style.animationPlayState = 'paused'; }
         function resumeRight() { swipeRight.style.animationPlayState = 'running'; }
 
-        //hover kiri
         leftCards.forEach(card => {
             card.addEventListener('mouseenter', pauseLeft);
             card.addEventListener('mouseleave', resumeLeft);
@@ -864,15 +842,11 @@ body::after {
             card.addEventListener('touchend', resumeLeft, { passive: true });
             card.addEventListener('touchcancel', resumeLeft, { passive: true });
             
-            // Klik card untuk buka detail
             card.addEventListener('click', function() {
-                // Ganti dengan ID/data postingan yang sesuai
-                window.parent.location.href = 'detail.html?id=1'; // Jika di iframe
-                // atau window.location.href = 'detail.html?id=1'; // Jika tidak di iframe
+                window.parent.location.href = 'detail.html?id=1'; 
             });
         });
 
-        //hover kanan
         rightCards.forEach(card => {
             card.addEventListener('mouseenter', pauseRight);
             card.addEventListener('mouseleave', resumeRight);
@@ -880,21 +854,18 @@ body::after {
             card.addEventListener('touchend', resumeRight, { passive: true });
             card.addEventListener('touchcancel', resumeRight, { passive: true });
             
-            // Klik card untuk buka detail
             card.addEventListener('click', function() {
                 window.parent.location.href = 'detail.html?id=1';
             });
         });
 
-        // Aktifkan shine effect setelah typewriter selesai
         setTimeout(() => {
             const shineElement = document.querySelector('.shine');
             if (shineElement) {
                 shineElement.style.cursor = 'pointer';
             }
-        }, 1000); // Delay sampai animasi typewriter selesai
+        }, 1000); 
 
-        // Data pengguna
         let userData = {
             username: "User#1234",
             bio: "Halo! Saya pengguna baru di platform ini. Saya suka bermain game dan coding.",
@@ -915,7 +886,6 @@ body::after {
             repostedPosts: []
         };
         
-        // XP values untuk berbagai aktivitas
         const xpValues = {
             dailyLogin: 50,
             likePost: 5,
@@ -926,7 +896,6 @@ body::after {
             editProfile: 5
         };
         
-        // Fungsi untuk menampilkan notifikasi XP
         function showXpNotification(xpAmount, message) {
             const notification = document.getElementById('xpNotification');
             const notificationText = document.getElementById('xpNotificationText');
@@ -939,47 +908,38 @@ body::after {
             }, 3000);
         }
         
-        // Fungsi untuk menambah XP
         function addXP(amount, activity) {
             userData.xp += amount;
             
-            // Tampilkan notifikasi
             showXpNotification(amount, activity);
             
-            // Periksa apakah level up
             checkLevelUp();
-            
-            // Perbarui tampilan
+           
             updateProfileDisplay();
         }
         
-        // Fungsi untuk memperbarui tampilan profil
         function updateProfileDisplay() {
             document.getElementById('usernameDisplay').textContent = userData.username;
             document.getElementById('userBio').textContent = userData.bio;
             document.getElementById('currentXP').textContent = userData.xp;
             document.getElementById('currentLevel').textContent = userData.level;
             
-            // Hitung XP untuk progress bar
             const xpForCurrentLevel = (userData.level - 1) * 100;
             const xpInCurrentLevel = userData.xp - xpForCurrentLevel;
             const xpPercentage = (xpInCurrentLevel / 100) * 100;
             document.getElementById('xpProgress').style.width = `${xpPercentage}%`;
             
-            // Hitung XP menuju level berikutnya
             const xpToNextLevel = 100 - xpInCurrentLevel;
             document.getElementById('xpToNextLevel').textContent = `${xpToNextLevel} XP menuju Level ${userData.level + 1}`;
             
             document.getElementById('profileImg').src = userData.avatar;
             document.getElementById('profileBanner').style.backgroundImage = `url('${userData.banner}')`;
-            
-            // Update statistik
+           
             document.getElementById('postCount').textContent = userData.stats.posts;
             document.getElementById('likeCount').textContent = userData.stats.likes;
             document.getElementById('commentCount').textContent = userData.stats.comments;
             document.getElementById('loginStreak').textContent = userData.stats.loginStreak;
             
-            // Update badge
             const badgeContainer = document.querySelector('.profile-info .mb-2');
             badgeContainer.innerHTML = '';
             userData.badges.forEach(badge => {
@@ -987,7 +947,6 @@ body::after {
                 badgeElement.className = 'badge';
                 badgeElement.textContent = badge;
                 
-                // Warna khusus untuk badge tertentu
                 if (badge === 'Aktif') {
                     badgeElement.style.backgroundColor = 'var(--info-color)';
                 } else if (badge === 'Kreator') {
@@ -999,7 +958,6 @@ body::after {
                 badgeContainer.appendChild(badgeElement);
             });
             
-            // Update tombol login harian
             const dailyLoginBtn = document.getElementById('dailyLoginBtn');
             if (userData.dailyLoginClaimed) {
                 dailyLoginBtn.disabled = true;
@@ -1010,7 +968,6 @@ body::after {
             }
         }
         
-        // Event listener untuk upload avatar
         document.getElementById('avatarUpload').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -1022,7 +979,6 @@ body::after {
             }
         });
         
-        // Event listener untuk upload banner
         document.getElementById('bannerUpload').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -1034,52 +990,41 @@ body::after {
             }
         });
         
-        // Simpan avatar baru
         document.getElementById('saveAvatar').addEventListener('click', function() {
             const newAvatar = document.getElementById('avatarPreview').src;
             userData.avatar = newAvatar;
             
-            // Tambah XP untuk aktivitas mengubah avatar
             addXP(xpValues.changeAvatar, "Mengubah avatar");
             
-            // Tutup modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('avatarModal'));
             modal.hide();
         });
         
-        // Simpan banner baru
         document.getElementById('saveBanner').addEventListener('click', function() {
             const newBanner = document.getElementById('bannerPreview').src;
             userData.banner = newBanner;
             
-            // Tambah XP untuk aktivitas mengubah banner
             addXP(xpValues.changeBanner, "Mengubah banner");
             
-            // Tutup modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('bannerModal'));
             modal.hide();
         });
         
-        // Simpan perubahan profil
         document.getElementById('saveProfile').addEventListener('click', function() {
             userData.username = document.getElementById('usernameInput').value;
             userData.bio = document.getElementById('bioInput').value;
             
-            // Tambah XP untuk aktivitas mengedit profil
             addXP(xpValues.editProfile, "Mengedit profil");
             
-            // Tutup modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
             modal.hide();
         });
         
-        // Fungsi untuk mengecek kenaikan level
         function checkLevelUp() {
             const xpNeeded = userData.level * 100;
             if (userData.xp >= xpNeeded) {
                 userData.level++;
                 
-                // Tambah badge jika mencapai level tertentu
                 if (userData.level === 5 && !userData.badges.includes("Aktif")) {
                     userData.badges.push("Aktif");
                 } else if (userData.level === 10 && !userData.badges.includes("Kreator")) {
@@ -1089,27 +1034,22 @@ body::after {
                 }
                 
                 updateProfileDisplay();
-                
-                // Tampilkan notifikasi level up
+               
                 showXpNotification(0, `Selamat! Anda naik ke level ${userData.level}`);
             }
         }
         
-        // Login harian
         document.getElementById('dailyLoginBtn').addEventListener('click', function() {
             if (!userData.dailyLoginClaimed) {
                 userData.dailyLoginClaimed = true;
                 userData.stats.loginStreak++;
                 
-                // Tambah XP untuk login harian
                 addXP(xpValues.dailyLogin, "Login harian");
                 
-                // Tambah aktivitas ke riwayat
                 addActivity("Anda mengklaim XP login harian", "fas fa-calendar-day", "text-primary");
             }
         });
         
-        // Fungsi untuk menambah aktivitas ke riwayat
         function addActivity(text, icon, color) {
             const activityTab = document.getElementById('activity');
             const activityItem = document.createElement('div');
@@ -1120,13 +1060,10 @@ body::after {
                 <small class="text-muted d-block">Baru saja</small>
             `;
             
-            // Tambah di atas aktivitas sebelumnya
             activityTab.insertBefore(activityItem, activityTab.firstChild);
         }
         
-        // Event listener untuk like, comment, dan repost
         document.addEventListener('click', function(e) {
-            // Like post
             if (e.target.closest('.like-btn')) {
                 const likeBtn = e.target.closest('.like-btn');
                 const postId = likeBtn.getAttribute('data-post-id');
@@ -1134,22 +1071,17 @@ body::after {
                 if (!userData.likedPosts.includes(postId)) {
                     userData.likedPosts.push(postId);
                     
-                    // Update tampilan like
                     const likeCount = likeBtn.querySelector('.like-count');
                     likeCount.textContent = parseInt(likeCount.textContent) + 1;
                     
-                    // Tambah XP
                     addXP(xpValues.likePost, "Menyukai postingan");
                     
-                    // Update statistik
                     userData.stats.likes++;
                     
-                    // Tambah aktivitas ke riwayat
                     addActivity("Anda menyukai sebuah postingan", "fas fa-heart", "text-danger");
                 }
             }
             
-            // Comment post
             if (e.target.closest('.comment-btn')) {
                 const commentBtn = e.target.closest('.comment-btn');
                 const postId = commentBtn.getAttribute('data-post-id');
@@ -1157,20 +1089,15 @@ body::after {
                 if (!userData.commentedPosts.includes(postId)) {
                     userData.commentedPosts.push(postId);
                     
-                    // Update tampilan komentar
                     const commentCount = commentBtn.querySelector('.comment-count');
                     commentCount.textContent = parseInt(commentCount.textContent) + 1;
                     
-                    // Tambah XP
                     addXP(xpValues.commentPost, "Mengomentari postingan");
                     
-                    // Update statistik
                     userData.stats.comments++;
                     
-                    // Tambah aktivitas ke riwayat
                     addActivity("Anda mengomentari sebuah postingan", "fas fa-comment", "text-info");
                     
-                    // Simulasi input komentar
                     const comment = prompt("Tulis komentar Anda:");
                     if (comment) {
                         alert("Komentar berhasil ditambahkan!");
@@ -1178,7 +1105,6 @@ body::after {
                 }
             }
             
-            // Repost
             if (e.target.closest('.repost-btn')) {
                 const repostBtn = e.target.closest('.repost-btn');
                 const postId = repostBtn.getAttribute('data-post-id');
@@ -1186,14 +1112,11 @@ body::after {
                 if (!userData.repostedPosts.includes(postId)) {
                     userData.repostedPosts.push(postId);
                     
-                    // Update tampilan repost
                     const repostCount = repostBtn.querySelector('.repost-count');
                     repostCount.textContent = parseInt(repostCount.textContent) + 1;
                     
-                    // Tambah XP
                     addXP(xpValues.repost, "Membagikan postingan");
                     
-                    // Tambah aktivitas ke riwayat
                     addActivity("Anda membagikan sebuah postingan", "fas fa-share", "text-success");
                     
                     alert("Postingan berhasil dibagikan!");
@@ -1201,7 +1124,6 @@ body::after {
             }
         });
         
-        // Inisialisasi tampilan
         document.addEventListener('DOMContentLoaded', function() {
             updateProfileDisplay();
         });
