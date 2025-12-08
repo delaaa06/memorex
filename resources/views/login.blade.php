@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In MemoraX</title>
-    <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('bootstrap-5.3.8-dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <style>
         :root {
             --primary: #E18E2E;
@@ -405,19 +407,26 @@
         <div class="login-body">
             <div id="alertContainer"></div>
             
-            <form id="loginForm">
+            {{-- Form login dengan CSRF token --}}
+            <form id="loginForm" action="{{ route('login.submit') }}" method="POST">
+                @csrf
                 <div class="mb-4">
-                    <label for="exampleDropdownFormEmail1" class="form-label">Alamat Email</label>
-                    <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="nama@contoh.com">
+                    <label for="email" class="form-label">Alamat Email</label>
+                    <input type="email" class="form-control" id="email" name="email" 
+                           placeholder="nama@contoh.com" value="{{ old('email') }}">
                     <div class="invalid-feedback" id="emailError">
                         Harap masukkan alamat email yang valid.
                     </div>
+                    @error('email')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
                 
                 <div class="mb-4">
-                    <label for="exampleDropdownFormPassword1" class="form-label">Kata Sandi</label>
+                    <label for="password" class="form-label">Kata Sandi</label>
                     <div class="password-container">
-                        <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Kata Sandi">
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Kata Sandi">
                         <button type="button" class="password-toggle" id="passwordToggle">
                             <i class="bi bi-eye"></i>
                         </button>
@@ -425,16 +434,20 @@
                     <div class="invalid-feedback" id="passwordError">
                         Kata sandi harus minimal 6 karakter.
                     </div>
+                    @error('password')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
                 
                 <div class="mb-4 d-flex justify-content-between align-items-center">
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                        <label class="form-check-label" for="dropdownCheck">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">
                             Ingat saya
                         </label>
                     </div>
-                    <a href="#" class="text-decoration-none" style="color: var(--accent); font-weight: 500;" id="forgotPasswordLink">Lupa kata sandi?</a>
+                    <a href="#" class="text-decoration-none" style="color: var(--accent); font-weight: 500;" 
+                       id="forgotPasswordLink">Lupa kata sandi?</a>
                 </div>
                 
                 <button type="submit" class="btn btn-primary w-100 btn-login mb-4" id="loginButton">
@@ -449,15 +462,18 @@
             
             <div class="text-center">
                 <span style="color: #6c757d;">Belum punya akun? </span>
-                <a href="regis.html" class="text-decoration-none fw-bold" style="color: var(--primary);" id="signupLink">Daftar sekarang</a>
+                {{-- Menggunakan route() untuk link pendaftaran --}}
+                <a href="{{ route('register') }}" class="text-decoration-none fw-bold" 
+                   style="color: var(--primary);" id="signupLink">Daftar sekarang</a>
             </div>
         </div>
         
         <div class="login-footer">
-            &copy; 2023 Login App. All rights reserved.
+            &copy; {{ date('Y') }} MemoraX. All rights reserved.
         </div>
     </div>
 
+    {{-- Modal reset password --}}
     <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -558,13 +574,15 @@
         </div>
     </div>
 
-    <script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    {{-- Menggunakan asset() untuk file lokal --}}
+    <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const loginForm = document.getElementById('loginForm');
-            const emailInput = document.getElementById('exampleDropdownFormEmail1');
-            const passwordInput = document.getElementById('exampleDropdownFormPassword1');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
             const passwordToggle = document.getElementById('passwordToggle');
             const loginButton = document.getElementById('loginButton');
             const buttonText = document.getElementById('buttonText');
@@ -600,11 +618,11 @@
             let countdownTimer;
             let countdownTime = 300;
             let generatedCode = '';
-            
+
             passwordToggle.addEventListener('click', function() {
                 togglePasswordVisibility(passwordInput, this);
             });
-            
+
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -621,15 +639,15 @@
                     showError(passwordInput, 'passwordError', 'Kata sandi harus minimal 6 karakter.');
                     return;
                 }
-                
-                simulateLogin(email, password);
+
+                submitLoginForm(email, password);
             });
-            
+
             forgotPasswordLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 forgotPasswordModal.show();
             });
-            
+
             sendCodeButton.addEventListener('click', function() {
                 const email = resetEmailInput.value.trim();
                 
@@ -640,7 +658,7 @@
                 
                 simulateSendCode(email);
             });
-            
+
             verifyCodeButton.addEventListener('click', function() {
                 const enteredCode = getVerificationCode();
                 
@@ -657,12 +675,12 @@
                 goToResetStep(2);
                 clearInterval(countdownTimer);
             });
-            
+
             resendCodeButton.addEventListener('click', function() {
                 const email = resetEmailInput.value.trim();
                 simulateSendCode(email);
             });
-            
+
             resetPasswordButton.addEventListener('click', function() {
                 const newPassword = newPasswordInput.value;
                 const confirmNewPassword = confirmNewPasswordInput.value;
@@ -679,7 +697,7 @@
                 
                 simulateResetPassword();
             });
-            
+
             newPasswordToggle.addEventListener('click', function() {
                 togglePasswordVisibility(newPasswordInput, this);
             });
@@ -687,7 +705,7 @@
             confirmNewPasswordToggle.addEventListener('click', function() {
                 togglePasswordVisibility(confirmNewPasswordInput, this);
             });
-            
+
             verificationInputs.forEach((input, index) => {
                 input.addEventListener('input', function() {
                     if (this.value.length === 1 && index < verificationInputs.length - 1) {
@@ -710,11 +728,11 @@
                     }
                 });
             });
-            
+
             document.getElementById('forgotPasswordModal').addEventListener('hidden.bs.modal', function() {
                 resetResetPasswordForm();
             });
-            
+
             function togglePasswordVisibility(input, toggleBtn) {
                 const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
                 input.setAttribute('type', type);
@@ -728,27 +746,27 @@
                     icon.classList.add('bi-eye-slash');
                 }
             }
-            
+
             function isValidEmail(email) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return emailRegex.test(email);
             }
-            
+
             function resetValidation() {
                 emailInput.classList.remove('is-invalid');
                 passwordInput.classList.remove('is-invalid');
                 clearAlert();
             }
-            
+
             function showError(input, errorId, message) {
                 input.classList.add('is-invalid');
                 document.getElementById(errorId).textContent = message;
             }
-            
+
             function clearAlert() {
                 alertContainer.innerHTML = '';
             }
-            
+
             function showAlert(message, type) {
                 const alert = document.createElement('div');
                 alert.className = `alert alert-${type} alert-dismissible fade show`;
@@ -769,12 +787,12 @@
                     }, 5000);
                 }
             }
-            
+
             function showResetError(input, errorId, message) {
                 input.classList.add('is-invalid');
                 document.getElementById(errorId).textContent = message;
             }
-            
+
             function showResetAlert(message, type) {
                 const alert = document.createElement('div');
                 alert.className = `alert alert-${type} alert-dismissible fade show`;
@@ -795,11 +813,11 @@
                     }, 5000);
                 }
             }
-            
+
             function clearResetAlert() {
                 resetAlertContainer.innerHTML = '';
             }
-            
+
             function goToResetStep(step) {
                 resetSteps.forEach((stepElement, index) => {
                     if (index === step) {
@@ -811,7 +829,7 @@
                 currentResetStep = step;
                 clearResetAlert();
             }
-            
+
             function getVerificationCode() {
                 let code = '';
                 verificationInputs.forEach(input => {
@@ -819,7 +837,7 @@
                 });
                 return code;
             }
-            
+
             function startCountdown() {
                 countdownTime = 300;
                 updateCountdownDisplay();
@@ -834,13 +852,13 @@
                     }
                 }, 1000);
             }
-            
+
             function updateCountdownDisplay() {
                 const minutes = Math.floor(countdownTime / 60);
                 const seconds = countdownTime % 60;
                 countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
-            
+
             function resetResetPasswordForm() {
                 goToResetStep(0);
                 
@@ -857,40 +875,62 @@
                 
                 clearInterval(countdownTimer);
             }
-            
+
             function generateVerificationCode() {
                 return Math.floor(100000 + Math.random() * 900000).toString();
             }
-            
+
             function redirectToHome() {
                 redirectOverlay.classList.add('active');
                 
                 setTimeout(() => {
-                    window.location.href = 'beranda.html';
+                    window.location.href = "{{ route('home') }}";
                 }, 3000);
             }
-            
-            function simulateLogin(email, password) {
+
+            function submitLoginForm(email, password) {
                 buttonText.classList.add('d-none');
                 buttonSpinner.classList.remove('d-none');
                 loginButton.disabled = true;
-                
-                setTimeout(() => {
+
+                fetch("{{ route('login.submit') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        remember: document.getElementById('remember').checked
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
                     buttonText.classList.remove('d-none');
                     buttonSpinner.classList.add('d-none');
                     loginButton.disabled = false;
                     
-                    if (email === 'user@example.com' && password === 'password123') {
+                    if (data.success) {
                         showAlert('Login berhasil! Mengalihkan ke halaman home...', 'success');
                         setTimeout(() => {
                             redirectToHome();
                         }, 1500);
                     } else {
-                        showAlert('Email atau kata sandi salah. Silakan coba lagi.', 'danger');
+                        showAlert(data.message || 'Email atau kata sandi salah. Silakan coba lagi.', 'danger');
                     }
-                }, 2000);
+                })
+                .catch(error => {
+                    buttonText.classList.remove('d-none');
+                    buttonSpinner.classList.add('d-none');
+                    loginButton.disabled = false;
+                    
+                    console.error('Error:', error);
+                    showAlert('Terjadi kesalahan. Silakan coba lagi.', 'danger');
+                });
             }
-            
+
             function simulateSendCode(email) {
                 sendCodeText.classList.add('d-none');
                 sendCodeSpinner.classList.remove('d-none');
@@ -912,7 +952,7 @@
                     showResetAlert(`Kode verifikasi telah dikirim ke ${email}. Kode: ${generatedCode} (ini hanya demo)`, 'info');
                 }, 1500);
             }
-            
+
             function simulateResetPassword() {
                 resetPasswordText.classList.add('d-none');
                 resetPasswordSpinner.classList.remove('d-none');
@@ -926,7 +966,7 @@
                     goToResetStep(3);
                 }, 1500);
             }
-            
+
             const loginContainer = document.querySelector('.login-container');
             loginContainer.style.opacity = '0';
             loginContainer.style.transform = 'translateY(30px)';

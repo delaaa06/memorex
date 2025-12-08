@@ -552,31 +552,35 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="/foto/maskotweb.jpeg" alt="🤡"></a>
+                <a class="navbar-brand" href="{{ route('home') }}"><img class="maskotweb" src="{{ asset('foto/maskotweb.jpeg') }}" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <a class="nav-link" href="beranda.html">Home</a>
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="6. upload.html">Make a memory</a>
+                    <a class="nav-link {{ request()->routeIs('upload') ? 'active' : '' }}" href="{{ route('upload') }}">Make a memory</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="search.html">Hall of Shame</a>
+                    <a class="nav-link {{ request()->routeIs('search') ? 'active' : '' }}" href="{{ route('search') }}">Hall of Shame</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="profilepage.html">Profile</a>
+                    <a class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}" href="{{ route('profile') }}">Profile</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link active" href="feedback.html">Feedback</a>
+                    <a class="nav-link {{ request()->routeIs('feedback') ? 'active' : '' }}" href="{{ route('feedback') }}">Feedback</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="support.html">Support Us</a>
+                    <a class="nav-link {{ request()->routeIs('support') ? 'active' : '' }}" href="{{ route('support') }}">Support Us</a>
                     </li>
                 </ul>
+                <form class="d-flex" role="search" action="{{ route('search') }}" method="GET">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search" value="{{ request('q') }}"/>
+                    <button class="searchButton" type="submit">Search</button>
+                </form>
                 </div>
             </div>
         </nav>
@@ -816,7 +820,7 @@
             <hr class="mb-4">
             <div class="row align-items-center">
                 <div class="col-12 text-center">
-                    <p class="text-white text-decoration-none">Hak Cipta ©2025 | Dibuat dengan Empati</p>
+                    <p class="text-white text-decoration-none">Hak Cipta ©{{ date('Y') }} | Dibuat dengan Empati</p>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
-    <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('bootstrap-5.3.8-dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
@@ -539,32 +539,35 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="/foto/maskotweb.jpeg" alt="🤡"></a>
+                {{-- Menggunakan asset() helper untuk gambar --}}
+                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ asset('foto/maskotweb.jpeg') }}" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {{-- Menggunakan route() helper untuk link --}}
                     <li class="nav-item">
-                    <a class="nav-link active" href="beranda.html">Home</a>
+                    <a class="nav-link active" href="{{ route('beranda') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="6. upload.html">Make a memory</a>
+                    <a class="nav-link" href="{{ route('upload') }}">Make a memory</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="search.html">Hall of Shame</a>
+                    <a class="nav-link" href="{{ route('search') }}">Hall of Shame</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="profilepage.html">Profile</a>
+                    <a class="nav-link" href="{{ route('profile') }}">Profile</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="feedback.html">Feedback</a>
+                    <a class="nav-link" href="{{ route('feedback') }}">Feedback</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="support.html">Support Us</a>
+                    <a class="nav-link" href="{{ route('support') }}">Support Us</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
+                {{-- Form dengan CSRF token jika menggunakan POST --}}
+                <form class="d-flex" role="search" action="{{ route('search') }}" method="GET">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
                     <button class="searchButton" type="submit" style="border-radius: 10px;">Search</button>
                 </form>
@@ -611,6 +614,7 @@
         
         <div class="content-base">
             <div class="swipe-left">
+                @for($i = 0; $i < 2; $i++) {{-- Loop untuk duplikasi card --}}
                 <div class="card" data-post-id="1">
                     <p class="card-text">Hari ini aku ketemu mantan di mall, dia lagi sama pacar barunya</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
@@ -651,29 +655,11 @@
                     <p class="card-text">Jatuh di depan gebetan, padahal lagi pengen kelihatan keren</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
                 </div>
-                <div class="card" data-post-id="1">
-                    <p class="card-text">Hari ini aku ketemu mantan di mall, dia lagi sama pacar barunya</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="2">
-                    <p class="card-text">Gak sengaja kirim meme ke grup keluarga, padahal maksudnya ke temen</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="3">
-                    <p class="card-text">Salah manggil dosen pake nama "sayang", langsung mau masuk lobang</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="4">
-                    <p class="card-text">Nyapa orang yang kupikir temen ternyata orang lain wkwk</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="5">
-                    <p class="card-text">Kenapa choso ganteng banget ya Allah, ganteng imut comel swamiku muah muah</p>
-                    <div class="desc-card mt-3">From: Dela</div>
-                </div>
+                @endfor
             </div>
             <br>
             <div class="swipe-right">
+                @for($i = 0; $i < 2; $i++) {{-- Loop untuk duplikasi card --}}
                 <div class="card" data-post-id="11">
                     <p class="card-text">Lagi serius meeting tiba-tiba kucing lewat depan kamera</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
@@ -714,26 +700,7 @@
                     <p class="card-text">Ngedance sendiri di kamar ternyata curtain kebuka</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
                 </div>
-                <div class="card" data-post-id="11">
-                    <p class="card-text">Lagi serius meeting tiba-tiba kucing lewat depan kamera</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="12">
-                    <p class="card-text">Salah transfer ke nomor yang mirip, uang sejuta melayang</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="13">
-                    <p class="card-text">Ngomong jelek tentang seseorang eh orangnya di belakang</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="14">
-                    <p class="card-text">Tidur di kelas terus ngiler, semua pada ketawa</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="15">
-                    <p class="card-text">Ngirim voice note marah ke orang yang salah</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
+                @endfor
             </div>
         </div>
     </main>
@@ -758,7 +725,8 @@
                 Kategori: Kucing
             </div>
 
-            <img src="4.jpg" class="post-media" id="postMedia" alt="Media Postingan">
+            {{-- Menggunakan asset() untuk gambar --}}
+            <img src="{{ asset('4.jpg') }}" class="post-media" id="postMedia" alt="Media Postingan">
 
             <div class="post-story" id="postStory">
                 Ini adalah isi cerita yang kamu tulis ketika upload.
@@ -775,7 +743,9 @@
             <h3><i class="fas fa-flag"></i> Laporkan Postingan</h3>
             <p>Pilih alasan kenapa kamu melaporkan postingan ini. Laporan akan membantu kami menjaga komunitas tetap aman.</p>
 
+            {{-- Form dengan CSRF token --}}
             <form id="reportForm">
+                @csrf
                 <div class="report-options">
                     <div class="report-option">
                         <input type="radio" name="reportReason" id="spam" value="spam">
@@ -874,7 +844,8 @@
             <hr class="mb-4">
             <div class="row align-items-center">
                 <div class="col-12 text-center">
-                    <p class="text-white text-decoration-none">Hak Cipta ©2025 | Dibuat dengan Empati</p>
+                    {{-- Menggunakan date() helper untuk tahun dinamis --}}
+                    <p class="text-white text-decoration-none">Hak Cipta ©{{ date('Y') }} | Dibuat dengan Empati</p>
                 </div>
             </div>
         </div>
@@ -1056,7 +1027,7 @@ Dia cuma ketawa sambil nolongin aku. Sekarang kita jadian, tapi cerita jatuh itu
             
             if (post.media) {
                 postMedia.style.display = 'block';
-                postMedia.src = post.media;
+                postMedia.src = "{{ asset('') }}" + post.media;
                 postMedia.alt = post.title;
             } else {
                 postMedia.style.display = 'none';
@@ -1301,7 +1272,6 @@ Dia cuma ketawa sambil nolongin aku. Sekarang kita jadian, tapi cerita jatuh itu
         }
     });
 </script>
-
-<script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

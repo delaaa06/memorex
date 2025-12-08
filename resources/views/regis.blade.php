@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in MemoraX</title>
+    <title>Sign up MemoraX</title>
     <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
@@ -506,12 +506,12 @@
             
             <div class="text-center">
                 <span style="color: #6c757d;">Sudah punya akun? </span>
-                <a href="login.html" class="text-decoration-none fw-bold" style="color: var(--primary);" id="loginLink">Masuk di sini</a>
+                <a href="{{ route('login') }}" class="text-decoration-none fw-bold" style="color: var(--primary);" id="loginLink">Masuk di sini</a>
             </div>
         </div>
         
         <div class="register-footer">
-            &copy; 2023 Aplikasi Kami. All rights reserved.
+            &copy; {{ date('Y') }} Aplikasi Kami. All rights reserved.
         </div>
     </div>
 
@@ -821,7 +821,7 @@
                     showAlert('Registrasi berhasil! Anda akan dialihkan ke halaman login.', 'success');
                     
                     setTimeout(() => {
-                        window.location.href = 'login.html';
+                        window.location.href = '{{ route("login") }}';
                     }, 3000);
                 }, 2000);
             }

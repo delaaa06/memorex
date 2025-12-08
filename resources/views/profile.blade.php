@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
-    <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('bootstrap-5.3.8-dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -580,29 +580,29 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="/foto/maskotweb.jpeg" alt="🤡"></a>
+                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ asset('foto/maskotweb.jpeg') }}" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <a class="nav-link" href="beranda.html">Home</a>
+                    <a class="nav-link" href="{{ route('beranda') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="6. upload.html">Make a memory</a>
+                    <a class="nav-link" href="{{ route('upload') }}">Make a memory</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="search.html">Hall of Shame</a>
+                    <a class="nav-link" href="{{ route('search') }}">Hall of Shame</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link active" href="profilepage.html">Profile</a>
+                    <a class="nav-link active" href="{{ route('profile') }}">Profile</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="feedback.html">Feedback</a>
+                    <a class="nav-link" href="{{ route('feedback') }}">Feedback</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="support.html">Support Us</a>
+                    <a class="nav-link" href="{{ route('support') }}">Support Us</a>
                     </li>
                 </ul>
                 </div>
@@ -904,7 +904,7 @@
             card.addEventListener('touchcancel', resumeLeft, { passive: true });
             
             card.addEventListener('click', function() {
-                window.location.href = 'beranda.html';
+                window.location.href = '{{ route('beranda') }}';
             });
         });
 
@@ -916,7 +916,7 @@
             card.addEventListener('touchcancel', resumeRight, { passive: true });
             
             card.addEventListener('click', function() {
-                window.location.href = 'beranda.html';
+                window.location.href = '{{ route('beranda') }}';
             });
         });
 
@@ -1410,10 +1410,10 @@
                 sessionStorage.clear();
                 localStorage.removeItem('currentUserId');
                
-                window.location.href = 'login.html';
+                window.location.href = '{{ route('login') }}';
             }
         });
     </script>
-    <script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
