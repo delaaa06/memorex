@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
@@ -57,7 +57,7 @@
         }
         
         .footer {
-        background-color: #43B5AD !important;
+            background-color: #ea8428 !important;
         }
         
         .teksFooter{
@@ -77,7 +77,7 @@
         }
         
         #header {
-        background-color: #43B5AD !important;
+            background-color: #ffe97a !important;
         }
 
         .judul{
@@ -247,6 +247,7 @@
             border: 3px solid var(--accent);
             box-shadow: 0px 8px 0px var(--primary);
             box-sizing: border-box;
+            position: relative;
         }
 
         .post-title {
@@ -304,9 +305,232 @@
             color: white;
         }
         
-        /* Halaman Detail */
         .detail-page {
             display: none;
+        }
+
+        .report-button {
+            position: absolute;
+            top: 28px;
+            right: 28px;
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 0px #c93820;
+        }
+
+        .report-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0px #c93820;
+        }
+
+        .report-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 0px #c93820;
+        }
+
+        .report-button i {
+            margin-right: 6px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-report {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--accent);
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-report h3 {
+            color: var(--red);
+            font-weight: 800;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .modal-report p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: var(--red);
+        }
+
+        .report-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .report-option {
+            position: relative;
+            cursor: pointer;
+            border: 3px solid var(--secondary);
+            border-radius: 12px;
+            padding: 15px;
+            background: #f9ffff;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .report-option:hover {
+            border-color: var(--orange);
+            background: #FFF4C4;
+            transform: translateX(5px);
+        }
+
+        .report-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .report-option:has(input[type="radio"]:checked) {
+            border-color: var(--red);
+            background: #ffe6e6;
+        }
+
+        .report-option label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .report-option i {
+            margin-right: 10px;
+            font-size: 18px;
+            color: var(--red);
+        }
+
+        .report-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid var(--secondary);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            resize: vertical;
+            min-height: 100px;
+            font-size: 14px;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .report-textarea:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        .submit-report {
+            width: 100%;
+            padding: 14px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 0px #c93820;
+        }
+
+        .submit-report:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0px #c93820;
+        }
+
+        .submit-report:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 0 2px 0px #c93820;
+        }
+
+        .submit-report:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -315,26 +539,29 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ ('/images/foto/maskotweb.jpeg') }}" alt="🤡"></a>
+                <a class="navbar-brand" href="#"><img class="maskotweb" src="/foto/maskotweb.jpeg" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ route ('beranda')}}" id="homeLink">Home</a>
+                    <a class="nav-link active" href="beranda.html">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('upload') }}">Make a memory</a>
+                    <a class="nav-link" href="6. upload.html">Make a memory</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('search') }}">Hall of Shame</a>
-                    </li>
-                     <li class="nav-item">
-                    <a class="nav-link" href=" {{ route ('profile') }}">Profile</a>
+                    <a class="nav-link" href="search.html">Hall of Shame</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('support') }}">Support Us</a>
+                    <a class="nav-link" href="profilepage.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="feedback.html">Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="support.html">Support Us</a>
                     </li>
                 </ul>
                 <form class="d-flex" role="search">
@@ -345,7 +572,6 @@
             </div>
         </nav>
     </header>
-
 
     <main class="content" id="homePage">
         <div class="container py-5">
@@ -425,7 +651,6 @@
                     <p class="card-text">Jatuh di depan gebetan, padahal lagi pengen kelihatan keren</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
                 </div>
-                
                 <div class="card" data-post-id="1">
                     <p class="card-text">Hari ini aku ketemu mantan di mall, dia lagi sama pacar barunya</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
@@ -489,7 +714,6 @@
                     <p class="card-text">Ngedance sendiri di kamar ternyata curtain kebuka</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
                 </div>
-            
                 <div class="card" data-post-id="11">
                     <p class="card-text">Lagi serius meeting tiba-tiba kucing lewat depan kamera</p>
                     <div class="desc-card mt-3">From: Anonymous</div>
@@ -514,9 +738,12 @@
         </div>
     </main>
 
-    
     <main class="content detail-page" id="detailPage">
         <div class="post-container">
+            <button class="report-button" id="reportButton">
+                <i class="fas fa-flag"></i> Report
+            </button>
+
             <a href="#" class="back-button" id="backButton">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
@@ -531,8 +758,7 @@
                 Kategori: Kucing
             </div>
 
-
-            <img src="{{ asset('images/4.jpg') }}" class="post-media" id="postMedia" alt="Media Postingan">
+            <img src="4.jpg" class="post-media" id="postMedia" alt="Media Postingan">
 
             <div class="post-story" id="postStory">
                 Ini adalah isi cerita yang kamu tulis ketika upload.
@@ -542,6 +768,87 @@
             </div>
         </div>
     </main>
+
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal-report">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <h3><i class="fas fa-flag"></i> Laporkan Postingan</h3>
+            <p>Pilih alasan kenapa kamu melaporkan postingan ini. Laporan akan membantu kami menjaga komunitas tetap aman.</p>
+
+            <form id="reportForm">
+                <div class="report-options">
+                    <div class="report-option">
+                        <input type="radio" name="reportReason" id="spam" value="spam">
+                        <label for="spam">
+                            <i class="fas fa-ad"></i>
+                            Spam atau Iklan yang Mengganggu
+                        </label>
+                    </div>
+
+                    <div class="report-option">
+                        <input type="radio" name="reportReason" id="harassment" value="harassment">
+                        <label for="harassment">
+                            <i class="fas fa-user-slash"></i>
+                            Pelecehan atau Bullying
+                        </label>
+                    </div>
+
+                    <div class="report-option">
+                        <input type="radio" name="reportReason" id="hate" value="hate">
+                        <label for="hate">
+                            <i class="fas fa-heart-broken"></i>
+                            Ujaran Kebencian
+                        </label>
+                    </div>
+
+                    <div class="report-option">
+                        <input type="radio" name="reportReason" id="violence" value="violence">
+                        <label for="violence">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Kekerasan atau Konten Berbahaya
+                        </label>
+                    </div>
+
+                    <div class="report-option">
+                        <input type="radio" name="reportReason" id="inappropriate" value="inappropriate">
+                        <label for="inappropriate">
+                            <i class="fas fa-ban"></i>
+                            Konten Tidak Pantas
+                        </label>
+                    </div>
+
+                    <div class="report-option">
+                        <input type="radio" name="reportReason" id="fake" value="fake">
+                        <label for="fake">
+                            <i class="fas fa-times-circle"></i>
+                            Informasi Palsu atau Menyesatkan
+                        </label>
+                    </div>
+
+                    <div class="report-option">
+                        <input type="radio" name="reportReason" id="other" value="other">
+                        <label for="other">
+                            <i class="fas fa-ellipsis-h"></i>
+                            Lainnya
+                        </label>
+                    </div>
+                </div>
+
+                <textarea 
+                    class="report-textarea" 
+                    id="reportDetails" 
+                    placeholder="(Opsional) Jelaskan lebih detail tentang masalah yang kamu temukan..."></textarea>
+
+                <button type="submit" class="submit-report" id="submitReport">
+                    <i class="fas fa-paper-plane"></i> Kirim Laporan
+                </button>
+
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i> Laporan berhasil dikirim! Terima kasih atas perhatianmu.
+                </div>
+            </form>
+        </div>
+    </div>
 
     <footer class="footer" style="--bs-bg-opacity: .5">
         <div class="container text-center text-md-start">
@@ -573,160 +880,428 @@
         </div>
     </footer>
 
-    <script>
-        
-        const dummyPosts = {
-            '1': {
-                title: 'Ketemu Mantan di Mall',
-                date: '27 November 2025',
-                category: 'Malu',
-                story: 'Hari ini aku ketemu mantan di mall, dia lagi sama pacar barunya. Awkward banget rasanya, aku langsung pura-pura sibuk liat HP padahal cuma buka galeri doang. Terus dia malah nyapa, dan aku kayak robot kaku banget ngomongnya. Setelah itu aku langsung kabur ke toilet sembunyi 15 menit. Pas keluar ternyata mereka udah pergi. Syukurlah...',
-                image: '4.jpg'
-            },
-            '2': {
-                title: 'Kirim Meme ke Grup Keluarga',
-                date: '26 November 2025',
-                category: 'Malu',
-                story: 'Gak sengaja kirim meme ke grup keluarga, padahal maksudnya ke temen. Memenya tentang "cara survive di usia 30-an masih single". Sekarang semua keluarga pada nanya-nanya apakah aku ada masalah. Om-om dan tante-tante malah kasih saran buat cari jodoh. Aduh malu banget!',
-                image: '4.jpg'
-            },
-            '3': {
-                title: 'Salah Panggil Dosen',
-                date: '25 November 2025',
-                category: 'Malu',
-                story: 'Salah manggil dosen pake nama "sayang", langsung mau masuk lobang. Habis itu aku bilang "maaf Bu, tadi lagi mikirin pacar". Padahal aku jomblo dari lahir! Dosennya cuma ketawa, tapi muka aku langsung merah padam. Sekarang tiap ketemu dosen itu, pasti ingat kejadian itu.',
-                image: '4.jpg'
-            },
-            '4': {
-                title: 'Salah Nyapa Orang',
-                date: '24 November 2025',
-                category: 'Lucu',
-                story: 'Nyapa orang yang kupikir temen ternyata orang lain wkwk. Aku sampe tepuk punggungnya dan bilang "Eh lu disini juga!". Pas dia balik, ternyata orang yang gak aku kenal sama sekali. Aku cuma bisa bilang "Maaf, salah orang" sambil pergi dengan muka merah.',
-                image: '4.jpg'
-            },
-            '5': {
-                title: 'Choso Ganteng Banget',
-                date: '26 November 2025',
-                category: 'Senang',
-                story: 'Kenapa choso ganteng banget ya Allah, ganteng imut comel swamiku muah muah. Setiap kali nonton Jujutsu Kaisen aku selalu nunggu Choso muncul. Karakternya yang cool tapi care sama adiknya bikin aku meleleh. Belum lagi pas dia masih pake rambut dua kepang itu, lucuuuu banget! Aku sampe beli merchnya banyak. Temen-temen bilang aku gila, tapi biarin deh. Choso is the best!',
-                image: '4.jpg'
-            },
-            '6': {
-                title: 'Kentut di Lift',
-                date: '23 November 2025',
-                category: 'Malu',
-                story: 'Kentut di lift penuh orang, semua pada ngeliatin. Suaranya keras banget dan baunya... ya sudahlah. Aku cuma bisa pura-pura batuk sambil lihat ke atas. Sampai sekarang masih trauma naik lift bareng orang banyak.',
-                image: '4.jpg'
-            },
-            '7': {
-                title: 'Lupa Bayar di Warteg',
-                date: '22 November 2025',
-                category: 'Malu',
-                story: 'Lupa bayar di warteg, udah sampai rumah baru inget. Langsung balik lagi ke warteg sambil minta maaf. Pemiliknya bilang "Gapapa Mas, saya kira Mas mau kabur". Malu banget! Sekarang tiap makan di warteg pasti bayar dulu sebelum pergi.',
-                image: '4.jpg'
-            },
-            '8': {
-                title: 'Nyanyi di Kamar Mandi',
-                date: '21 November 2025',
-                category: 'Lucu',
-                story: 'Nyanyi kenceng di kamar mandi ternyata mic nya nyala ke speaker. Suaranya keluar ke seluruh rumah! Keluarga pada ketawa-ketawa. Padahal lagi serius nyanyi lagu sedih, jadi lucu deh.',
-                image: '4.jpg'
-            },
-            '9': {
-                title: 'Geleng-geleng Sendiri',
-                date: '20 November 2025',
-                category: 'Lucu',
-                story: 'Geleng-geleng sendiri ternyata orang sebelah kira diajak ngobrol. Dia malah nanya "Ada apa? Kenapa geleng-geleng?". Aku cuma bisa bilang "Lagi latihan buat drama" sambil pergi dengan muka merah.',
-                image: '4.jpg'
-            },
-            '10': {
-                title: 'Jatuh di Depan Gebetan',
-                date: '19 November 2025',
-                category: 'Malu',
-                story: 'Jatuh di depan gebetan, padahal lagi pengen kelihatan keren. Pas lagi jalan sambil senyum-senyum, gak liat ada batu. Langsung jatuh terguling. Gebetan cuma ketawa sambil nanya "Lagi latihan parkour ya?". Malu banget!',
-                image: '4.jpg'
-            }
-        };
+   <script>
+    const postsData = {
+        1: {
+            title: "Ketemu Mantan di Mall",
+            date: "15 November 2025",
+            category: "Cinta & Romansa",
+            media: "4.jpg",
+            story: `Hari ini aku lagi jalan-jalan di mall sendirian, tiba-tiba nemu mantan! Dia lagi jalan bareng pacar barunya yang keliatan lebih ganteng dan lebih stylish dari aku.
 
+Aku langsung panik! Cepat-cepat sembunyi di balik tanaman hias dekat food court. Tapi nasib sial, ternyata dia liatin aku! Dia cuma senyum kecil terus lanjut jalan.
+
+Malu banget! Aku masih pake kaos bekas lomba lari 5 tahun lalu sama celana training bolong. Sekarang aku masih nongkrong di toilet mall nungguin mereka pergi.`
+
+        },
+        2: {
+            title: "Salah Kirim Meme ke Grup Keluarga",
+            date: "10 November 2025",
+            category: "Kecelakaan Digital",
+            media: "",
+            story: `Baru bangun tidur, buka WhatsApp langsung kirim meme receh ke temen. Eh ternyata salah kirim ke grup keluarga besar! Isinya meme "When you realize it's Monday tomorrow" dengan gambar orang nangis darah.
+
+Satu menit kemudian, mama chat private: "Nak, ini gambar apa? Kok serem banget?"
+
+Om-om dan tante-tante pada kasih reaksi "?" semua. Papa malah tanya: "Ini artinya apa? Kode apa?"
+
+Aku bilang lagi tes fitur baru WhatsApp. Sekarang image-nya masih ada, jadi bahan ledekan tiap gathering keluarga.`
+        },
+        3: {
+            title: "Salah Manggil Dosen 'Sayang'",
+            date: "5 November 2025",
+            category: "Kampus",
+            media: "",
+            story: `Lagi asik chat sama pacar sambil nunggu dosen masuk kelas. Dosennya dateng, aku tanpa sadar masih kebawa suasana chat.
+
+Pas dia nawarin bantuan, aku langsung jawab: "Iya sayang, tunggu bentar ya..."
+
+Sepi. Sunyi. Semua mata ngeliatin aku.
+
+Dosennya cuma senyum tipis: "Sayang? Kita kan baru ketemu semester ini..."
+
+Mau ngilang aja pengennya. Sampe sekarang tiap ketemu dosen itu, dia selalu panggil aku "sayang" di depan kelas.`
+        },
+        4: {
+            title: "Nyapa Orang Salah",
+            date: "1 November 2025",
+            category: "Social Fails",
+            media: "",
+            story: `Di halte bus, liat temen dari belakang. Langsung tepuk pundak sambil teriak: "WOI GOBLOK!"
+
+Eh ternyata orang lain. Bukan cuma orang lain, tapi bapak-bapak umur 50an yang lagi baca koran dengan tenang.
+
+Dia pelan-pelan nutup korannya, liatin aku dari ujung kaki ke ujung rambut, lalu bilang: "Siapa yang goblok?"
+
+Aku cuma bisa berkata: "Maaf pak, saya yang goblok."
+
+Langsung lari ke arah bus yang kebetulan lagi datang.`
+        },
+        5: {
+            title: "Pujian untuk Choso",
+            date: "28 Oktober 2025",
+            category: "Fandom",
+            media: "",
+            story: `AKU GAK TAHU LAGI HARUS GIMANA. SETIAP LIAT CHOSO DI JUJUTSU KAISEN LANGSUNG DEG-DEGAN.
+
+Dia tuh... GANTENG BANGET SIH? Rambutnya, matanya, sifatnya yang protektif ke Yuuji, semuanya sempurna!
+
+Aku sampe bikin 5 akun TikTok cuma buat edit Choso. Ig aku isinya cuma screenshot Choso doang. Temen-temen udah pada khawatir.
+
+Tapi gimana lagi? Dia imut comel banget! SWAMIKU! MUAH MUAH! ❤️✨
+
+#ChosoSupremacy #SaveMe`
+        },
+        6: {
+            title: "Kentut di Lift Penuh",
+            date: "25 Oktober 2025",
+            category: "Momen Memalukan",
+            media: "",
+            story: `Naik lift di gedung kantor, 8 orang termasuk aku. Perut tiba-tiba mules, dan... itu terjadi.
+
+Bukan cuma bunyi, tapi baunya... seperti telur busuk dicampur kubis.
+
+Semua pada mengernyit. Ada yang tutup hidung, ada yang pelan-pelan mundur ke pojok.
+
+Aku coba pura-pura liat ke atas seakan-akan mencari sumber suara. Tapi semua tahu.
+
+Sampai lantai tujuan, lift kosong tinggal aku sendiri. Penyesalan sepanjang hidup.`
+        },
+        7: {
+            title: "Lupa Bayar di Warteg",
+            date: "20 Oktober 2025",
+            category: "Keseharian",
+            media: "",
+            story: `Makan siang di warteg langganan, laper banget. Habis makan langsung buru-buru pulang karena ada meeting online.
+
+Baru sampai rumah 30 menit, dapat telpon dari mamang warteg: "Mas, makanannya enak gak?"
+
+Aku: "Enak bang Pak!"
+
+Mamang: "Iya, bayarnya kapan?"
+
+TERNYATA AKU LUBA BAYAR! Langsung balik ke warteg sambil bawa uang plus bonus karena malu.
+
+Sekarang tiap ke warteg itu, mamangnya selalu ingetin: "Jangan lupa bayar ya Mas!"`
+        },
+        8: {
+            title: "Menyanyi di Kamar Mandi",
+            date: "18 Oktober 2025",
+            category: "Musikal",
+            media: "",
+            story: `Lagi asik mandi, nyanyi-nyanyi lagu Bruno Mars full emotion. Sampe teriak-teriak high note-nya.
+
+Ternyata... MIC DROP KU MASIH NYALA DARI KEMAREN DAN TERHUBUNG KE SPEAKER BLUETOOTH DI RUANG TAMU!
+
+Adikku rekam, upload ke TikTok, sekarang dapat 500K views. Komentar pada bilang: "Suaranya bagus, tapinya..."
+
+Sekeluarga pada tau kalo aku suka nyanyi "When I Was Your Man" sambil nangis-nangis di kamar mandi.`
+        },
+        9: {
+            title: "Geleng-geleng Sendiri",
+            date: "15 Oktober 2025",
+            category: "Keseharian",
+            media: "",
+            story: `Naik angkot, lagi mikirin betapa absurdnya hidup. Geleng-geleng sendiri sambil senyum-senyum kecil.
+
+Tiba-tiba nenek sebelahku nanya: "Ada apa Nak? Kenapa geleng-geleng? Nenek ada salah apa?"
+
+TERNYATA DIA KIRA AKU GELENGIN DIA!
+
+Aku cuma bisa bilang: "Bukan Nek, saya lagi latihan buat drama sekolah."
+
+Dia cuma manggut-manggut: "Oh, pinter juga ya."`
+        },
+        10: {
+            title: "Jatuh di Depan Gebetan",
+            date: "12 Oktober 2025",
+            category: "Cinta & Romansa",
+            media: "",
+            story: `Lagi jalan sama gebetan di taman, pengen kelihatan cool. Liat anak skateboard lewat, pengen nunjukkin kalo aku juga bisa.
+
+Pinjam skateboard-nya, bilang: "Liat ya, aku jago nih!"
+
+Langkah pertama... langsung jatuh telentang. Bukan cuma jatuh, tapi celanaku sobek di bagian belakang.
+
+Dia cuma ketawa sambil nolongin aku. Sekarang kita jadian, tapi cerita jatuh itu selalu jadi bahan ledekannya.`
+        }
+    };
+
+    const homePage = document.getElementById('homePage');
+    const detailPage = document.getElementById('detailPage');
+    const cards = document.querySelectorAll('.card');
+    const backButton = document.getElementById('backButton');
+    const reportButton = document.getElementById('reportButton');
+    const reportModal = document.getElementById('reportModal');
+    const closeModal = document.getElementById('closeModal');
+    const submitReportBtn = document.querySelector('.submit-report');
+    const reportTextarea = document.querySelector('.report-textarea');
+    const reportOptions = document.querySelectorAll('input[name="reportReason"]');
+    const successMessage = document.querySelector('.success-message');
+
+    const postTitle = document.getElementById('postTitle');
+    const postDate = document.getElementById('postDate');
+    const postCategory = document.getElementById('postCategory');
+    const postMedia = document.getElementById('postMedia');
+    const postStory = document.getElementById('postStory');
+
+    function showDetailPage(postId) {
+        const post = postsData[postId];
         
-        function showDetailPage(postId) {
-            document.getElementById('homePage').style.display = 'none';
-            document.getElementById('detailPage').style.display = 'flex';
+        if (post) {
+            postTitle.textContent = post.title;
+            postDate.textContent = post.date;
+            postCategory.textContent = `Kategori: ${post.category}`;
+            postStory.textContent = post.story;
             
-            if (dummyPosts[postId]) {
-                const post = dummyPosts[postId];
-                document.getElementById('postTitle').textContent = post.title;
-                document.getElementById('postDate').textContent = post.date;
-                document.getElementById('postCategory').textContent = `Kategori: ${post.category}`;
-                document.getElementById('postStory').textContent = post.story;
-                document.getElementById('postMedia').src = post.image;
+            if (post.media) {
+                postMedia.style.display = 'block';
+                postMedia.src = post.media;
+                postMedia.alt = post.title;
             } else {
-                document.getElementById('postTitle').textContent = 'Postingan Tidak Ditemukan';
-                document.getElementById('postStory').textContent = 'Maaf, postingan yang Anda cari tidak tersedia.';
+                postMedia.style.display = 'none';
             }
-        }
-
-        function showHomePage() {
-            document.getElementById('homePage').style.display = 'block';
-            document.getElementById('detailPage').style.display = 'none';
-        }
-        const swipeLeft = document.querySelector('.swipe-left');
-        const swipeRight = document.querySelector('.swipe-right');
-
-        const leftCards = document.querySelectorAll('.swipe-left .card');
-        const rightCards = document.querySelectorAll('.swipe-right .card');
-        
-        function pauseLeft() { swipeLeft.style.animationPlayState = 'paused'; }
-        function resumeLeft() { swipeLeft.style.animationPlayState = 'running'; }
-
-        function pauseRight() { swipeRight.style.animationPlayState = 'paused'; }
-        function resumeRight() { swipeRight.style.animationPlayState = 'running'; }
-
-        leftCards.forEach(card => {
-            card.addEventListener('mouseenter', pauseLeft);
-            card.addEventListener('mouseleave', resumeLeft);
-            card.addEventListener('touchstart', pauseLeft, { passive: true });
-            card.addEventListener('touchend', resumeLeft, { passive: true });
-            card.addEventListener('touchcancel', resumeLeft, { passive: true });
             
-            card.addEventListener('click', function() {
-                const postId = this.getAttribute('data-post-id');
-                showDetailPage(postId);
-            });
-        });
-
-        rightCards.forEach(card => {
-            card.addEventListener('mouseenter', pauseRight);
-            card.addEventListener('mouseleave', resumeRight);
-            card.addEventListener('touchstart', pauseRight, { passive: true });
-            card.addEventListener('touchend', resumeRight, { passive: true });
-            card.addEventListener('touchcancel', resumeRight, { passive: true });
+            detailPage.dataset.currentPostId = postId;
             
-            card.addEventListener('click', function() {
-                const postId = this.getAttribute('data-post-id');
-                showDetailPage(postId);
-            });
-        });
+            homePage.style.display = 'none';
+            detailPage.style.display = 'block';
+            
+            window.scrollTo(0, 0);
+        } else {
+            alert('Postingan tidak ditemukan!');
+        }
+    }
 
+    function showHomePage() {
+        detailPage.style.display = 'none';
+        homePage.style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    function showReportModal() {
+        reportModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hideReportModal() {
+        reportModal.classList.remove('show');
+        document.body.style.overflow = 'auto';
         
-        document.getElementById('backButton').addEventListener('click', function(e) {
-            e.preventDefault();
-            showHomePage();
-        });
+        reportTextarea.value = '';
+        reportOptions.forEach(option => option.checked = false);
+        submitReportBtn.disabled = true;
+        successMessage.classList.remove('show');
+    }
 
-    
-        document.getElementById('homeLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            showHomePage();
-        });
-
+    function submitReport() {
+        const selectedReason = document.querySelector('input[name="reportReason"]:checked');
+        const additionalReason = reportTextarea.value.trim();
+        
+        if (!selectedReason) {
+            alert('Pilih alasan report terlebih dahulu!');
+            return;
+        }
+        
+        const reportData = {
+            postId: detailPage.dataset.currentPostId,
+            reason: selectedReason.value,
+            details: additionalReason,
+            reporterUserId: getCurrentUserId(),
+            reportedUserId: getPostAuthorId(detailPage.dataset.currentPostId),
+            timestamp: new Date().toISOString()
+        };
+        
+        saveReport(reportData);
+        
+        penalizeUserForReport(detailPage.dataset.currentPostId);
+        
+        console.log('Report submitted for post:', reportData);
+        
+        successMessage.classList.add('show');
+        
         setTimeout(() => {
-            const shineElement = document.querySelector('.shine');
-            if (shineElement) {
-                shineElement.style.cursor = 'pointer';
+            hideReportModal();
+        }, 3000);
+    }
+
+    function getCurrentUserId() {
+        return localStorage.getItem('currentUserId') || 'anonymous';
+    }
+    
+    function getPostAuthorId(postId) {
+        const postAuthors = {
+            1: 'user123',
+            2: 'user456',
+            3: 'user789',
+            4: 'user101',
+            5: 'user_dela',
+            6: 'user112',
+            7: 'user131',
+            8: 'user415',
+            9: 'user161',
+            10: 'user718'
+        };
+        return postAuthors[postId] || 'anonymous';
+    }
+    
+    function saveReport(reportData) {
+        let reports = JSON.parse(localStorage.getItem('reports')) || [];
+        reports.push(reportData);
+        localStorage.setItem('reports', JSON.stringify(reports));
+    }
+    
+    function penalizeUserForReport(postId) {
+        const authorId = getPostAuthorId(postId);
+        
+        if (authorId === 'anonymous') {
+            console.log('Cannot penalize anonymous user');
+            return;
+        }
+        
+        const userKey = `user_${authorId}`;
+        let userData = JSON.parse(localStorage.getItem(userKey));
+        
+        if (userData) {
+            const xpPenalty = 50;
+            userData.xp = Math.max(0, userData.xp - xpPenalty);
+            
+            localStorage.setItem(userKey, JSON.stringify(userData));
+            
+            userData.reportCount = (userData.reportCount || 0) + 1;
+            localStorage.setItem(userKey, JSON.stringify(userData));
+            
+            console.log(`XP reduced by ${xpPenalty} for user ${authorId}. New XP: ${userData.xp}`);
+            
+            if (userData.reportCount >= 3) {
+                applyHeavyPenalty(userData, authorId);
             }
-        }, 1000);
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            
+            updateUserDisplayIfActive(authorId);
+        }
+    }
+    
+    function applyHeavyPenalty(userData, userId) {
+        userData.suspended = true;
+        userData.suspendedUntil = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        localStorage.setItem(`user_${userId}`, JSON.stringify(userData));
+        
+        console.log(`User ${userId} suspended for 7 days due to multiple reports`);
+    }
+    
+    function updateUserDisplayIfActive(userId) {
+        const currentUser = localStorage.getItem('currentUserId');
+        
+        if (currentUser === userId) {
+            if (typeof window.updateProfileDisplay === 'function') {
+                window.updateProfileDisplay();
+            }
+            
+            showPenaltyNotification();
+        }
+    }
+    
+    function showPenaltyNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'penalty-notification';
+        notification.innerHTML = `
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Peringatan!</strong> XP Anda dikurangi 50 poin karena postingan Anda dilaporkan.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
+    }
+    
+    const style = document.createElement('style');
+    style.textContent = `
+        .penalty-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+    `;
+    document.head.appendChild(style);
+
+    cards.forEach(card => {
+        card.addEventListener('click', function() {
+            const postId = parseInt(this.dataset.postId);
+            showDetailPage(postId);
+        });
+    });
+
+    backButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        showHomePage();
+    });
+
+    reportButton.addEventListener('click', showReportModal);
+
+    closeModal.addEventListener('click', hideReportModal);
+
+    reportModal.addEventListener('click', function(e) {
+        if (e.target === reportModal) {
+            hideReportModal();
+        }
+    });
+
+    reportOptions.forEach(option => {
+        option.addEventListener('change', function() {
+            submitReportBtn.disabled = false;
+        });
+    });
+
+    submitReportBtn.addEventListener('click', submitReport);
+
+    const swipeLeft = document.querySelector('.swipe-left');
+    const swipeRight = document.querySelector('.swipe-right');
+    
+    [swipeLeft, swipeRight].forEach(container => {
+        container.addEventListener('mouseenter', () => {
+            container.style.animationPlayState = 'paused';
+        });
+        
+        container.addEventListener('mouseleave', () => {
+            container.style.animationPlayState = 'running';
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        homePage.style.display = 'block';
+        detailPage.style.display = 'none';
+        
+        submitReportBtn.disabled = true;
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            .swipe-left:hover, .swipe-right:hover {
+                animation-play-state: paused !important;
+            }
+        `;
+        document.head.appendChild(style);
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && reportModal.classList.contains('show')) {
+            hideReportModal();
+        }
+        
+        if (e.key === 'Backspace' && detailPage.style.display === 'block') {
+            showHomePage();
+        }
+    });
+</script>
+
+<script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

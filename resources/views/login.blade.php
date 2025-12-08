@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In MemoraX</title>
+    <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
         :root {
@@ -314,7 +315,6 @@
             color: var(--primary);
         }
         
-        
         .redirect-overlay {
             position: fixed;
             top: 0;
@@ -379,7 +379,6 @@
     </style>
 </head>
 <body>
-    
     <div class="redirect-overlay" id="redirectOverlay">
         <div class="redirect-content">
             <i class="bi bi-check-circle-fill redirect-icon"></i>
@@ -459,7 +458,6 @@
         </div>
     </div>
 
-    
     <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -469,7 +467,6 @@
                 </div>
                 <div class="modal-body">
                     <div id="resetAlertContainer"></div>
-                    
                     
                     <div class="reset-step active" id="resetStep1">
                         <p>Masukkan alamat email yang terkait dengan akun Anda. Kami akan mengirimkan kode verifikasi ke email tersebut.</p>
@@ -487,7 +484,6 @@
                             </div>
                         </button>
                     </div>
-                    
                     
                     <div class="reset-step" id="resetStep2">
                         <p>Kami telah mengirimkan kode verifikasi 6-digit ke <strong id="emailSentTo"></strong>. Masukkan kode tersebut di bawah ini.</p>
@@ -512,7 +508,6 @@
                             Kirim Ulang Kode
                         </button>
                     </div>
-                    
                     
                     <div class="reset-step" id="resetStep3">
                         <p>Buat kata sandi baru untuk akun Anda.</p>
@@ -548,7 +543,6 @@
                         </button>
                     </div>
                     
-                    
                     <div class="reset-step" id="resetStep4">
                         <div class="text-center py-4">
                             <i class="bi bi-check-circle-fill" style="font-size: 3rem; color: var(--primary);"></i>
@@ -564,12 +558,10 @@
         </div>
     </div>
 
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            
             const loginForm = document.getElementById('loginForm');
             const emailInput = document.getElementById('exampleDropdownFormEmail1');
             const passwordInput = document.getElementById('exampleDropdownFormPassword1');
@@ -582,7 +574,6 @@
             const forgotPasswordLink = document.getElementById('forgotPasswordLink');
             const redirectOverlay = document.getElementById('redirectOverlay');
             
-        
             const forgotPasswordModal = new bootstrap.Modal(document.getElementById('forgotPasswordModal'));
             const resetSteps = document.querySelectorAll('.reset-step');
             const resetEmailInput = document.getElementById('resetEmail');
@@ -607,34 +598,29 @@
             
             let currentResetStep = 0;
             let countdownTimer;
-            let countdownTime = 300; 
+            let countdownTime = 300;
             let generatedCode = '';
-            
             
             passwordToggle.addEventListener('click', function() {
                 togglePasswordVisibility(passwordInput, this);
             });
             
-         
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 resetValidation();
                 
-              
                 const email = emailInput.value.trim();
                 if (!isValidEmail(email)) {
                     showError(emailInput, 'emailError', 'Harap masukkan alamat email yang valid.');
                     return;
                 }
                 
-                
                 const password = passwordInput.value.trim();
                 if (password.length < 6) {
                     showError(passwordInput, 'passwordError', 'Kata sandi harus minimal 6 karakter.');
                     return;
                 }
-                
                 
                 simulateLogin(email, password);
             });
@@ -651,10 +637,10 @@
                     showResetError(resetEmailInput, 'resetEmailError', 'Harap masukkan alamat email yang valid.');
                     return;
                 }
-              
+                
                 simulateSendCode(email);
             });
-          
+            
             verifyCodeButton.addEventListener('click', function() {
                 const enteredCode = getVerificationCode();
                 
@@ -711,7 +697,6 @@
                     if (index === verificationInputs.length - 1 && this.value.length === 1) {
                         const fullCode = getVerificationCode();
                         if (fullCode.length === 6) {
-                        
                             setTimeout(() => {
                                 verifyCodeButton.click();
                             }, 500);
@@ -730,7 +715,6 @@
                 resetResetPasswordForm();
             });
             
-    
             function togglePasswordVisibility(input, toggleBtn) {
                 const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
                 input.setAttribute('type', type);
@@ -745,12 +729,10 @@
                 }
             }
             
-          
             function isValidEmail(email) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return emailRegex.test(email);
             }
-            
             
             function resetValidation() {
                 emailInput.classList.remove('is-invalid');
@@ -839,7 +821,7 @@
             }
             
             function startCountdown() {
-                countdownTime = 300; 
+                countdownTime = 300;
                 updateCountdownDisplay();
                 
                 countdownTimer = setInterval(() => {
@@ -860,9 +842,8 @@
             }
             
             function resetResetPasswordForm() {
-                
                 goToResetStep(0);
-            
+                
                 resetEmailInput.value = '';
                 verificationInputs.forEach(input => input.value = '');
                 newPasswordInput.value = '';
@@ -880,7 +861,6 @@
             function generateVerificationCode() {
                 return Math.floor(100000 + Math.random() * 900000).toString();
             }
-            
             
             function redirectToHome() {
                 redirectOverlay.classList.add('active');
@@ -917,7 +897,6 @@
                 sendCodeButton.disabled = true;
                 
                 setTimeout(() => {
-                    
                     sendCodeText.classList.remove('d-none');
                     sendCodeSpinner.classList.add('d-none');
                     sendCodeButton.disabled = false;

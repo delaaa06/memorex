@@ -4,82 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-:root {
-    --yellow: #FFE97A;
-    --orange: #E18E2E;
-    --red: #EA4828;
-    --mint: #43B5AD;
-    --teal: #279D9F;
-
-    --primary: var(--teal);
-    --secondary: var(--mint);
-    --accent: var(--yellow);
-    --danger: var(--red);
-}
-
-html {
-    height: 100%;
-}
-body{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    min-height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-    position: relative;
-    z-index: 0;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(
-        135deg,
-        var(--yellow),
-        var(--mint),
-        var(--teal),
-        var(--yellow)
-    );
-    background-size: 400% 400%;
-    animation: gradient 18s ease infinite;
-    z-index: -2;
-}
-@keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-
-
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2NkYGBgAAAABQABDQottAAAAABJRU5ErkJggg==");
-    opacity: 0.15;
-    z-index: -1;
-    pointer-events: none;
-}
-@keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.content {
-    flex: 1;
-    padding: 20px;
-}
-        
+        html {
+            height: 100%;
+        }
+        body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
         .footer {
-            background-color: #43B5AD !important;
+            background-color: #ea8428 !important;
         }
         .teksFooter{
             color: aliceblue !important; 
@@ -95,7 +39,7 @@ body::after {
             border-radius: 50%;
         }
         #header {
-            background-color: #43B5AD !important;
+            background-color: #ffe97a !important;
         }
 
         .judul{
@@ -268,13 +212,12 @@ body::after {
 
         .support-header h2 {
             font-weight: 700;
-            color: white;
+            color: #279D9F;
             margin-bottom: 10px;
         }
 
-
         .support-header p {
-            color: white;
+            color: #666;
             font-size: 16px;
         }
 
@@ -311,26 +254,29 @@ body::after {
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ ('/images/foto/maskotweb.jpeg') }}" alt="🤡"></a>
+                <a class="navbar-brand" href="#"><img class="maskotweb" src="/foto/maskotweb.jpeg" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route ('beranda') }}" target="contentFrame">Home</a>
+                    <a class="nav-link" href="beranda.html">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('upload') }}" target="contentFrame">Make a memory</a>
+                    <a class="nav-link" href="6. upload.html">Make a memory</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('search') }}" target="contentFrame">Hall of Shame</a>
-                    </li>
-                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('profile') }}" target="contentFrame">Profile</a>
+                    <a class="nav-link" href="search.html">Hall of Shame</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link  active" href="{{ route ('support') }}" target="contentFrame">Support Us</a>
+                    <a class="nav-link" href="profilepage.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="feedback.html">Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link active" href="support.html">Support Us</a>
                     </li>
                 </ul>
                 </div>
@@ -399,7 +345,7 @@ body::after {
 
         const leftCards = document.querySelectorAll('.swipe-left .card');
         const rightCards = document.querySelectorAll('.swipe-right .card');
- 
+        
         function pauseLeft() { swipeLeft.style.animationPlayState = 'paused'; }
         function resumeLeft() { swipeLeft.style.animationPlayState = 'running'; }
 
@@ -412,9 +358,9 @@ body::after {
             card.addEventListener('touchstart', pauseLeft, { passive: true });
             card.addEventListener('touchend', resumeLeft, { passive: true });
             card.addEventListener('touchcancel', resumeLeft, { passive: true });
-          
+            
             card.addEventListener('click', function() {
-                window.parent.location.href = 'detail.html?id=1'; 
+                window.parent.location.href = 'detail.html?id=1';
             });
         });
 
@@ -435,7 +381,7 @@ body::after {
             if (shineElement) {
                 shineElement.style.cursor = 'pointer';
             }
-        }, 1000); 
+        }, 1000);
     </script>
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </body>

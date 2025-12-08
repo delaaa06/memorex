@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-    --yellow: #FFF6A3;   
-    --greenlight: #C7F9CC; 
-    --greenmid: #80ED99;   
-    --greenstrong: #38A3A5; 
+            --yellow: #FFE97A;
+            --orange: #E18E2E;
+            --red: #EA4828;
+            --mint: #43B5AD;
+            --teal: #279D9F;
 
-    --primary: var(--greenstrong);
-    --secondary: var(--greenmid);
-    --accent: var(--yellow);
-}
+            --primary: var(--teal);
+            --secondary: var(--mint);
+            --accent: var(--yellow);
+            --danger: var(--red);
+        }
 
         html {
             height: 100%;
@@ -32,29 +34,13 @@
             position: relative;
             overflow-x: hidden;
         }
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(
-        135deg,
-        var(--yellow),
-        var(--greenlight),
-        var(--greenmid),
-        var(--yellow)
-    );
-    background-size: 400% 400%;
-    animation: gradient 18s ease infinite;
-    z-index: -1;
-}
-
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--mint) 100%);
+            z-index: -2;
         }
-
         body::after {
             content: "";
             position: fixed;
@@ -69,9 +55,8 @@
             padding: 20px;
         }
         .footer {
-        background-color: #43B5AD !important;
+            background-color: #ea8428 !important;
         }
-
         .teksFooter{
             color: aliceblue !important; 
         }
@@ -86,7 +71,7 @@
             border-radius: 50%;
         }
         #header {
-            background-color: #43B5AD !important;
+            background-color: #ffe97a !important;
         }
 
         .judul{
@@ -222,6 +207,7 @@
             overflow: hidden;
             width: 100%;
             padding: 20px 0;
+            
         }
         .swipe-left {
             display: flex;
@@ -272,7 +258,7 @@
             margin-top: 16px;
         }
         
-        input:not([type="file"]),
+        input:not([type="file"]):not([type="radio"]),
         select,
         textarea {
             width: 100%;
@@ -292,14 +278,14 @@
             resize: vertical;
         }
         
-        input:not([type="file"]):focus,
+        input:not([type="file"]):not([type="radio"]):focus,
         textarea:focus,
         select:focus {
             outline: none;
             border-color: var(--orange);
             box-shadow: 0 0 0 4px rgba(225, 142, 46, 0.3);
         }
-
+        
         .upload-box {
             display: block;
             width: 100%;
@@ -350,6 +336,85 @@
             transform: translateY(3px);
             box-shadow: 0px 3px 0px var(--primary);
         }
+
+        .visibility-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .visibility-card {
+            position: relative;
+            cursor: pointer;
+            border: 3px solid var(--secondary);
+            border-radius: 14px;
+            padding: 18px 12px;
+            background: #f9ffff;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .visibility-card:hover {
+            border-color: var(--orange);
+            background: #FFF4C4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .visibility-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .visibility-card input[type="radio"]:checked + .visibility-content {
+            color: var(--primary);
+        }
+
+        .visibility-card input[type="radio"]:checked ~ .visibility-content i {
+            color: var(--orange);
+            transform: scale(1.2);
+        }
+
+        .visibility-card:has(input[type="radio"]:checked) {
+            border-color: var(--orange);
+            background: linear-gradient(135deg, #FFF4C4 0%, #f9ffff 100%);
+            box-shadow: 0 0 0 3px rgba(225, 142, 46, 0.2);
+        }
+
+        .visibility-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .visibility-content i {
+            font-size: 28px;
+            color: var(--secondary);
+            transition: all 0.3s ease;
+            margin-bottom: 4px;
+        }
+
+        .visibility-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--primary);
+            display: block;
+        }
+
+        .visibility-content small {
+            font-size: 11px;
+            color: #666;
+            font-weight: 400;
+            line-height: 1.3;
+        }
     </style>
 </head>
 <body>
@@ -357,26 +422,29 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ ('/images/foto/maskotweb.jpeg') }}" alt="🤡"></a>
+                <a class="navbar-brand" href="#"><img class="maskotweb" src="/foto/maskotweb.jpeg" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route ('beranda') }}" target="contentFrame">Home</a>
+                    <a class="nav-link" href="beranda.html">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link active" href="{{ route ('upload') }}" target="contentFrame">Make a memory</a>
+                    <a class="nav-link active" href="6. upload.html">Make a memory</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('search') }}" target="contentFrame">Hall of Shame</a>
+                    <a class="nav-link" href="search.html">Hall of Shame</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('profile') }}" target="contentFrame">Profile</a>
+                    <a class="nav-link" href="profilepage.html">Profile</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('support') }}" target="contentFrame">Support Us</a>
+                    <a class="nav-link" href="feedback.html">Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="support.html">Support Us</a>
                     </li>
                 </ul>
                 </div>
@@ -408,13 +476,35 @@
                 <label for="datetime">Tanggal Kejadian</label>
                 <input type="datetime-local" id="datetime" name="datetime" />
 
-                <label for="visibility">Visibilitas</label>
-                <select id="visibility" name="visibility" required>
-                    <option value="public">Public</option>
-                    <option value="followers">Followers</option>
-                    <option value="private">Private</option>
-                    <option value="anon">Anon</option>
-                </select>
+                <label>Visibilitas</label>
+                <div class="visibility-options">
+                    <label class="visibility-card">
+                        <input type="radio" name="visibility" value="public" required>
+                        <div class="visibility-content">
+                            <i class="fas fa-globe"></i>
+                            <span class="visibility-title">Public</span>
+                            <small>Semua orang bisa melihat</small>
+                        </div>
+                    </label>
+                    
+                    <label class="visibility-card">
+                        <input type="radio" name="visibility" value="private" required>
+                        <div class="visibility-content">
+                            <i class="fas fa-lock"></i>
+                            <span class="visibility-title">Private</span>
+                            <small>Hanya kamu yang bisa lihat</small>
+                        </div>
+                    </label>
+                    
+                    <label class="visibility-card">
+                        <input type="radio" name="visibility" value="anon" required>
+                        <div class="visibility-content">
+                            <i class="fas fa-user-secret"></i>
+                            <span class="visibility-title">Anonymous</span>
+                            <small>Public tanpa nama</small>
+                        </div>
+                    </label>
+                </div>
 
                 <label>Upload Media (max 80MB)</label>
                 
@@ -473,46 +563,50 @@
         const swipeLeft = document.querySelector('.swipe-left');
         const swipeRight = document.querySelector('.swipe-right');
 
-        const leftCards = document.querySelectorAll('.swipe-left .card');
-        const rightCards = document.querySelectorAll('.swipe-right .card');
-        
-        function pauseLeft() { swipeLeft.style.animationPlayState = 'paused'; }
-        function resumeLeft() { swipeLeft.style.animationPlayState = 'running'; }
-
-        function pauseRight() { swipeRight.style.animationPlayState = 'paused'; }
-        function resumeRight() { swipeRight.style.animationPlayState = 'running'; }
-
-
-        leftCards.forEach(card => {
-            card.addEventListener('mouseenter', pauseLeft);
-            card.addEventListener('mouseleave', resumeLeft);
-            card.addEventListener('touchstart', pauseLeft, { passive: true });
-            card.addEventListener('touchend', resumeLeft, { passive: true });
-            card.addEventListener('touchcancel', resumeLeft, { passive: true });
+        if (swipeLeft) {
+            const leftCards = document.querySelectorAll('.swipe-left .card');
             
-            card.addEventListener('click', function() {
-                window.parent.location.href = 'detail.html?id=1'; 
-            });
-        });
+            function pauseLeft() { swipeLeft.style.animationPlayState = 'paused'; }
+            function resumeLeft() { swipeLeft.style.animationPlayState = 'running'; }
 
-        rightCards.forEach(card => {
-            card.addEventListener('mouseenter', pauseRight);
-            card.addEventListener('mouseleave', resumeRight);
-            card.addEventListener('touchstart', pauseRight, { passive: true });
-            card.addEventListener('touchend', resumeRight, { passive: true });
-            card.addEventListener('touchcancel', resumeRight, { passive: true });
-            
-            card.addEventListener('click', function() {
-                window.parent.location.href = 'detail.html?id=1';
+            leftCards.forEach(card => {
+                card.addEventListener('mouseenter', pauseLeft);
+                card.addEventListener('mouseleave', resumeLeft);
+                card.addEventListener('touchstart', pauseLeft, { passive: true });
+                card.addEventListener('touchend', resumeLeft, { passive: true });
+                card.addEventListener('touchcancel', resumeLeft, { passive: true });
+                
+                card.addEventListener('click', function() {
+                    window.parent.location.href = 'detail.html?id=1';
+                });
             });
-        });
+        }
+
+        if (swipeRight) {
+            const rightCards = document.querySelectorAll('.swipe-right .card');
+            
+            function pauseRight() { swipeRight.style.animationPlayState = 'paused'; }
+            function resumeRight() { swipeRight.style.animationPlayState = 'running'; }
+
+            rightCards.forEach(card => {
+                card.addEventListener('mouseenter', pauseRight);
+                card.addEventListener('mouseleave', resumeRight);
+                card.addEventListener('touchstart', pauseRight, { passive: true });
+                card.addEventListener('touchend', resumeRight, { passive: true });
+                card.addEventListener('touchcancel', resumeRight, { passive: true });
+                
+                card.addEventListener('click', function() {
+                    window.parent.location.href = 'detail.html?id=1';
+                });
+            });
+        }
 
         setTimeout(() => {
             const shineElement = document.querySelector('.shine');
             if (shineElement) {
                 shineElement.style.cursor = 'pointer';
             }
-        }, 1000); 
+        }, 1000);
     </script>
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </body>

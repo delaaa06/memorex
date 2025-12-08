@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -18,14 +18,12 @@
             display: flex;
             flex-direction: column;
         }
-
-        
         .content {
             flex: 1;
             padding: 20px;
         }
         .footer {
-            background-color: #43B5AD !important;
+            background-color: #ea8428 !important;
         }
         .teksFooter{
             color: aliceblue !important; 
@@ -41,7 +39,7 @@
             border-radius: 50%;
         }
         #header {
-            background-color: #43B5AD !important;
+            background-color: #ffe97a !important;
         }
 
         .judul{
@@ -203,53 +201,24 @@
         }
 
         :root {
-            --yellow: #FFE97A;
-            --orange: #E18E2E;
-            --red: #EA4828;
-            --mint: #43B5AD;
-            --teal: #279D9F;
-
-            --primary: var(--teal);
-            --secondary: var(--mint);
-            --accent: var(--yellow);
-            --danger: var(--red);
-    }
-
+            --primary-color: #E18E2E;
+            --secondary-color: #FFE97A;
+            --accent-color: #EA4828;
+            --info-color: #3bd6cb;
+            --dark-color: #05c78d;
+            --dark-bg: #ffffff;
+            --darker-bg: #ffffff34;
+            --light-text: #230575;
+            --gray-text: #230575;
+            --border-color: #2d3035;
+        }
+        
         body {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--light-text);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            margin: 0;
-            position: relative;
-            overflow-x: hidden;
-    }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, var(--yellow), var(--mint), var(--teal), var(--yellow));
-            background-size: 400% 400%;
-            animation: gradient 18s ease infinite;
-            z-index: -1;
-    }
-
-
-    @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2NkYGBgAAAABQABDQottAAAAABJRU5ErkJggg==");
-    opacity: 0.18;
-    z-index: -1;
-    pointer-events: none;
-}
-
+        }
         
        .profile-banner {
             height: 200px;
@@ -310,6 +279,29 @@ body::after {
             margin-bottom: 5px;
         }
         
+        .badge-warning-report {
+            background-color: var(--accent-color) !important;
+            color: white !important;
+            animation: pulse 2s infinite;
+        }
+        
+        .badge-danger {
+            background-color: #dc3545 !important;
+            color: white !important;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+            }
+        }
+        
         .xp-bar {
             height: 12px;
             background-color: #2d3035;
@@ -328,11 +320,14 @@ body::after {
         }
         
         .post-card {
-    background: transparent;
-    backdrop-filter: none; 
-}
-
-
+            background-color: var(--darker-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--info-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
         
         .post-card:hover {
             transform: translateY(-2px);
@@ -513,6 +508,10 @@ body::after {
             color: var(--primary-color);
         }
         
+        .stat-report .stat-value {
+            color: var(--accent-color) !important;
+        }
+        
         .stat-label {
             font-size: 0.8rem;
             color: var(--gray-text);
@@ -527,6 +526,53 @@ body::after {
             display: inline-block;
             margin-bottom: 10px;
         }
+        
+        .logout-btn-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .logout-btn-custom {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn-custom:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(220, 53, 69, 0.4);
+        }
+        
+        .penalty-history {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: rgba(220, 53, 69, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .penalty-history h6 {
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+        
+        .penalty-history ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .penalty-history li {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -534,26 +580,29 @@ body::after {
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ ('/images/foto/maskotweb.jpeg') }}" alt="🤡"></a>
+                <a class="navbar-brand" href="#"><img class="maskotweb" src="/foto/maskotweb.jpeg" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ route ('beranda') }}" target="contentFrame">Home</a>
+                    <a class="nav-link" href="beranda.html">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('upload') }}" target="contentFrame">Make a memory</a>
+                    <a class="nav-link" href="6. upload.html">Make a memory</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('search') }}" target="contentFrame">Hall of Shame</a>
-                    </li>
-                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('profile') }}" target="contentFrame">Profile</a>
+                    <a class="nav-link" href="search.html">Hall of Shame</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="{{ route ('support') }}" target="contentFrame">Support Us</a>
+                    <a class="nav-link active" href="profilepage.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="feedback.html">Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="support.html">Support Us</a>
                     </li>
                 </ul>
                 </div>
@@ -562,6 +611,12 @@ body::after {
     </header>
 
     <main class="content container">
+        <div class="logout-btn-container">
+            <button class="btn logout-btn-custom" id="logoutBtn">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </button>
+        </div>
+        
         <div class="xp-notification" id="xpNotification">
             <i class="fas fa-star me-2"></i>
             <span id="xpNotificationText">+10 XP</span>
@@ -576,7 +631,7 @@ body::after {
                     <img src="https://i.pravatar.cc/120" alt="Foto Profil" id="profileImg">
                 </div>
             </div>
-
+            
             <div class="profile-info">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
@@ -618,13 +673,19 @@ body::after {
                                 <div class="stat-label">Hari Login</div>
                             </div>
                         </div>
+                        
+                        <div class="penalty-history" id="penaltyHistory" style="display: none;">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>History Penalty</h6>
+                            <ul id="penaltyList">
+                            </ul>
+                        </div>
                     </div>
                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                         <i class="fas fa-edit"></i> Edit Profil
                     </button>
                 </div>
             </div>
-           
+            
             <button class="btn daily-login-btn w-100" id="dailyLoginBtn">
                 <i class="fas fa-calendar-day me-2"></i> Klaim XP Login Harian
             </button>
@@ -637,7 +698,7 @@ body::after {
                     <button class="nav-link" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity" type="button" role="tab" aria-controls="activity" aria-selected="false">Aktivitas</button>
                 </li>
             </ul>
-           
+            
             <div class="tab-content" id="profileTabContent">
                 <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
                     <div class="post-card" data-post-id="1">
@@ -829,11 +890,11 @@ body::after {
         const leftCards = document.querySelectorAll('.swipe-left .card');
         const rightCards = document.querySelectorAll('.swipe-right .card');
         
-        function pauseLeft() { swipeLeft.style.animationPlayState = 'paused'; }
-        function resumeLeft() { swipeLeft.style.animationPlayState = 'running'; }
+        function pauseLeft() { if(swipeLeft) swipeLeft.style.animationPlayState = 'paused'; }
+        function resumeLeft() { if(swipeLeft) swipeLeft.style.animationPlayState = 'running'; }
 
-        function pauseRight() { swipeRight.style.animationPlayState = 'paused'; }
-        function resumeRight() { swipeRight.style.animationPlayState = 'running'; }
+        function pauseRight() { if(swipeRight) swipeRight.style.animationPlayState = 'paused'; }
+        function resumeRight() { if(swipeRight) swipeRight.style.animationPlayState = 'running'; }
 
         leftCards.forEach(card => {
             card.addEventListener('mouseenter', pauseLeft);
@@ -843,7 +904,7 @@ body::after {
             card.addEventListener('touchcancel', resumeLeft, { passive: true });
             
             card.addEventListener('click', function() {
-                window.parent.location.href = 'detail.html?id=1'; 
+                window.location.href = 'beranda.html';
             });
         });
 
@@ -855,7 +916,7 @@ body::after {
             card.addEventListener('touchcancel', resumeRight, { passive: true });
             
             card.addEventListener('click', function() {
-                window.parent.location.href = 'detail.html?id=1';
+                window.location.href = 'beranda.html';
             });
         });
 
@@ -864,7 +925,7 @@ body::after {
             if (shineElement) {
                 shineElement.style.cursor = 'pointer';
             }
-        }, 1000); 
+        }, 1000);
 
         let userData = {
             username: "User#1234",
@@ -878,12 +939,16 @@ body::after {
                 posts: 12,
                 likes: 47,
                 comments: 23,
-                loginStreak: 5
+                loginStreak: 5,
+                reports: 0
             },
             dailyLoginClaimed: false,
             likedPosts: [],
             commentedPosts: [],
-            repostedPosts: []
+            repostedPosts: [],
+            reportCount: 0,
+            totalXpPenalty: 0,
+            suspended: false
         };
         
         const xpValues = {
@@ -914,8 +979,63 @@ body::after {
             showXpNotification(amount, activity);
             
             checkLevelUp();
-           
+            
             updateProfileDisplay();
+        }
+        
+        function loadUserData() {
+            const currentUserId = localStorage.getItem('currentUserId') || 'user123';
+            const savedData = JSON.parse(localStorage.getItem(`user_${currentUserId}`));
+            
+            if (savedData) {
+                userData = { ...userData, ...savedData };
+            }
+            
+            const allReports = JSON.parse(localStorage.getItem('reports')) || [];
+            const userReports = allReports.filter(report => 
+                getPostAuthorIdFromReport(report.postId) === currentUserId
+            );
+            
+            userData.stats.reports = userReports.length;
+            userData.reportCount = userReports.length;
+            
+            userData.totalXpPenalty = userReports.length * 50;
+            
+            if (userData.suspended && userData.suspendedUntil) {
+                const suspendUntil = new Date(userData.suspendedUntil);
+                const now = new Date();
+                if (now > suspendUntil) {
+                    userData.suspended = false;
+                    userData.suspendedUntil = null;
+                    localStorage.setItem(`user_${currentUserId}`, JSON.stringify(userData));
+                }
+            }
+        }
+        
+        function getPostAuthorIdFromReport(postId) {
+            const postAuthors = {
+                1: 'user123',
+                2: 'user456',
+                3: 'user789',
+                4: 'user101',
+                5: 'user_dela',
+                6: 'user112',
+                7: 'user131',
+                8: 'user415',
+                9: 'user161',
+                10: 'user718',
+                11: 'user192',
+                12: 'user021',
+                13: 'user223',
+                14: 'user425',
+                15: 'user526',
+                16: 'user627',
+                17: 'user728',
+                18: 'user829',
+                19: 'user930',
+                20: 'user031'
+            };
+            return postAuthors[postId] || 'anonymous';
         }
         
         function updateProfileDisplay() {
@@ -934,29 +1054,17 @@ body::after {
             
             document.getElementById('profileImg').src = userData.avatar;
             document.getElementById('profileBanner').style.backgroundImage = `url('${userData.banner}')`;
-           
+            
             document.getElementById('postCount').textContent = userData.stats.posts;
             document.getElementById('likeCount').textContent = userData.stats.likes;
             document.getElementById('commentCount').textContent = userData.stats.comments;
             document.getElementById('loginStreak').textContent = userData.stats.loginStreak;
             
-            const badgeContainer = document.querySelector('.profile-info .mb-2');
-            badgeContainer.innerHTML = '';
-            userData.badges.forEach(badge => {
-                const badgeElement = document.createElement('span');
-                badgeElement.className = 'badge';
-                badgeElement.textContent = badge;
-                
-                if (badge === 'Aktif') {
-                    badgeElement.style.backgroundColor = 'var(--info-color)';
-                } else if (badge === 'Kreator') {
-                    badgeElement.style.backgroundColor = 'var(--accent-color)';
-                } else if (badge === 'Pemula') {
-                    badgeElement.style.backgroundColor = 'var(--dark-color)';
-                }
-                
-                badgeContainer.appendChild(badgeElement);
-            });
+            updateReportBadge();
+            
+            updateReportStats();
+            
+            updatePenaltyHistory();
             
             const dailyLoginBtn = document.getElementById('dailyLoginBtn');
             if (userData.dailyLoginClaimed) {
@@ -968,6 +1076,171 @@ body::after {
             }
         }
         
+        function updateReportBadge() {
+            const badgeContainer = document.querySelector('.profile-info .mb-2');
+            
+            const existingReportBadge = badgeContainer.querySelector('.badge-warning-report');
+            if (existingReportBadge) {
+                existingReportBadge.remove();
+            }
+            
+            const existingSuspendedBadge = badgeContainer.querySelector('.badge-danger');
+            if (existingSuspendedBadge) {
+                existingSuspendedBadge.remove();
+            }
+            
+            if (userData.reportCount > 0) {
+                const reportBadge = document.createElement('span');
+                reportBadge.className = 'badge badge-warning-report';
+                reportBadge.textContent = `${userData.reportCount} Report`;
+                reportBadge.title = `${userData.reportCount} postingan Anda telah dilaporkan`;
+                reportBadge.setAttribute('data-bs-toggle', 'tooltip');
+                badgeContainer.appendChild(reportBadge);
+            }
+            
+            if (userData.suspended) {
+                const suspendedBadge = document.createElement('span');
+                suspendedBadge.className = 'badge badge-danger';
+                suspendedBadge.textContent = 'Suspended';
+                suspendedBadge.title = 'Akun Anda ditangguhkan karena menerima banyak laporan';
+                suspendedBadge.setAttribute('data-bs-toggle', 'tooltip');
+                badgeContainer.appendChild(suspendedBadge);
+                
+                if (userData.suspendedUntil) {
+                    const suspendUntil = new Date(userData.suspendedUntil);
+                    const now = new Date();
+                    if (suspendUntil > now) {
+                        showSuspendedModal(suspendUntil);
+                    }
+                }
+            }
+        }
+        
+        function updateReportStats() {
+            const statsContainer = document.querySelector('.stats-container');
+            let reportStat = statsContainer.querySelector('.stat-report');
+            
+            if (!reportStat && userData.reportCount > 0) {
+                reportStat = document.createElement('div');
+                reportStat.className = 'stat-item stat-report';
+                reportStat.innerHTML = `
+                    <div class="stat-value" id="reportCount">${userData.reportCount}</div>
+                    <div class="stat-label">Laporan</div>
+                `;
+                statsContainer.appendChild(reportStat);
+            } else if (reportStat) {
+                reportStat.querySelector('#reportCount').textContent = userData.reportCount;
+            }
+        }
+        
+        function updatePenaltyHistory() {
+            const penaltyHistory = document.getElementById('penaltyHistory');
+            const penaltyList = document.getElementById('penaltyList');
+            
+            if (userData.totalXpPenalty > 0) {
+                penaltyHistory.style.display = 'block';
+                penaltyList.innerHTML = '';
+                
+                const allReports = JSON.parse(localStorage.getItem('reports')) || [];
+                const userReports = allReports.filter(report => 
+                    getPostAuthorIdFromReport(report.postId) === localStorage.getItem('currentUserId')
+                );
+                
+                userReports.forEach((report, index) => {
+                    const li = document.createElement('li');
+                    const reportDate = new Date(report.timestamp).toLocaleDateString('id-ID');
+                    li.textContent = `-${50} XP (${reportDate}): Postingan dilaporkan karena "${report.reason}"`;
+                    penaltyList.appendChild(li);
+                });
+                
+                if (userData.suspended) {
+                    const li = document.createElement('li');
+                    li.textContent = `⚠️ Akun ditangguhkan selama 7 hari (menerima ${userData.reportCount} laporan)`;
+                    penaltyList.appendChild(li);
+                }
+                
+                const totalLi = document.createElement('li');
+                totalLi.innerHTML = `<strong>Total XP yang hilang: -${userData.totalXpPenalty}</strong>`;
+                penaltyList.appendChild(totalLi);
+            } else {
+                penaltyHistory.style.display = 'none';
+            }
+        }
+        
+        function showSuspendedModal(untilDate) {
+            if (document.querySelector('.modal-suspended')) return;
+            
+            const modalHtml = `
+                <div class="modal fade modal-suspended" id="suspendedModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title"><i class="fas fa-ban me-2"></i>Akun Ditangguhkan</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-danger">
+                                    <h6><i class="fas fa-exclamation-triangle me-2"></i>Akses Anda dibatasi!</h6>
+                                    <p>Akun Anda telah ditangguhkan karena menerima terlalu banyak laporan dari pengguna lain.</p>
+                                    <p class="mb-0"><strong>Akun akan aktif kembali pada:</strong><br>
+                                    ${untilDate.toLocaleDateString('id-ID', { 
+                                        weekday: 'long', 
+                                        year: 'numeric', 
+                                        month: 'long', 
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}</p>
+                                </div>
+                                <div class="mt-3">
+                                    <h6>Alasan Penangguhan:</h6>
+                                    <ul>
+                                        <li>Postingan Anda dilaporkan karena melanggar aturan komunitas</li>
+                                        <li>Menerima ${userData.reportCount} laporan dari pengguna lain</li>
+                                        <li>XP Anda telah dikurangi sebanyak ${userData.totalXpPenalty} poin</li>
+                                    </ul>
+                                    <p class="text-muted mt-3">Selama penangguhan, Anda tidak dapat membuat postingan baru atau berinteraksi dengan postingan lain.</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = modalHtml;
+            document.body.appendChild(modalContainer);
+            
+            const modal = new bootstrap.Modal(document.getElementById('suspendedModal'));
+            modal.show();
+            
+            document.getElementById('suspendedModal').addEventListener('hidden.bs.modal', function() {
+                modalContainer.remove();
+            });
+        }
+
+        function checkLevelUp() {
+            const xpNeeded = userData.level * 100;
+            if (userData.xp >= xpNeeded) {
+                userData.level++;
+
+                if (userData.level === 5 && !userData.badges.includes("Aktif")) {
+                    userData.badges.push("Aktif");
+                } else if (userData.level === 10 && !userData.badges.includes("Kreator")) {
+                    userData.badges.push("Kreator");
+                } else if (userData.level === 20 && !userData.badges.includes("Expert")) {
+                    userData.badges.push("Expert");
+                }
+                
+                updateProfileDisplay();
+
+                showXpNotification(0, `Selamat! Anda naik ke level ${userData.level}`);
+            }
+        }
+
         document.getElementById('avatarUpload').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -996,6 +1269,9 @@ body::after {
             
             addXP(xpValues.changeAvatar, "Mengubah avatar");
             
+            const currentUserId = localStorage.getItem('currentUserId') || 'user123';
+            localStorage.setItem(`user_${currentUserId}`, JSON.stringify(userData));
+            
             const modal = bootstrap.Modal.getInstance(document.getElementById('avatarModal'));
             modal.hide();
         });
@@ -1005,6 +1281,9 @@ body::after {
             userData.banner = newBanner;
             
             addXP(xpValues.changeBanner, "Mengubah banner");
+            
+            const currentUserId = localStorage.getItem('currentUserId') || 'user123';
+            localStorage.setItem(`user_${currentUserId}`, JSON.stringify(userData));
             
             const modal = bootstrap.Modal.getInstance(document.getElementById('bannerModal'));
             modal.hide();
@@ -1016,40 +1295,25 @@ body::after {
             
             addXP(xpValues.editProfile, "Mengedit profil");
             
+            const currentUserId = localStorage.getItem('currentUserId') || 'user123';
+            localStorage.setItem(`user_${currentUserId}`, JSON.stringify(userData));
+            
             const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
             modal.hide();
         });
-        
-        function checkLevelUp() {
-            const xpNeeded = userData.level * 100;
-            if (userData.xp >= xpNeeded) {
-                userData.level++;
-                
-                if (userData.level === 5 && !userData.badges.includes("Aktif")) {
-                    userData.badges.push("Aktif");
-                } else if (userData.level === 10 && !userData.badges.includes("Kreator")) {
-                    userData.badges.push("Kreator");
-                } else if (userData.level === 20 && !userData.badges.includes("Expert")) {
-                    userData.badges.push("Expert");
-                }
-                
-                updateProfileDisplay();
-               
-                showXpNotification(0, `Selamat! Anda naik ke level ${userData.level}`);
-            }
-        }
-        
+
         document.getElementById('dailyLoginBtn').addEventListener('click', function() {
             if (!userData.dailyLoginClaimed) {
                 userData.dailyLoginClaimed = true;
                 userData.stats.loginStreak++;
-                
                 addXP(xpValues.dailyLogin, "Login harian");
-                
                 addActivity("Anda mengklaim XP login harian", "fas fa-calendar-day", "text-primary");
+                
+                const currentUserId = localStorage.getItem('currentUserId') || 'user123';
+                localStorage.setItem(`user_${currentUserId}`, JSON.stringify(userData));
             }
         });
-        
+
         function addActivity(text, icon, color) {
             const activityTab = document.getElementById('activity');
             const activityItem = document.createElement('div');
@@ -1059,10 +1323,10 @@ body::after {
                 <span>${text}</span>
                 <small class="text-muted d-block">Baru saja</small>
             `;
-            
+
             activityTab.insertBefore(activityItem, activityTab.firstChild);
         }
-        
+ 
         document.addEventListener('click', function(e) {
             if (e.target.closest('.like-btn')) {
                 const likeBtn = e.target.closest('.like-btn');
@@ -1070,64 +1334,86 @@ body::after {
                 
                 if (!userData.likedPosts.includes(postId)) {
                     userData.likedPosts.push(postId);
-                    
                     const likeCount = likeBtn.querySelector('.like-count');
                     likeCount.textContent = parseInt(likeCount.textContent) + 1;
-                    
                     addXP(xpValues.likePost, "Menyukai postingan");
-                    
                     userData.stats.likes++;
-                    
                     addActivity("Anda menyukai sebuah postingan", "fas fa-heart", "text-danger");
+                    
+                    const currentUserId = localStorage.getItem('currentUserId') || 'user123';
+                    localStorage.setItem(`user_${currentUserId}`, JSON.stringify(userData));
                 }
             }
-            
+
             if (e.target.closest('.comment-btn')) {
                 const commentBtn = e.target.closest('.comment-btn');
                 const postId = commentBtn.getAttribute('data-post-id');
                 
                 if (!userData.commentedPosts.includes(postId)) {
                     userData.commentedPosts.push(postId);
-                    
                     const commentCount = commentBtn.querySelector('.comment-count');
                     commentCount.textContent = parseInt(commentCount.textContent) + 1;
-                    
                     addXP(xpValues.commentPost, "Mengomentari postingan");
-                    
                     userData.stats.comments++;
-                    
                     addActivity("Anda mengomentari sebuah postingan", "fas fa-comment", "text-info");
-                    
                     const comment = prompt("Tulis komentar Anda:");
                     if (comment) {
                         alert("Komentar berhasil ditambahkan!");
                     }
+                    
+                    const currentUserId = localStorage.getItem('currentUserId') || 'user123';
+                    localStorage.setItem(`user_${currentUserId}`, JSON.stringify(userData));
                 }
             }
-            
+
             if (e.target.closest('.repost-btn')) {
                 const repostBtn = e.target.closest('.repost-btn');
                 const postId = repostBtn.getAttribute('data-post-id');
                 
                 if (!userData.repostedPosts.includes(postId)) {
                     userData.repostedPosts.push(postId);
-                    
+
                     const repostCount = repostBtn.querySelector('.repost-count');
                     repostCount.textContent = parseInt(repostCount.textContent) + 1;
-                    
+
                     addXP(xpValues.repost, "Membagikan postingan");
-                    
+
                     addActivity("Anda membagikan sebuah postingan", "fas fa-share", "text-success");
                     
                     alert("Postingan berhasil dibagikan!");
+                    
+                    const currentUserId = localStorage.getItem('currentUserId') || 'user123';
+                    localStorage.setItem(`user_${currentUserId}`, JSON.stringify(userData));
                 }
             }
         });
-        
+
         document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            
             updateProfileDisplay();
+            
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            if (!localStorage.getItem('currentUserId')) {
+                localStorage.setItem('currentUserId', 'user123');
+            }
+        });
+
+        window.updateProfileDisplay = updateProfileDisplay;
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                sessionStorage.clear();
+                localStorage.removeItem('currentUserId');
+               
+                window.location.href = 'login.html';
+            }
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
