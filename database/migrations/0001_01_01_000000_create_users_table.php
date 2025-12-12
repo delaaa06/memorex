@@ -17,24 +17,39 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('username')->unique();
+            $table->string('phone')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->integer('xp')->default(0);
+            $table->integer('level')->default(1);
+            $table->text('bio')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('banner')->nullable();
+            $table->integer('login_streak')->default(0);
+            $table->date('last_login')->nullable();
+            $table->integer('total_likes')->default(0);
+            $table->integer('total_comments')->default(0);
         });
 
+    
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        /** cek table users bener ga namnya */
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->index(); 
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        
     }
 
     /**
@@ -42,8 +57,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schemaww::dropIfExists('users');
+        Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('username');
     }
 };

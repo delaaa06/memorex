@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -46,4 +47,6 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::get('/regis', function () {
     return view('regis');
 })->name('regis');
+
+Route::post('/regis', [RegisController::class, 'regis'])->name('regis.submit');
 

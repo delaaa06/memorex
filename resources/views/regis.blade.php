@@ -347,6 +347,8 @@
     </style>
 </head>
 <body>
+
+
     <div class="register-container">
         <div class="register-header">
             <i class="bi bi-person-plus-fill floating-icon pulse"></i>
@@ -367,21 +369,22 @@
                 <div class="step" id="step3">3</div>
             </div>
             
-            <form id="registerForm">
+            <form id="regisForm" action="{{ route('regis.submit') }}" method="POST">
+                @csrf
                 <div class="form-step active" id="step1Form">
                     <h5 class="mb-4" style="color: var(--primary);">Informasi Pribadi</h5>
                     
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="firstName" class="form-label">Nama Depan</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="Nama depan">
+                            <input name="first_name" type="text" class="form-control" id="firstName" placeholder="Nama depan">
                             <div class="invalid-feedback" id="firstNameError">
                                 Nama depan harus diisi.
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="lastName" class="form-label">Nama Belakang</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="Nama belakang">
+                            <input name="last_name" type="text" class="form-control" id="lastName" placeholder="Nama belakang">
                             <div class="invalid-feedback" id="lastNameError">
                                 Nama belakang harus diisi.
                             </div>
@@ -390,7 +393,7 @@
                     
                     <div class="mb-3">
                         <label for="email" class="form-label">Alamat Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="nama@contoh.com">
+                        <input name="email" type="email" class="form-control" id="email" placeholder="nama@contoh.com">
                         <div class="invalid-feedback" id="emailError">
                             Harap masukkan alamat email yang valid.
                         </div>
@@ -398,7 +401,7 @@
                     
                     <div class="mb-3">
                         <label for="phone" class="form-label">Nomor Telepon</label>
-                        <input type="tel" class="form-control" id="phone" placeholder="08xxxxxxxxxx">
+                        <input name="phone" type="tel" class="form-control" id="phone" placeholder="08xxxxxxxxxx">
                         <div class="invalid-feedback" id="phoneError">
                             Harap masukkan nomor telepon yang valid.
                         </div>
@@ -414,7 +417,7 @@
                     
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Pilih username">
+                        <input name="username" type="text" class="form-control" id="username" placeholder="Pilih username">
                         <div class="invalid-feedback" id="usernameError">
                             Username harus 3-20 karakter dan hanya boleh mengandung huruf, angka, dan underscore.
                         </div>
@@ -423,7 +426,7 @@
                     <div class="mb-3">
                         <label for="password" class="form-label">Kata Sandi</label>
                         <div class="password-container">
-                            <input type="password" class="form-control" id="password" placeholder="Buat kata sandi">
+                            <input name="password" type="password" class="form-control" id="password" placeholder="Buat kata sandi">
                             <button type="button" class="password-toggle" id="passwordToggle">
                                 <i class="bi bi-eye"></i>
                             </button>
@@ -442,7 +445,7 @@
                     <div class="mb-4">
                         <label for="confirmPassword" class="form-label">Konfirmasi Kata Sandi</label>
                         <div class="password-container">
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="Ulangi kata sandi">
+                            <input name="password_confirmation" type="password" class="form-control" id="confirmPassword" placeholder="Ulangi kata sandi">
                             <button type="button" class="password-toggle" id="confirmPasswordToggle">
                                 <i class="bi bi-eye"></i>
                             </button>

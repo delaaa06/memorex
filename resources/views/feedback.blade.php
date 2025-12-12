@@ -32,7 +32,7 @@
             flex-direction: column;
             position: relative;
             overflow-x: hidden;
-            background: linear-gradient(135deg, var(--yellow), var(--mint), var(--teal));
+            background: radial-gradient(circle at center, #fff 0%, #fff 60%, #fff4df 85%, #fff4df 100%);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
         }

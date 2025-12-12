@@ -18,6 +18,7 @@
             margin: 0;
             display: flex;
             flex-direction: column;
+            background: radial-gradient(circle at center, #fff 0%, #fff 60%, #fff4df 85%, #fff4df 100%);
         }
         .content {
             flex: 1;
@@ -212,13 +213,6 @@
             --light-text: #230575;
             --gray-text: #230575;
             --border-color: #2d3035;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: var(--light-text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
         }
         
        .profile-banner {

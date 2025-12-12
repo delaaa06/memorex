@@ -577,9 +577,6 @@
                 card.addEventListener('touchend', resumeLeft, { passive: true });
                 card.addEventListener('touchcancel', resumeLeft, { passive: true });
                 
-                card.addEventListener('click', function() {
-                    window.location.href = "{{ route('detail', ['id' => 1]) }}";
-                });
             });
         }
 
@@ -596,9 +593,7 @@
                 card.addEventListener('touchend', resumeRight, { passive: true });
                 card.addEventListener('touchcancel', resumeRight, { passive: true });
                 
-                card.addEventListener('click', function() {
-                    window.location.href = "{{ route('detail', ['id' => 1]) }}";
-                });
+               
             });
         }
 
