@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
-    <link href="{{ asset('bootstrap-5.3.8-dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
@@ -33,8 +33,9 @@
             flex-direction: column;
             position: relative;
             overflow-x: hidden;
+            background: radial-gradient(circle at center, #fff 0%, #fff 60%, #fff4df 85%, #fff4df 100%);
         }
-
+/* 
         body::before {
             content: "";
             position: fixed;
@@ -43,7 +44,7 @@
             background-size: 400% 400%;
             animation: gradient 18s ease infinite;
             z-index: -1;
-        }
+        } */
 
         @keyframes gradient {
             0% { background-position: 0% 50%; }
