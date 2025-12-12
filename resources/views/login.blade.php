@@ -464,7 +464,7 @@
             <div class="text-center">
                 <span style="color: #6c757d;">Belum punya akun? </span>
                 {{-- Menggunakan route() untuk link pendaftaran --}}
-                <a href="{{ route('register') }}" class="text-decoration-none fw-bold" 
+                <a href="{{ route('regis') }}" class="text-decoration-none fw-bold" 
                    style="color: var(--primary);" id="signupLink">Daftar sekarang</a>
             </div>
         </div>
@@ -885,7 +885,7 @@
                 redirectOverlay.classList.add('active');
                 
                 setTimeout(() => {
-                    window.location.href = "{{ route('home') }}";
+                    window.location.href = "{{ route('beranda') }}";
                 }, 3000);
             }
 
