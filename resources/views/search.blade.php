@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -271,6 +272,126 @@
             transform: translateY(-2px);
             color: white;
         }
+
+        .post-stats {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .post-stats .badge {
+            font-size: 0.9rem;
+            padding: 8px 15px;
+        }
+
+        .post-card-views {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .post-card-views i {
+            color: #E18E2E;
+            margin-right: 3px;
+        }
+
+        /* Post Detail Actions */
+        .post-actions-detail .btn {
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+        }
+
+        .like-btn-detail {
+            transition: all 0.3s ease;
+        }
+
+        .like-btn-detail:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+
+        .like-btn-detail.liked {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .like-btn-detail.liked:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        /* komentars Section Detail */
+        .komentars-section-detail {
+            margin-top: 2rem;
+        }
+
+        .komentar-form-wrapper {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .komentar-form-detail textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .komentars-list-detail {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* komentar Item di Detail Page */
+        .komentar-item-detail {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .komentar-item-detail:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .komentar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .komentar-author {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        .komentar-date {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .komentar-content {
+            color: #212529;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Empty State */
+        .empty-komentars {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+        }
+
+        .empty-komentars i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
@@ -313,102 +434,171 @@
     </header>
 
     <main class="main-content" id="homePage">
+        <div class="container mt-4">
+            <h2>Hasil Pencarian: "{{ $query }}"</h2>
+            <p>Ditemukan {{ $searchResults->count() }} hasil</p>
+            
+            <div class="posts-grid">
+                @forelse($searchResults as $post)
+                    <div class="post-card bg-white" data-post-id="{{ $post->id }}">
+                        @if($post->gambar)
+                            <img src="{{ asset('storage/' . $post->gambar) }}" class="post-card-img" alt="{{ $post->judul }}">
+                        @else
+                            <img src="https://via.placeholder.com/600x400" class="post-card-img" alt="{{ $post->judul }}">
+                        @endif
+                        
+                        <div class="post-card-body">
+                            <h5 class="post-card-title">{{ Str::limit($post->judul, 50) }}</h5>
+                            <span class="post-card-badge">{{ $post->kategori }}</span>
+                            <p class="post-card-text">{{ Str::limit($post->isi, 120) }}</p>
+                            <small class="text-muted">Oleh: {{ $post->user->name ?? 'Anonymous' }}</small>
+                        </div>
+                        
+                        <div class="post-card-footer">
+                            <small class="post-card-views">
+                                <i class="fas fa-heart"></i> {{ $post->likes }} likes
+                            </small>
+                            <a href="#" class="btn btn-custom-primary view-detail">Baca Selengkapnya</a>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted">Tidak ada hasil yang ditemukan untuk "{{ $query }}"</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
         <div class="container">
             <h1 class="hall-of-shame-title">🔥 Postingan Populer Bulan Ini 🔥</h1>
             <p class="hall-of-shame-subtitle">Lihat konten yang paling banyak dibaca dan disukai oleh pengguna.</p>
 
             <div class="posts-grid">
-                <div class="post-card bg-white" data-post-id="1">
-                    <img src="https://via.placeholder.com/600x400/E18E2E/FFFFFF?text=Postingan+1" class="post-card-img" alt="Gambar Postingan 1">
-                    <div class="post-card-body">
-                        <h5 class="post-card-title">Cara Menciptakan Memori Baru</h5>
-                        <span class="post-card-badge">Inspirasi</span>
-                        <p class="post-card-text">
-                            Pelajari tips dan trik sederhana untuk membuat momen tak terlupakan dalam hidup Anda.
-                        </p>
+                @forelse($popularPosts as $post)
+                    <div class="post-card bg-white" data-post-id="{{ $post->id }}">
+                        @if($post->gambar)
+                            <img src="{{ asset('storage/' . $post->gambar) }}" class="post-card-img" alt="{{ $post->judul }}">
+                        @else
+                            <img src="https://via.placeholder.com/600x400/E18E2E/FFFFFF?text={{ urlencode($post->judul) }}" class="post-card-img" alt="{{ $post->judul }}">
+                        @endif
+                        
+                        <div class="post-card-body">
+                            <h5 class="post-card-title">{{ Str::limit($post->judul, 50) }}</h5>
+                            <span class="post-card-badge">{{ $post->kategori }}</span>
+                            <p class="post-card-text">
+                                {{ Str::limit($post->isi, 120) }}
+                            </p>
+                        </div>
+                        
+                        <div class="post-card-footer">
+                            <small class="post-card-views">
+                                <i class="fas fa-heart"></i> {{ $post->likes }} likes
+                                @if(isset($post->views))
+                                    • <i class="fas fa-eye"></i> {{ number_format($post->views) }} views
+                                @endif
+                            </small>
+                            <a href="#" class="btn btn-custom-primary view-detail">Baca Selengkapnya</a>
+                        </div>
                     </div>
-                    <div class="post-card-footer">
-                        <small class="post-card-views">Dilihat: 15K kali</small>
-                        <a href="#" class="btn btn-custom-primary">Baca Selengkapnya</a>
+                @empty
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Belum ada postingan populer bulan ini</p>
                     </div>
-                </div>
-
-                <div class="post-card bg-white" data-post-id="2">
-                    <img src="https://via.placeholder.com/600x400/43B5AD/FFFFFF?text=Postingan+2" class="post-card-img" alt="Gambar Postingan 2">
-                    <div class="post-card-body">
-                        <h5 class="post-card-title">10 Momen Paling 'Shame' di Tahun Ini</h5>
-                        <span class="post-card-badge">Hiburan</span>
-                        <p class="post-card-text">
-                            Kumpulan cerita dan insiden lucu yang membuat kita semua tersenyum sekaligus malu.
-                        </p>
-                    </div>
-                    <div class="post-card-footer">
-                        <small class="post-card-views">Dilihat: 12K kali</small>
-                        <a href="#" class="btn btn-custom-primary">Baca Selengkapnya</a>
-                    </div>
-                </div>
-
-                <div class="post-card bg-white" data-post-id="3">
-                    <img src="https://via.placeholder.com/600x400/EA4828/FFFFFF?text=Postingan+3" class="post-card-img" alt="Gambar Postingan 3">
-                    <div class="post-card-body">
-                        <h5 class="post-card-title">Profil Pengguna Paling Setia</h5>
-                        <span class="post-card-badge">Komunitas</span>
-                        <p class="post-card-text">
-                            Wawancara eksklusif dengan pengguna yang paling banyak memberikan dukungan.
-                        </p>
-                    </div>
-                    <div class="post-card-footer">
-                        <small class="post-card-views">Dilihat: 9.8K kali</small>
-                        <a href="#" class="btn btn-custom-primary">Baca Selengkapnya</a>
-                    </div>
-                </div>
-
-                <div class="post-card bg-white" data-post-id="4">
-                    <img src="https://via.placeholder.com/600x400/279D9F/FFFFFF?text=Postingan+4" class="post-card-img" alt="Gambar Postingan 4">
-                    <div class="post-card-body">
-                        <h5 class="post-card-title">Tips Efektif Memberikan Support</h5>
-                        <span class="post-card-badge">Panduan</span>
-                        <p class="post-card-text">
-                            Cara-cara terbaik untuk memberikan dukungan yang benar-benar bermakna kepada sesama.
-                        </p>
-                    </div>
-                    <div class="post-card-footer">
-                        <small class="post-card-views">Dilihat: 7.1K kali</small>
-                        <a href="#" class="btn btn-custom-primary">Baca Selengkapnya</a>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </main>
 
-    <main class="main-content detail-page" id="detailPage">
+    <main class="main-content detail-page" id="detailPage" style="display: none;">
         <div class="container">
             <div class="post-container">
                 <a href="#" class="back-button" id="backButton">
                     <i class="fas fa-arrow-left"></i> Kembali ke Hall of Shame
                 </a>
 
-                <h1 class="post-title" id="postTitle">Judul Postingan Muncul di Sini</h1>
+                <h1 class="post-title" id="postTitle">Memuat...</h1>
 
                 <div class="post-info">
-                    Diposting pada: <b id="postDate">20 November 2025</b>
+                    Diposting pada: <b id="postDate"></b> • 
+                    Kategori: <span class="badge bg-primary" id="postCategory"></span>
                 </div>
 
-                <div class="post-category" id="postCategory">
-                    Kategori: Kucing
+                <img src="" class="post-media" id="postMedia" alt="Media Postingan" style="display: none;">
+
+                <div class="post-story" id="postStory">Memuat konten...</div>
+
+                <!-- Like & komentar Actions -->
+                <div class="post-actions-detail mt-4 mb-4">
+                    <div class="d-flex gap-3 align-items-center">
+                        <!-- Like Button -->
+                        @auth
+                        <button class="btn btn-outline-danger like-btn-detail" id="likeButtonDetail" data-post-id="">
+                            <i class="fas fa-heart"></i>
+                            <span id="likesCountDetail">0</span> Likes
+                        </button>
+                        @else
+                        <a href="{{ route('login') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-heart"></i> Login untuk Like
+                        </a>
+                        @endauth
+                        
+                        <!-- komentar Count Badge -->
+                        <span class="badge bg-secondary">
+                            <i class="fas fa-komentar"></i>
+                            <span id="komentarsCountDetail">0</span> Komentar
+                        </span>
+                    </div>
                 </div>
 
-                <img src="https://via.placeholder.com/600x400/E18E2E/FFFFFF?text=Postingan+Detail" class="post-media" id="postMedia" alt="Media Postingan">
+                <hr>
 
-                <div class="post-story" id="postStory">
-                    Ini adalah isi cerita yang kamu tulis ketika upload.
+                <!-- komentars Section -->
+                <div class="komentars-section-detail">
+                    <h4 class="mb-4">
+                        <i class="fas fa-komentars"></i> Komentar 
+                        (<span id="totalkomentars">0</span>)
+                    </h4>
                     
-                    Bisa panjang, bisa berbaris baru,
-                    semuanya akan tetap rapi karena pakai white-space: pre-line;
+                    <!-- komentar Form -->
+                    @auth
+                    <div class="komentar-form-wrapper mb-4">
+                        <form id="komentarFormDetail" class="komentar-form-detail">
+                            @csrf
+                            <div class="mb-3">
+                                <textarea class="form-control" 
+                                        id="komentarContent" 
+                                        name="content" 
+                                        rows="3" 
+                                        placeholder="Tulis komentar Anda..." 
+                                        required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Kirim Komentar
+                            </button>
+                        </form>
+                    </div>
+                    @else
+                    <div class="alert alert-info">
+                        Silakan <a href="{{ route('login') }}" class="alert-link">login</a> untuk berkomentar
+                    </div>
+                    @endauth
+                    
+                    <!-- komentars List -->
+                    <div class="komentars-list-detail" id="komentarsListDetail">
+                        <!-- komentars akan dimuat via JavaScript -->
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="text-muted mt-2">Memuat komentar...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
+    
 
     <footer class="footer">
         <div class="container text-center text-md-start">
@@ -445,217 +635,398 @@
     <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
     
     <script>
+            const homePage = document.getElementById('homePage');
+            const detailPage = document.getElementById('detailPage');
+            const backButton = document.getElementById('backButton');
+            const postTitle = document.getElementById('postTitle');
+            const postDate = document.getElementById('postDate');
+            const postCategory = document.getElementById('postCategory');
+            const postMedia = document.getElementById('postMedia');
+            const postStory = document.getElementById('postStory');
 
-        const postsData = {
-            1: {
-                title: "Cara Menciptakan Memori Baru",
-                date: "15 November 2025",
-                category: "Inspirasi",
-                media: "https://via.placeholder.com/600x400/E18E2E/FFFFFF?text=Postingan+1",
-                story: `Pelajari tips dan trik sederhana untuk membuat momen tak terlupakan dalam hidup Anda.
+            // ===== TAMBAHAN - Variable untuk tracking post ID =====
+            let currentPostId = null;
 
-1. Hadir Sepenuhnya
-Matikan ponsel dan fokus pada momen yang sedang terjadi. Kehadiran penuh adalah kunci untuk menciptakan memori yang berarti.
-
-2. Dokumentasikan dengan Bijak
-Ambil foto atau video, tetapi jangan sampai mengganggu pengalaman itu sendiri. Beberapa gambar berkualitas lebih baik daripada ratusan foto biasa.
-
-3. Libatkan Semua Indra
-Perhatikan bau, suara, dan sensasi di sekitar Anda. Memori yang melibatkan banyak indra cenderung lebih tahan lama.
-
-4. Berbagi dengan Orang Terdekat
-Pengalaman yang dibagikan dengan orang lain seringkali lebih mudah diingat dan lebih bermakna.
-
-5. Refleksikan Pengalaman
-Luangkan waktu untuk merenungkan apa yang telah Anda alami dan pelajari darinya.`
-            },
-            2: {
-                title: "10 Momen Paling 'Shame' di Tahun Ini",
-                date: "10 November 2025",
-                category: "Hiburan",
-                media: "https://via.placeholder.com/600x400/43B5AD/FFFFFF?text=Postingan+2",
-                story: `Kumpulan cerita dan insiden lucu yang membuat kita semua tersenyum sekaligus malu.
-
-1. Salah Kirim Pesan
-"Kirim pesan romantis untuk pacar, eh malah ke grup kantor. Bosku balas: 'Besok kita bahas di meeting ya!'"
-
-2. Salah Panggil Nama
-"Saat presentasi, panggil klien dengan nama mantan. Dia cuma senyum: 'Nama yang bagus, tapi bukan saya.'"
-
-3. Tersandung Sendiri
-"Pengen kelihatan cool, malah tersandung karpet di depan semua orang. Sekarang dijuluki 'Si Karpet'."
-
-4. Lupa Zoom Mute
-"Nyanyi-nyanyi lagu sedih sambil kerja, ternyata mic masih nyala. Sekarang semua kolega tau life storyku."
-
-5. Salah Bawa Tas
-"Bawa tas istri ke kantor. Isinya make-up semua. Diledek seharian sama temen-temen."
-
-6. Auto-correct Fail
-"Tulis 'meeting penting' jadi 'makan pentol'. Klien bingung, temen-temen ngakak."
-
-7. Salah Kostum
-"Datang ke pesta kostum, ternyata salah tanggal. Cuma aku yang pake kostum pirate di meeting bisnis."
-
-8. Lupa Nama Sendiri
-"Saat perkenalan di training, blank sejenak. "Nama saya... eh... tunggu dulu...""
-
-9. Salah Angkat Tangan
-"Angkat tangan waktu dosen tanya 'siapa yang belum paham?' Padahal maksudnya mau ke toilet."
-
-10. Ketiduran di Tempat Umum
-"Tidur di kereta, bangun-bangun udah di stasiun akhir. Muka ada bekas jendela di pipi."
-`
-            },
-            3: {
-                title: "Profil Pengguna Paling Setia",
-                date: "5 November 2025",
-                category: "Komunitas",
-                media: "https://via.placeholder.com/600x400/EA4828/FFFFFF?text=Postingan+3",
-                story: `Wawancara eksklusif dengan pengguna yang paling banyak memberikan dukungan.
-
-Nama: Bambang "The Supporter" Santoso
-Umur: 28 tahun
-Bergabung sejak: Januari 2023
-Total dukungan diberikan: 1.245 kali
-
-"Bagi saya, memberikan dukungan itu seperti memberikan energi positif ke dunia. Setiap kali saya baca cerita seseorang yang sedang mengalami masa sulit atau momen memalukan, saya ingat bahwa kita semua manusia. Kita semua punya hari-hari buruk, momen canggung, dan pengalaman yang membuat kita malu."
-
-"Bergabung dengan MemoraX mengubah cara pandang saya. Dulu saya sering merasa sendirian dalam menghadapi masalah. Sekarang saya tahu, ternyata banyak orang yang mengalami hal serupa. Dengan memberikan dukungan, saya merasa menjadi bagian dari komunitas yang saling menguatkan."
-
-"Tips saya untuk pengguna baru: Jangan takut untuk berbagi. Setiap cerita yang kamu bagikan bisa menjadi inspirasi atau pelajaran bagi orang lain. Dan jangan lupa untuk memberikan dukungan kepada sesama. Kadang, satu 'like' atau kata penyemangat bisa mengubah hari seseorang."
-
-"Komunitas ini seperti keluarga besar bagi saya. Di sini kita bisa menjadi diri sendiri tanpa takut dihakimi. Itulah kekuatan sebenarnya dari MemoraX."`
-            },
-            4: {
-                title: "Tips Efektif Memberikan Support",
-                date: "1 November 2025",
-                category: "Panduan",
-                media: "https://via.placeholder.com/600x400/279D9F/FFFFFF?text=Postingan+4",
-                story: `Cara-cara terbaik untuk memberikan dukungan yang benar-benar bermakna kepada sesama.
-
-1. Dengarkan dengan Tulus
-Sebelum memberikan saran, pastikan kamu benar-benar memahami apa yang diceritakan. Kadang orang hanya perlu didengar.
-
-2. Validasi Perasaan
-Ungkapan seperti "Wajar kok kamu merasa seperti itu" atau "Saya mengerti kenapa kamu merasa malu" bisa sangat membantu.
-
-3. Hindari Menyalahkan
-Fokus pada dukungan, bukan pada mencari siapa yang salah. Setiap orang punya perspektif berbeda.
-
-4. Tawarkan Perspektif Positif
-"Setidaknya kamu belajar dari pengalaman itu" atau "Ini akan jadi cerita lucu suatu hari nanti" bisa meringankan beban.
-
-5. Gunakan Emoji dengan Bijak
-👍 = Saya setuju/mendukung
-❤️ = Ini menyentuh hati
-😂 = Ini lucu
-🤗 = Pelukan virtual
-
-6. Berbagi Pengalaman Serupa
-"Pernah mengalami hal serupa..." membuat orang merasa tidak sendirian.
-
-7. Hormati Privasi
-Jangan tanyakan detail yang terlalu personal jika tidak diberitahu.
-
-8. Jadilah Konsisten
-Dukungan yang konsisten membangun kepercayaan dalam komunitas.
-
-9. Fokus pada Solusi
-Setelah memberikan empati, tawarkan perspektif atau saran yang membangun jika diminta.
-
-10. Ingat: Kualitas > Kuantitas
-Satu komentar yang tulus lebih berharga daripada banyak komentar yang asal-asalan.
-
-Dengan memberikan dukungan yang tepat, kita tidak hanya membantu individu, tetapi juga memperkuat komunitas secara keseluruhan.`
-            }
-        };
-
-        const homePage = document.getElementById('homePage');
-        const detailPage = document.getElementById('detailPage');
-        const postCards = document.querySelectorAll('.post-card');
-        const backButton = document.getElementById('backButton');
-        const postTitle = document.getElementById('postTitle');
-        const postDate = document.getElementById('postDate');
-        const postCategory = document.getElementById('postCategory');
-        const postMedia = document.getElementById('postMedia');
-        const postStory = document.getElementById('postStory');
-
-        function showDetailPage(postId) {
-            const post = postsData[postId];
-            
-            if (post) {
-                postTitle.textContent = post.title;
-                postDate.textContent = post.date;
-                postCategory.textContent = `Kategori: ${post.category}`;
-                postStory.textContent = post.story;
+            // ===== DIUPDATE - Tambah load likes & komentars =====
+            function showDetailPage(postId) {
+                currentPostId = postId; // TAMBAHAN: simpan post ID
                 
-                if (post.media) {
-                    postMedia.style.display = 'block';
-                    postMedia.src = post.media;
-                    postMedia.alt = post.title;
-                } else {
-                    postMedia.style.display = 'none';
-                }
-                
+                // Tampilkan loading
                 homePage.style.display = 'none';
                 detailPage.style.display = 'block';
+                postTitle.textContent = 'Memuat...';
+                postStory.textContent = 'Memuat konten...';
+                window.scrollTo(0, 0);
                 
+                // Set post ID ke like button (TAMBAHAN)
+                const likeBtn = document.getElementById('likeButtonDetail');
+                if (likeBtn) {
+                    likeBtn.setAttribute('data-post-id', postId);
+                }
+                
+                // Fetch dari database
+                fetch(`/hall-of-shame/posts/${postId}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Post not found');
+                        return response.json();
+                    })
+                    .then(post => {
+                        postTitle.textContent = post.judul;
+                        postDate.textContent = post.formatted_date;
+                        postCategory.textContent = post.kategori; // Hapus "Kategori: " karena sudah ada badge
+                        postStory.textContent = post.isi;
+                        
+                        if (post.gambar) {
+                            postMedia.style.display = 'block';
+                            postMedia.src = `/storage/${post.gambar}`;
+                            postMedia.alt = post.judul;
+                        } else {
+                            postMedia.style.display = 'none';
+                        }
+                        
+                        // ===== TAMBAHAN - Update likes & komentars count =====
+                        const likesCountEl = document.getElementById('likesCountDetail');
+                        const komentarsCountEl = document.getElementById('komentarsCountDetail');
+                        const totalkomentarsEl = document.getElementById('totalkomentars');
+                        
+                        if (likesCountEl) likesCountEl.textContent = post.likes_count || 0;
+                        if (komentarsCountEl) komentarsCountEl.textContent = post.komentars_count || 0;
+                        if (totalkomentarsEl) totalkomentarsEl.textContent = post.komentars_count || 0;
+                        
+                        // Update like button state
+                        if (likeBtn && post.is_liked) {
+                            likeBtn.classList.add('liked');
+                        } else if (likeBtn) {
+                            likeBtn.classList.remove('liked');
+                        }
+                        
+                        // Load komentars
+                        loadkomentars(postId);
+                    })
+                    .catch(error => {
+                        console.error('Error loading post:', error);
+                        alert('Postingan tidak ditemukan!');
+                        showHomePage();
+                    });
+            }
+
+            // ===== TAMBAHAN - Fungsi load komentars =====
+            function loadkomentars(postId) {
+                fetch(`/posts/${postId}/komentars`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const komentarsList = document.getElementById('komentarsListDetail');
+                        
+                        if (!komentarsList) return;
+                        
+                        if (data.komentars.length === 0) {
+                            komentarsList.innerHTML = `
+                                <div class="empty-komentars">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>Belum ada komentar. Jadilah yang pertama berkomentar!</p>
+                                </div>
+                            `;
+                            return;
+                        }
+                        
+                        komentarsList.innerHTML = data.komentars.map(komentar => `
+                            <div class="komentar-item-detail">
+                                <div class="komentar-header">
+                                    <span class="komentar-author">${komentar.user_name}</span>
+                                    <span class="komentar-date">${komentar.created_at}</span>
+                                </div>
+                                <p class="komentar-content">${komentar.content}</p>
+                            </div>
+                        `).join('');
+                    })
+                    .catch(err => {
+                        console.error('Error loading komentars:', err);
+                        const komentarsList = document.getElementById('komentarsListDetail');
+                        if (komentarsList) {
+                            komentarsList.innerHTML = `
+                                <div class="alert alert-danger">Gagal memuat komentar</div>
+                            `;
+                        }
+                    });
+            }
+
+            // ===== DIBIARKAN - TETAP PAKAI =====
+            function showHomePage() {
+                detailPage.style.display = 'none';
+                homePage.style.display = 'block';
                 window.scrollTo(0, 0);
             }
-        }
 
-        function showHomePage() {
-            detailPage.style.display = 'none';
-            homePage.style.display = 'block';
-            window.scrollTo(0, 0);
-        }
-
-        postCards.forEach(card => {
-            card.addEventListener('click', function(e) {
-                if (!e.target.classList.contains('btn-custom-primary')) {
-                    const postId = parseInt(this.dataset.postId);
-                    showDetailPage(postId);
+            // ===== DIGANTI - EVENT DELEGATION (Support Card Dinamis) =====
+            homePage.addEventListener('click', function(e) {
+                // Cek apakah yang diklik adalah tombol "Baca Selengkapnya"
+                const readMoreBtn = e.target.closest('.btn-custom-primary');
+                if (readMoreBtn) {
+                    e.preventDefault();
+                    const card = readMoreBtn.closest('.post-card');
+                    const postId = card.dataset.postId;
+                    if (postId) {
+                        showDetailPage(postId);
+                    }
+                    return;
+                }
+                
+                // Atau klik langsung di card (tapi bukan di button)
+                const card = e.target.closest('.post-card');
+                if (card && !e.target.closest('.btn-custom-primary')) {
+                    const postId = card.dataset.postId;
+                    if (postId) {
+                        showDetailPage(postId);
+                    }
                 }
             });
-            
-            const readMoreBtn = card.querySelector('.btn-custom-primary');
-            if (readMoreBtn) {
-                readMoreBtn.addEventListener('click', function(e) {
+
+            // ===== DIBIARKAN - TETAP PAKAI =====
+            backButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                showHomePage();
+            });
+
+            // ===== DIBIARKAN - TETAP PAKAI =====
+            document.addEventListener('DOMContentLoaded', function() {
+                homePage.style.display = 'block';
+                detailPage.style.display = 'none';
+                
+                // Nav active state
+                const currentPage = window.location.pathname.split('/').pop();
+                const navLinks = document.querySelectorAll('.nav-link');
+                
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === currentPage) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            });
+
+            // ===== DIBIARKAN - TETAP PAKAI =====
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && detailPage.style.display === 'block') {
                     e.preventDefault();
-                    e.stopPropagation();
-                    const postId = parseInt(this.closest('.post-card').dataset.postId);
-                    showDetailPage(postId);
+                    showHomePage();
+                }
+            });
+
+            // ===== TAMBAHAN - Handle Like Button =====
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.like-btn-detail')) {
+                    e.preventDefault();
+                    const btn = e.target.closest('.like-btn-detail');
+                    const postId = btn.dataset.postId;
+                    
+                    if (!postId) return;
+                    
+                    fetch(`/posts/${postId}/like`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                            return;
+                        }
+                        
+                        // Update button state
+                        if (data.liked) {
+                            btn.classList.add('liked');
+                        } else {
+                            btn.classList.remove('liked');
+                        }
+                        
+                        // Update count
+                        document.getElementById('likesCountDetail').textContent = data.likes_count;
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        alert('Terjadi kesalahan');
+                    });
+                }
+            });
+
+            // ===== TAMBAHAN - Handle komentar Form Submit =====
+            const komentarForm = document.getElementById('komentarFormDetail');
+            if (komentarForm) {
+                komentarForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const textarea = document.getElementById('komentarContent');
+                    const content = textarea.value.trim();
+                    
+                    if (!content || !currentPostId) return;
+                    
+                    const formData = new FormData();
+                    formData.append('content', content);
+                    
+                    fetch(`/posts/${currentPostId}/komentar`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                            return;
+                        }
+                        
+                        // Reload komentars
+                        loadkomentars(currentPostId);
+                        
+                        // Update counter
+                        const currentCount = parseInt(document.getElementById('komentarsCountDetail').textContent);
+                        document.getElementById('komentarsCountDetail').textContent = currentCount + 1;
+                        document.getElementById('totalkomentars').textContent = currentCount + 1;
+                        
+                        // Reset form
+                        textarea.value = '';
+                        
+                        // Show success message
+                        const successMsg = document.createElement('div');
+                        successMsg.className = 'alert alert-success alert-dismissible fade show';
+                        successMsg.innerHTML = `
+                            Komentar berhasil dikirim!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+                        this.insertAdjacentElement('beforebegin', successMsg);
+                        
+                        setTimeout(() => successMsg.remove(), 3000);
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        alert('Terjadi kesalahan');
+                    });
                 });
             }
-        });
 
-        backButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            showHomePage();
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            homePage.style.display = 'block';
-            detailPage.style.display = 'none';
-            
-            const currentPage = window.location.pathname.split('/').pop();
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPage) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
+            // ===== TAMBAHAN - Handle Toggle komentar Section di Card =====
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.komentar-toggle-btn')) {
+                    const btn = e.target.closest('.komentar-toggle-btn');
+                    const postId = btn.dataset.postId;
+                    const wrapper = document.getElementById(`komentars-wrapper-${postId}`);
+                    
+                    if (wrapper) {
+                        if (wrapper.style.display === 'none' || !wrapper.style.display) {
+                            wrapper.style.display = 'block';
+                        } else {
+                            wrapper.style.display = 'none';
+                        }
+                    }
                 }
             });
-        });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Backspace' && detailPage.style.display === 'block') {
-                showHomePage();
-            }
-        });
+            // ===== TAMBAHAN - Handle Like di Card (List) =====
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.like-btn') && !e.target.closest('.like-btn-detail')) {
+                    e.preventDefault();
+                    const btn = e.target.closest('.like-btn');
+                    const postId = btn.dataset.postId;
+                    
+                    fetch(`/posts/${postId}/like`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                            return;
+                        }
+                        
+                        // Update UI
+                        if (data.liked) {
+                            btn.classList.add('liked');
+                        } else {
+                            btn.classList.remove('liked');
+                        }
+                        
+                        btn.querySelector('.likes-count').textContent = data.likes_count;
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        alert('Terjadi kesalahan');
+                    });
+                }
+            });
+
+            // ===== TAMBAHAN - Handle komentar Submit di Card (List) =====
+            document.addEventListener('submit', function(e) {
+                if (e.target.classList.contains('komentar-form')) {
+                    e.preventDefault();
+                    const form = e.target;
+                    const postId = form.dataset.postId;
+                    const input = form.querySelector('input[name="content"]');
+                    const content = input.value.trim();
+                    
+                    if (!content) return;
+                    
+                    const formData = new FormData();
+                    formData.append('content', content);
+                    
+                    fetch(`/posts/${postId}/komentar`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                            return;
+                        }
+                        
+                        // Add new komentar to list
+                        const komentarsList = document.getElementById(`komentars-list-${postId}`);
+                        if (komentarsList) {
+                            const newkomentar = `
+                                <div class="komentar-item mb-2">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1">
+                                            <strong class="komentar-author">${data.komentar.user_name}</strong>
+                                            <p class="komentar-text mb-0">${data.komentar.content}</p>
+                                            <small class="text-muted">${data.komentar.created_at}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            komentarsList.insertAdjacentHTML('afterbegin', newkomentar);
+                        }
+                        
+                        // Update komentar count
+                        const countSpan = document.querySelector(`[data-post-id="${postId}"].komentar-toggle-btn .komentars-count`);
+                        if (countSpan) {
+                            countSpan.textContent = parseInt(countSpan.textContent) + 1;
+                        }
+                        
+                        // Reset form
+                        input.value = '';
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        alert('Terjadi kesalahan');
+                    });
+                }
+            });
     </script>
 </body>
 </html>

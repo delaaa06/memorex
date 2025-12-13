@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤡 | MemoraX</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -567,11 +568,13 @@
                     <a class="nav-link" href="{{ route('support') }}">Support Us</a>
                     </li>
                 </ul>
+                
                 {{-- Form dengan CSRF token jika menggunakan POST --}}
                 <form class="d-flex" role="search" action="{{ route('search') }}" method="GET">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
                     <button class="searchButton" type="submit" style="border-radius: 10px;">Search</button>
                 </form>
+
                 </div>
             </div>
         </nav>
@@ -797,7 +800,7 @@
             <p>Pilih alasan kenapa kamu melaporkan postingan ini. Laporan akan membantu kami menjaga komunitas tetap aman.</p>
 
             {{-- Form dengan CSRF token --}}
-            <form id="reportForm">
+            <form id="reportForm" onsubmit="event.preventDefault();">
                 @csrf
                 <div class="report-options">
                     <div class="report-option">
@@ -1202,7 +1205,7 @@
             successMessage.classList.remove('show');
         }
 
-        function submitReport() {
+       function submitReport() {
             const selectedReason = document.querySelector('input[name="reportReason"]:checked');
             const additionalReason = reportTextarea.value.trim();
             
@@ -1211,33 +1214,54 @@
                 return;
             }
             
-            const reportData = {
-                postId: detailPage.dataset.currentPostId,
-                reason: selectedReason.value,
-                details: additionalReason,
-                reporterUserId: getCurrentUserId(),
-                reportedUserId: getPostAuthorId(detailPage.dataset.currentPostId),
-                timestamp: new Date().toISOString()
-            };
+            const postId = detailPage.dataset.currentPostId;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            saveReport(reportData);
+            // Disable button saat loading
+            submitReportBtn.disabled = true;
+            submitReportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
             
-            penalizeUserForReport(detailPage.dataset.currentPostId);
-            
-            console.log('Report submitted for post:', reportData);
-            
-            successMessage.classList.add('show');
-            
-            setTimeout(() => {
-                hideReportModal();
-            }, 3000);
+            fetch('/reports', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    post_id: postId,
+                    reason: selectedReason.value,
+                    details: additionalReason
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    successMessage.classList.add('show');
+                    setTimeout(() => {
+                        hideReportModal();
+                        submitReportBtn.disabled = false;
+                        submitReportBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Laporan';
+                    }, 2000);
+                } else {
+                    alert(data.message || 'Gagal mengirim laporan');
+                    submitReportBtn.disabled = false;
+                    submitReportBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Laporan';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengirim laporan');
+                submitReportBtn.disabled = false;
+                submitReportBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Laporan';
+            });
         }
 
-        function getCurrentUserId() {
+    function getCurrentUserId() {
             return localStorage.getItem('currentUserId') || 'anonymous';
         }
         
-        function getPostAuthorId(postId) {
+    function getPostAuthorId(postId) {
             const postAuthors = {
                 1: 'user123',
                 2: 'user456',

@@ -31,7 +31,7 @@ class User extends Authenticatable
         'login_streak',
         'last_login',
         'total_likes',
-        'total_comments',
+        'total_komentars',
     ];
 
     /**
@@ -70,11 +70,21 @@ class User extends Authenticatable
 
     public function komentars()
     {
-        return $this->hasMany(Komentar::class, 'user_id');
+        return $this->hasMany(\App\Models\komentar::class, 'user_id');
     }
 
     public function feedbacks()
     {
         return $this->hasMany(Feedback::class);
+    }
+    
+    public function activities()
+    {
+        return $this->hasMany(Activity::class)->latest();
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(\App\Models\Like::class, 'user_id'); // Pakai full namespace
     }
 }

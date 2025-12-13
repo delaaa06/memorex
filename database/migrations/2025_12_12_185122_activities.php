@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('type'); // 'like', 'comment', 'repost', 'daily_login'
+            $table->string('type'); // 'like', 'komentar', 'repost', 'daily_login'
             $table->text('description'); // "Anda menyukai postingan..."
             $table->string('icon')->nullable(); // 'fas fa-heart'
             $table->string('color')->nullable(); // 'text-danger'

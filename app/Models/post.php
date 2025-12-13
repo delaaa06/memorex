@@ -30,10 +30,9 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Relationship with Komentar
     public function komentar(): HasMany
     {
-        return $this->hasMany(Komentar::class, 'post_id');
+        return $this->hasMany(komentar::class, 'post_id');
     }
 
     // Helper method to get media URL
@@ -100,7 +99,27 @@ class Post extends Model
         return $this->created_at->format('d F Y');
     }
 
+     public function komentars()
+    {
+        return $this->hasMany(komentar::class)->latest();
+    }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    // Method helper
+    public function isLikedBy($user)
+    {
+        if (!$user) return false;
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    public function likesCount()
+    {
+        return $this->likes()->count();
+    }
     // //ini yg kutambah
     // // Scope untuk postingan populer
     // public function scopePopular($query, $limit = 4)

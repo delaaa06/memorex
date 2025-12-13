@@ -67,9 +67,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function comment(Request $request)
+    public function komentar(Request $request)
     {
-        // TODO: Implement comment functionality
+        // TODO: Implement komentar functionality
     }
 
     public function repost(Request $request)

@@ -29,7 +29,7 @@ return new class extends Migration
             $table->integer('login_streak')->default(0);
             $table->date('last_login')->nullable();
             $table->integer('total_likes')->default(0);
-            $table->integer('total_comments')->default(0);
+            $table->integer('total_komentars')->default(0);
         });
 
     

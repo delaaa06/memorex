@@ -6,6 +6,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\HallOfShameController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -68,7 +70,7 @@ Route::middleware('auth')->group(function () {
     
     // Post interactions
     Route::post('/posts/like', [PostController::class, 'like']);
-    Route::post('/posts/comment', [PostController::class, 'comment']);
+    Route::post('/posts/komentar', [PostController::class, 'komentar']);
     Route::post('/posts/repost', [PostController::class, 'repost']);
 });
 
@@ -88,3 +90,21 @@ Route::middleware('auth')->group(function () {
 });
 
 
+Route::post('/reports', [ReportController::class, 'store'])->name('reports.store')->middleware('auth');
+
+Route::get('/hall-of-shame', [HallOfShameController::class, 'index'])->name('hall-of-shame');
+Route::get('/hall-of-shame/posts/{id}', [HallOfShameController::class, 'show'])->name('hall-of-shame.show');
+Route::get('/posts/{id}/komentars', [HallOfShameController::class, 'getkomentars'])->name('posts.komentars');
+
+Route::get('/search', [HallOfShameController::class, 'search'])->name('search');
+
+// Route untuk detail post
+Route::get('/hall-of-shame/posts/{id}', [HallOfShameController::class, 'showPost'])->name('posts.detail');
+
+// Route untuk like dan komentar (harus login)
+Route::middleware('auth')->group(function () {
+    Route::post('/posts/{id}/like', [HallOfShameController::class, 'toggleLike'])->name('posts.like');
+    Route::post('/posts/{id}/komentar', [HallOfShameController::class, 'storekomentar'])->name('posts.komentar');
+});
+
+// Route untuk get komentars (public)

@@ -608,7 +608,7 @@
 
             <div class="feedback-container">
                 <h1 class="feedback-title">
-                    <i class="fas fa-comment-alt"></i> Bagikan Pendapat Anda
+                    <i class="fas fa-komentar-alt"></i> Bagikan Pendapat Anda
                 </h1>
                 <p class="feedback-subtitle">
                     Setiap feedback yang Anda berikan sangat berharga bagi kami. 

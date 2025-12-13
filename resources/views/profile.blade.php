@@ -670,7 +670,7 @@
                                 <div class="stat-label">Suka</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" id="commentCount">{{ $user->komentars_count ?? 0 }}</div>
+                                <div class="stat-value" id="komentarCount">{{ $user->komentars_count ?? 0 }}</div>
                                 <div class="stat-label">Komentar</div>
                             </div>
                             <div class="stat-item">
@@ -719,8 +719,8 @@
                             <div class="post-action like-btn" data-post-id="1">
                                 <i class="far fa-heart"></i> <span class="like-count">12</span>
                             </div>
-                            <div class="post-action comment-btn" data-post-id="1">
-                                <i class="far fa-comment"></i> <span class="comment-count">5</span>
+                            <div class="post-action komentar-btn" data-post-id="1">
+                                <i class="far fa-komentar"></i> <span class="komentar-count">5</span>
                             </div>
                             <div class="post-action repost-btn" data-post-id="1">
                                 <i class="far fa-share-square"></i> <span class="repost-count">2</span>
@@ -741,8 +741,8 @@
                             <div class="post-action like-btn" data-post-id="2">
                                 <i class="far fa-heart"></i> <span class="like-count">24</span>
                             </div>
-                            <div class="post-action comment-btn" data-post-id="2">
-                                <i class="far fa-comment"></i> <span class="comment-count">8</span>
+                            <div class="post-action komentar-btn" data-post-id="2">
+                                <i class="far fa-komentar"></i> <span class="komentar-count">8</span>
                             </div>
                             <div class="post-action repost-btn" data-post-id="2">
                                 <i class="far fa-share-square"></i> <span class="repost-count">3</span>
@@ -753,7 +753,7 @@
                 
                 <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
                     <div class="activity-item">
-                        <i class="fas fa-comment text-info me-2"></i>
+                        <i class="fas fa-komentar text-info me-2"></i>
                         <span>Anda mengomentari postingan "Tips Coding"</span>
                         <small class="text-muted d-block">3 jam yang lalu</small>
                     </div>
@@ -943,13 +943,13 @@
             stats: {
                 posts: 12,
                 likes: 47,
-                comments: 23,
+                komentars: 23,
                 loginStreak: 5,
                 reports: 0
             },
             dailyLoginClaimed: false,
             likedPosts: [],
-            commentedPosts: [],
+            komentaredPosts: [],
             repostedPosts: [],
             reportCount: 0,
             totalXpPenalty: 0,
@@ -959,7 +959,7 @@
         const xpValues = {
             dailyLogin: 50,
             likePost: 5,
-            commentPost: 10,
+            komentarPost: 10,
             repost: 15,
             changeAvatar: 10,
             changeBanner: 15,
@@ -1062,7 +1062,7 @@
             
             document.getElementById('postCount').textContent = userData.stats.posts;
             document.getElementById('likeCount').textContent = userData.stats.likes;
-            document.getElementById('commentCount').textContent = userData.stats.comments;
+            document.getElementById('komentarCount').textContent = userData.stats.komentars;
             document.getElementById('loginStreak').textContent = userData.stats.loginStreak;
             
             updateReportBadge();
@@ -1350,19 +1350,19 @@
                 }
             }
 
-            if (e.target.closest('.comment-btn')) {
-                const commentBtn = e.target.closest('.comment-btn');
-                const postId = commentBtn.getAttribute('data-post-id');
+            if (e.target.closest('.komentar-btn')) {
+                const komentarBtn = e.target.closest('.komentar-btn');
+                const postId = komentarBtn.getAttribute('data-post-id');
                 
-                if (!userData.commentedPosts.includes(postId)) {
-                    userData.commentedPosts.push(postId);
-                    const commentCount = commentBtn.querySelector('.comment-count');
-                    commentCount.textContent = parseInt(commentCount.textContent) + 1;
-                    addXP(xpValues.commentPost, "Mengomentari postingan");
-                    userData.stats.comments++;
-                    addActivity("Anda mengomentari sebuah postingan", "fas fa-comment", "text-info");
-                    const comment = prompt("Tulis komentar Anda:");
-                    if (comment) {
+                if (!userData.komentaredPosts.includes(postId)) {
+                    userData.komentaredPosts.push(postId);
+                    const komentarCount = komentarBtn.querySelector('.komentar-count');
+                    komentarCount.textContent = parseInt(komentarCount.textContent) + 1;
+                    addXP(xpValues.komentarPost, "Mengomentari postingan");
+                    userData.stats.komentars++;
+                    addActivity("Anda mengomentari sebuah postingan", "fas fa-komentar", "text-info");
+                    const komentar = prompt("Tulis komentar Anda:");
+                    if (komentar) {
                         alert("Komentar berhasil ditambahkan!");
                     }
                     
@@ -1425,7 +1425,7 @@
         const xpValues = {
             dailyLogin: 50,
             likePost: 5,
-            commentPost: 10,
+            komentarPost: 10,
             repost: 15,
             changeAvatar: 10,
             changeBanner: 15,
@@ -1748,11 +1748,11 @@
                 likePost(postId, likeBtn);
             }
 
-            // COMMENT POST
-            if (e.target.closest('.comment-btn')) {
-                const commentBtn = e.target.closest('.comment-btn');
-                const postId = commentBtn.getAttribute('data-post-id');
-                commentPost(postId, commentBtn);
+            // komentar POST
+            if (e.target.closest('.komentar-btn')) {
+                const komentarBtn = e.target.closest('.komentar-btn');
+                const postId = komentarBtn.getAttribute('data-post-id');
+                komentarPost(postId, komentarBtn);
             }
 
             // REPOST
@@ -1814,13 +1814,13 @@
             }
         }
 
-        // ===== COMMENT POST FUNCTION =====
-        async function commentPost(postId, commentBtn) {
-            const comment = prompt("Tulis komentar Anda:");
-            if (!comment) return;
+        // ===== komentar POST FUNCTION =====
+        async function komentarPost(postId, komentarBtn) {
+            const komentar = prompt("Tulis komentar Anda:");
+            if (!komentar) return;
             
             try {
-                const response = await fetch('/posts/comment', {
+                const response = await fetch('/posts/komentar', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1828,31 +1828,31 @@
                     },
                     body: JSON.stringify({ 
                         post_id: postId,
-                        comment: comment
+                        komentar: komentar
                     })
                 });
 
                 const data = await response.json();
                 
                 if (data.success) {
-                    const commentCount = commentBtn.querySelector('.comment-count');
-                    if (commentCount) {
-                        commentCount.textContent = parseInt(commentCount.textContent) + 1;
+                    const komentarCount = komentarBtn.querySelector('.komentar-count');
+                    if (komentarCount) {
+                        komentarCount.textContent = parseInt(komentarCount.textContent) + 1;
                     }
                     
-                    await addXP(xpValues.commentPost, "Mengomentari postingan");
-                    addActivity("Anda mengomentari sebuah postingan", "fas fa-comment", "text-info");
+                    await addXP(xpValues.komentarPost, "Mengomentari postingan");
+                    addActivity("Anda mengomentari sebuah postingan", "fas fa-komentar", "text-info");
                     
                     // Update stats
-                    const commentCountStat = document.getElementById('commentCount');
-                    if (commentCountStat) {
-                        commentCountStat.textContent = parseInt(commentCountStat.textContent) + 1;
+                    const komentarCountStat = document.getElementById('komentarCount');
+                    if (komentarCountStat) {
+                        komentarCountStat.textContent = parseInt(komentarCountStat.textContent) + 1;
                     }
                     
                     alert('Komentar berhasil ditambahkan!');
                 }
             } catch (error) {
-                console.error('Error commenting:', error);
+                console.error('Error komentaring:', error);
                 alert('Terjadi kesalahan saat menambahkan komentar');
             }
         }

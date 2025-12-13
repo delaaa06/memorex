@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Komentar extends Model
+class komentar extends Model
 {
     protected $table = 'komentar';
 
@@ -38,4 +38,6 @@ class Komentar extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    
 }
