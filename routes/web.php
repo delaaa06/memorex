@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FeedbackController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -70,4 +71,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/comment', [PostController::class, 'comment']);
     Route::post('/posts/repost', [PostController::class, 'repost']);
 });
+
+Route::get('/', [PostController::class, 'index'])->name('beranda');
+Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/feedback', function () {
+        return view('feedback'); // Atau view kamu
+    })->name('feedback');
+    
+    Route::post('/feedback', [FeedbackController::class, 'store']);
+    Route::get('/feedback/recent', [FeedbackController::class, 'getRecent']);
+    Route::get('/feedback/stats', [FeedbackController::class, 'getStats']);
+    Route::get('/feedback/my-feedbacks', [FeedbackController::class, 'getUserFeedbacks']);
+});
+
 

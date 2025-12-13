@@ -445,6 +445,7 @@
     <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
     
     <script>
+
         const postsData = {
             1: {
                 title: "Cara Menciptakan Memori Baru",

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>🤡 | MemoraX - Feedback</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -765,7 +766,6 @@
                         <p class="mb-0">Kami sangat menghargai kontribusi Anda untuk membuat MemoraX lebih baik.</p>
                     </div>
                 </form>
-
                 <div class="feedback-stats">
                     <div class="stat-item">
                         <div class="stat-value" id="totalFeedbacks">0</div>
@@ -826,7 +826,7 @@
         </div>
     </footer>
 
-    <script>
+    <!-- <script>
         let currentUserId = localStorage.getItem('currentUserId') || 'user123';
         let userData = JSON.parse(localStorage.getItem(`user_${currentUserId}`)) || {};
         let feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
@@ -1198,6 +1198,320 @@
             if (e.key === `user_${currentUserId}`) {
                 updateStatistics();
             }
+        });
+    </script> -->
+
+    <script>
+        // Get CSRF token from meta tag
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+        // State variables
+        let currentRating = 0;
+
+        // DOM Elements
+        const stars = document.querySelectorAll('.star');
+        const overallRatingValue = document.getElementById('overallRatingValue');
+        const ratingLabel = document.getElementById('ratingLabel');
+        const feedbackTitle = document.getElementById('feedbackTitle');
+        const feedbackText = document.getElementById('feedbackText');
+        const titleCount = document.getElementById('titleCount');
+        const textCount = document.getElementById('textCount');
+        const submitBtn = document.getElementById('submitFeedbackBtn');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const successMessage = document.getElementById('successMessage');
+        const xpNotification = document.getElementById('xpNotification');
+        const xpNotificationText = document.getElementById('xpNotificationText');
+        const closeNotification = document.getElementById('closeNotification');
+
+        // ===== STAR RATING FUNCTIONALITY =====
+        stars.forEach(star => {
+            // Click handler
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                currentRating = rating;
+                overallRatingValue.value = rating;
+                
+                // Update star display
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.add('active');
+                        s.textContent = '★';
+                    } else {
+                        s.classList.remove('active');
+                        s.textContent = '☆';
+                    }
+                });
+                
+                // Update label
+                const labels = ['Sangat Buruk', 'Buruk', 'Cukup', 'Baik', 'Sangat Baik'];
+                ratingLabel.textContent = labels[rating - 1];
+                
+                validateForm();
+            });
+            
+            // Hover effect
+            star.addEventListener('mouseover', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.style.color = '#ffc107';
+                    } else {
+                        s.style.color = '#ddd';
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseout', function() {
+                stars.forEach((s, index) => {
+                    if (index < currentRating) {
+                        s.style.color = '#ffc107';
+                    } else {
+                        s.style.color = '#ddd';
+                    }
+                });
+            });
+        });
+
+        // ===== CHARACTER COUNTER =====
+        feedbackTitle.addEventListener('input', function() {
+            const count = this.value.length;
+            titleCount.textContent = count;
+            titleCount.style.color = count > 100 ? '#dc3545' : '#666';
+            validateForm();
+        });
+
+        feedbackText.addEventListener('input', function() {
+            const count = this.value.length;
+            textCount.textContent = count;
+            textCount.style.color = count > 1000 ? '#dc3545' : '#666';
+            validateForm();
+        });
+
+        // ===== FORM VALIDATION =====
+        function validateForm() {
+            const titleValid = feedbackTitle.value.length >= 5 && feedbackTitle.value.length <= 100;
+            const textValid = feedbackText.value.length >= 50 && feedbackText.value.length <= 1000;
+            const ratingValid = currentRating > 0;
+            
+            const categories = document.querySelectorAll('.category-checkbox:checked');
+            const categoriesValid = categories.length > 0;
+            
+            submitBtn.disabled = !(titleValid && textValid && ratingValid && categoriesValid);
+            
+            if (!submitBtn.disabled) {
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Feedback & Dapatkan 50 XP!';
+            }
+        }
+
+        // Add validation listener to category checkboxes
+        document.querySelectorAll('.category-checkbox').forEach(cb => {
+            cb.addEventListener('change', validateForm);
+        });
+
+        // ===== SUGGESTION CLICK =====
+        window.fillSuggestion = function(text) {
+            feedbackText.value = text;
+            feedbackText.dispatchEvent(new Event('input'));
+        };
+
+        // ===== FORM SUBMISSION (LARAVEL API) =====
+        feedbackForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (submitBtn.disabled) return;
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+            
+            // Collect form data
+            const categories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
+                .map(cb => cb.value);
+            
+            const feedbackData = {
+                rating: currentRating,
+                title: feedbackTitle.value,
+                feedback_text: feedbackText.value,
+                categories: categories,
+                email: document.getElementById('userEmail').value || null,
+                name: document.getElementById('userName').value || null,
+                allow_contact: document.getElementById('allowContact').checked
+            };
+            
+            try {
+                // Send to Laravel backend
+                const response = await fetch('/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(feedbackData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    // Show success message
+                    showSuccessMessage();
+                    
+                    // Show XP notification
+                    showXPNotification(result.xp_earned);
+                    
+                    // Update statistics
+                    await loadStats();
+                    await loadRecentFeedbacks();
+                    
+                    // Reset form
+                    resetForm();
+                } else {
+                    // Handle validation errors
+                    throw new Error(result.message || 'Gagal mengirim feedback');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Gagal mengirim feedback: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Feedback & Dapatkan 50 XP!';
+            }
+        });
+
+        // ===== SHOW SUCCESS MESSAGE =====
+        function showSuccessMessage() {
+            successMessage.classList.add('show');
+            successMessage.style.display = 'block';
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+                successMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // ===== SHOW XP NOTIFICATION =====
+        function showXPNotification(amount) {
+            xpNotificationText.textContent = `+${amount} XP untuk feedback Anda!`;
+            xpNotification.classList.add('show');
+            
+            setTimeout(() => {
+                xpNotification.classList.remove('show');
+            }, 5000);
+        }
+
+        closeNotification.addEventListener('click', function() {
+            xpNotification.classList.remove('show');
+        });
+
+        // ===== RESET FORM =====
+        function resetForm() {
+            currentRating = 0;
+            overallRatingValue.value = 0;
+            
+            stars.forEach(star => {
+                star.classList.remove('active');
+                star.textContent = '★';
+                star.style.color = '#ddd';
+            });
+            
+            ratingLabel.textContent = 'Belum ada rating';
+            
+            feedbackForm.reset();
+            feedbackTitle.value = '';
+            feedbackText.value = '';
+            
+            titleCount.textContent = '0';
+            textCount.textContent = '0';
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Feedback & Dapatkan 50 XP!';
+            
+            document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
+        }
+
+        // ===== LOAD STATISTICS FROM API =====
+        async function loadStats() {
+            try {
+                const response = await fetch('/feedback/stats', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+                
+                const stats = await response.json();
+                
+                document.getElementById('totalFeedbacks').textContent = stats.total_feedbacks || 0;
+                document.getElementById('averageRating').textContent = stats.average_rating || '0.0';
+                document.getElementById('xpEarned').textContent = stats.total_xp_earned || 0;
+                document.getElementById('userRank').textContent = stats.user_rank || '-';
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // ===== LOAD RECENT FEEDBACKS FROM API =====
+        async function loadRecentFeedbacks() {
+            try {
+                const response = await fetch('/feedback/recent', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+                
+                const feedbacks = await response.json();
+                const container = document.getElementById('recentFeedbacks');
+                
+                if (feedbacks.length === 0) {
+                    container.innerHTML = '<p class="text-muted text-center">Belum ada feedback</p>';
+                    return;
+                }
+                
+                container.innerHTML = feedbacks.map(fb => {
+                    const date = new Date(fb.created_at).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                    
+                    let starsHtml = '';
+                    for (let i = 1; i <= 5; i++) {
+                        starsHtml += i <= fb.rating ? '★' : '☆';
+                    }
+                    
+                    return `
+                        <div class="feedback-card mb-3" style="padding: 1rem; border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <div class="feedback-header d-flex justify-content-between mb-2">
+                                <div class="feedback-user fw-bold">${fb.user?.name || 'Anonymous'}</div>
+                                <div class="feedback-date text-muted">${date}</div>
+                            </div>
+                            <div class="feedback-content">
+                                <strong>${fb.title}</strong>
+                                <p class="mt-2 mb-0">${fb.feedback_text.substring(0, 150)}${fb.feedback_text.length > 150 ? '...' : ''}</p>
+                            </div>
+                            <div class="feedback-rating mt-2" style="color: #ffc107;">
+                                ${starsHtml}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error loading recent feedbacks:', error);
+            }
+        }
+
+        // ===== INITIALIZE ON PAGE LOAD =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial data
+            loadStats();
+            loadRecentFeedbacks();
+            
+            // Initial validation state
+            validateForm();
         });
     </script>
 

@@ -76,4 +76,35 @@ class PostController extends Controller
     {
         // TODO: Implement repost functionality
     }
+
+    public function index()
+    {
+        // Ambil semua post yang visible, urutkan dari yang terbaru
+        $posts = Post::where('visibilitas', 'public')
+                    ->with('user') // Eager load user relationship
+                    ->latest()
+                    ->get();
+        
+        // Split posts menjadi 2 bagian untuk swipe-left dan swipe-right
+        $midpoint = ceil($posts->count() / 2);
+        $leftPosts = $posts->take($midpoint);
+        $rightPosts = $posts->skip($midpoint);
+        
+        return view('beranda', compact('leftPosts', 'rightPosts'));
+    }
+    
+    public function show($id)
+    {
+        $post = Post::with('user')->findOrFail($id);
+        return response()->json([
+            'id' => $post->id,
+            'judul' => $post->judul,
+            'kategori' => $post->kategori,
+            'isi' => $post->isi,
+            'gambar' => $post->gambar,
+            'formatted_date' => $post->formatted_date,
+            'user' => $post->user->name ?? 'Anonymous'
+        ]);
+    }
+    
 }

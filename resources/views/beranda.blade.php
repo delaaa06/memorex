@@ -227,11 +227,11 @@
         
         @keyframes scrollLeft {
             from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
+            to { transform: translateX(-100%); }
         }
         
         @keyframes scrollRight {
-            from { transform: translateX(-50%); }
+            from { transform: translateX(-100%); }
             to { transform: translateX(0); }
         }
         
@@ -613,7 +613,7 @@
             </div>
         </div>
         
-        <div class="content-base">
+        <!-- <div class="content-base">
             <div class="swipe-left">
                 @for($i = 0; $i < 2; $i++) {{-- Loop untuk duplikasi card --}}
                 <div class="card" data-post-id="1">
@@ -703,11 +703,41 @@
                 </div>
                 @endfor
             </div>
+        </div> -->
+
+        <div class="content-base">
+            <div class="swipe-left">
+                @forelse($leftPosts as $post)
+                    <div class="card" data-post-id="{{ $post->id }}">
+                        <p class="card-text">{{ Str::limit($post->isi, 100) }}</p>
+                        <div class="desc-card mt-3">
+                            From: {{ $post->user->name ?? 'Anonymous' }}
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-center">Belum ada postingan</p>
+                @endforelse
+            </div>
+            
+            <br>
+            
+            <div class="swipe-right">
+                @forelse($rightPosts as $post)
+                    <div class="card" data-post-id="{{ $post->id }}">
+                        <p class="card-text">{{ Str::limit($post->isi, 100) }}</p>
+                        <div class="desc-card mt-3">
+                            From: {{ $post->user->name ?? 'Anonymous' }}
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-center">Belum ada postingan</p>
+                @endforelse
+            </div>
         </div>
     </main>
 
     <main class="content detail-page" id="detailPage">
-        <div class="post-container">
+        <!-- <div class="post-container">
             <button class="report-button" id="reportButton">
                 <i class="fas fa-flag"></i> Report
             </button>
@@ -735,6 +765,28 @@
                 Bisa panjang, bisa berbaris baru,
                 semuanya akan tetap rapi karena pakai white-space: pre-line;
             </div>
+        </div> -->
+
+         <div class="post-container">
+            <button class="report-button" id="reportButton">
+                <i class="fas fa-flag"></i> Report
+            </button>
+
+            <a href="#" class="back-button" id="backButton">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+
+            <h1 class="post-title" id="postTitle"></h1>
+
+            <div class="post-info">
+                Diposting pada: <b id="postDate"></b>
+            </div>
+
+            <div class="post-category" id="postCategory"></div>
+
+            <img src="" class="post-media" id="postMedia" alt="Media Postingan" style="display: none;">
+
+            <div class="post-story" id="postStory"></div>
         </div>
     </main>
 
@@ -853,425 +905,513 @@
     </footer>
 
    <script>
-    const postsData = {
-        1: {
-            title: "Ketemu Mantan di Mall",
-            date: "15 November 2025",
-            category: "Cinta & Romansa",
-            media: "4.jpg",
-            story: `Hari ini aku lagi jalan-jalan di mall sendirian, tiba-tiba nemu mantan! Dia lagi jalan bareng pacar barunya yang keliatan lebih ganteng dan lebih stylish dari aku.
+//     const postsData = {
+//         1: {
+//             title: "Ketemu Mantan di Mall",
+//             date: "15 November 2025",
+//             category: "Cinta & Romansa",
+//             media: "4.jpg",
+//             story: `Hari ini aku lagi jalan-jalan di mall sendirian, tiba-tiba nemu mantan! Dia lagi jalan bareng pacar barunya yang keliatan lebih ganteng dan lebih stylish dari aku.
 
-Aku langsung panik! Cepat-cepat sembunyi di balik tanaman hias dekat food court. Tapi nasib sial, ternyata dia liatin aku! Dia cuma senyum kecil terus lanjut jalan.
+// Aku langsung panik! Cepat-cepat sembunyi di balik tanaman hias dekat food court. Tapi nasib sial, ternyata dia liatin aku! Dia cuma senyum kecil terus lanjut jalan.
 
-Malu banget! Aku masih pake kaos bekas lomba lari 5 tahun lalu sama celana training bolong. Sekarang aku masih nongkrong di toilet mall nungguin mereka pergi.`
+// Malu banget! Aku masih pake kaos bekas lomba lari 5 tahun lalu sama celana training bolong. Sekarang aku masih nongkrong di toilet mall nungguin mereka pergi.`
 
-        },
-        2: {
-            title: "Salah Kirim Meme ke Grup Keluarga",
-            date: "10 November 2025",
-            category: "Kecelakaan Digital",
-            media: "",
-            story: `Baru bangun tidur, buka WhatsApp langsung kirim meme receh ke temen. Eh ternyata salah kirim ke grup keluarga besar! Isinya meme "When you realize it's Monday tomorrow" dengan gambar orang nangis darah.
+//         },
+//         2: {
+//             title: "Salah Kirim Meme ke Grup Keluarga",
+//             date: "10 November 2025",
+//             category: "Kecelakaan Digital",
+//             media: "",
+//             story: `Baru bangun tidur, buka WhatsApp langsung kirim meme receh ke temen. Eh ternyata salah kirim ke grup keluarga besar! Isinya meme "When you realize it's Monday tomorrow" dengan gambar orang nangis darah.
 
-Satu menit kemudian, mama chat private: "Nak, ini gambar apa? Kok serem banget?"
+// Satu menit kemudian, mama chat private: "Nak, ini gambar apa? Kok serem banget?"
 
-Om-om dan tante-tante pada kasih reaksi "?" semua. Papa malah tanya: "Ini artinya apa? Kode apa?"
+// Om-om dan tante-tante pada kasih reaksi "?" semua. Papa malah tanya: "Ini artinya apa? Kode apa?"
 
-Aku bilang lagi tes fitur baru WhatsApp. Sekarang image-nya masih ada, jadi bahan ledekan tiap gathering keluarga.`
-        },
-        3: {
-            title: "Salah Manggil Dosen 'Sayang'",
-            date: "5 November 2025",
-            category: "Kampus",
-            media: "",
-            story: `Lagi asik chat sama pacar sambil nunggu dosen masuk kelas. Dosennya dateng, aku tanpa sadar masih kebawa suasana chat.
+// Aku bilang lagi tes fitur baru WhatsApp. Sekarang image-nya masih ada, jadi bahan ledekan tiap gathering keluarga.`
+//         },
+//         3: {
+//             title: "Salah Manggil Dosen 'Sayang'",
+//             date: "5 November 2025",
+//             category: "Kampus",
+//             media: "",
+//             story: `Lagi asik chat sama pacar sambil nunggu dosen masuk kelas. Dosennya dateng, aku tanpa sadar masih kebawa suasana chat.
 
-Pas dia nawarin bantuan, aku langsung jawab: "Iya sayang, tunggu bentar ya..."
+// Pas dia nawarin bantuan, aku langsung jawab: "Iya sayang, tunggu bentar ya..."
 
-Sepi. Sunyi. Semua mata ngeliatin aku.
+// Sepi. Sunyi. Semua mata ngeliatin aku.
 
-Dosennya cuma senyum tipis: "Sayang? Kita kan baru ketemu semester ini..."
+// Dosennya cuma senyum tipis: "Sayang? Kita kan baru ketemu semester ini..."
 
-Mau ngilang aja pengennya. Sampe sekarang tiap ketemu dosen itu, dia selalu panggil aku "sayang" di depan kelas.`
-        },
-        4: {
-            title: "Nyapa Orang Salah",
-            date: "1 November 2025",
-            category: "Social Fails",
-            media: "",
-            story: `Di halte bus, liat temen dari belakang. Langsung tepuk pundak sambil teriak: "WOI GOBLOK!"
+// Mau ngilang aja pengennya. Sampe sekarang tiap ketemu dosen itu, dia selalu panggil aku "sayang" di depan kelas.`
+//         },
+//         4: {
+//             title: "Nyapa Orang Salah",
+//             date: "1 November 2025",
+//             category: "Social Fails",
+//             media: "",
+//             story: `Di halte bus, liat temen dari belakang. Langsung tepuk pundak sambil teriak: "WOI GOBLOK!"
 
-Eh ternyata orang lain. Bukan cuma orang lain, tapi bapak-bapak umur 50an yang lagi baca koran dengan tenang.
+// Eh ternyata orang lain. Bukan cuma orang lain, tapi bapak-bapak umur 50an yang lagi baca koran dengan tenang.
 
-Dia pelan-pelan nutup korannya, liatin aku dari ujung kaki ke ujung rambut, lalu bilang: "Siapa yang goblok?"
+// Dia pelan-pelan nutup korannya, liatin aku dari ujung kaki ke ujung rambut, lalu bilang: "Siapa yang goblok?"
 
-Aku cuma bisa berkata: "Maaf pak, saya yang goblok."
+// Aku cuma bisa berkata: "Maaf pak, saya yang goblok."
 
-Langsung lari ke arah bus yang kebetulan lagi datang.`
-        },
-        5: {
-            title: "Pujian untuk Choso",
-            date: "28 Oktober 2025",
-            category: "Fandom",
-            media: "",
-            story: `AKU GAK TAHU LAGI HARUS GIMANA. SETIAP LIAT CHOSO DI JUJUTSU KAISEN LANGSUNG DEG-DEGAN.
+// Langsung lari ke arah bus yang kebetulan lagi datang.`
+//         },
+//         5: {
+//             title: "Pujian untuk Choso",
+//             date: "28 Oktober 2025",
+//             category: "Fandom",
+//             media: "",
+//             story: `AKU GAK TAHU LAGI HARUS GIMANA. SETIAP LIAT CHOSO DI JUJUTSU KAISEN LANGSUNG DEG-DEGAN.
 
-Dia tuh... GANTENG BANGET SIH? Rambutnya, matanya, sifatnya yang protektif ke Yuuji, semuanya sempurna!
+// Dia tuh... GANTENG BANGET SIH? Rambutnya, matanya, sifatnya yang protektif ke Yuuji, semuanya sempurna!
 
-Aku sampe bikin 5 akun TikTok cuma buat edit Choso. Ig aku isinya cuma screenshot Choso doang. Temen-temen udah pada khawatir.
+// Aku sampe bikin 5 akun TikTok cuma buat edit Choso. Ig aku isinya cuma screenshot Choso doang. Temen-temen udah pada khawatir.
 
-Tapi gimana lagi? Dia imut comel banget! SWAMIKU! MUAH MUAH! ❤️✨
+// Tapi gimana lagi? Dia imut comel banget! SWAMIKU! MUAH MUAH! ❤️✨
 
-#ChosoSupremacy #SaveMe`
-        },
-        6: {
-            title: "Kentut di Lift Penuh",
-            date: "25 Oktober 2025",
-            category: "Momen Memalukan",
-            media: "",
-            story: `Naik lift di gedung kantor, 8 orang termasuk aku. Perut tiba-tiba mules, dan... itu terjadi.
+// #ChosoSupremacy #SaveMe`
+//         },
+//         6: {
+//             title: "Kentut di Lift Penuh",
+//             date: "25 Oktober 2025",
+//             category: "Momen Memalukan",
+//             media: "",
+//             story: `Naik lift di gedung kantor, 8 orang termasuk aku. Perut tiba-tiba mules, dan... itu terjadi.
 
-Bukan cuma bunyi, tapi baunya... seperti telur busuk dicampur kubis.
+// Bukan cuma bunyi, tapi baunya... seperti telur busuk dicampur kubis.
 
-Semua pada mengernyit. Ada yang tutup hidung, ada yang pelan-pelan mundur ke pojok.
+// Semua pada mengernyit. Ada yang tutup hidung, ada yang pelan-pelan mundur ke pojok.
 
-Aku coba pura-pura liat ke atas seakan-akan mencari sumber suara. Tapi semua tahu.
+// Aku coba pura-pura liat ke atas seakan-akan mencari sumber suara. Tapi semua tahu.
 
-Sampai lantai tujuan, lift kosong tinggal aku sendiri. Penyesalan sepanjang hidup.`
-        },
-        7: {
-            title: "Lupa Bayar di Warteg",
-            date: "20 Oktober 2025",
-            category: "Keseharian",
-            media: "",
-            story: `Makan siang di warteg langganan, laper banget. Habis makan langsung buru-buru pulang karena ada meeting online.
+// Sampai lantai tujuan, lift kosong tinggal aku sendiri. Penyesalan sepanjang hidup.`
+//         },
+//         7: {
+//             title: "Lupa Bayar di Warteg",
+//             date: "20 Oktober 2025",
+//             category: "Keseharian",
+//             media: "",
+//             story: `Makan siang di warteg langganan, laper banget. Habis makan langsung buru-buru pulang karena ada meeting online.
 
-Baru sampai rumah 30 menit, dapat telpon dari mamang warteg: "Mas, makanannya enak gak?"
+// Baru sampai rumah 30 menit, dapat telpon dari mamang warteg: "Mas, makanannya enak gak?"
 
-Aku: "Enak bang Pak!"
+// Aku: "Enak bang Pak!"
 
-Mamang: "Iya, bayarnya kapan?"
+// Mamang: "Iya, bayarnya kapan?"
 
-TERNYATA AKU LUBA BAYAR! Langsung balik ke warteg sambil bawa uang plus bonus karena malu.
+// TERNYATA AKU LUBA BAYAR! Langsung balik ke warteg sambil bawa uang plus bonus karena malu.
 
-Sekarang tiap ke warteg itu, mamangnya selalu ingetin: "Jangan lupa bayar ya Mas!"`
-        },
-        8: {
-            title: "Menyanyi di Kamar Mandi",
-            date: "18 Oktober 2025",
-            category: "Musikal",
-            media: "",
-            story: `Lagi asik mandi, nyanyi-nyanyi lagu Bruno Mars full emotion. Sampe teriak-teriak high note-nya.
+// Sekarang tiap ke warteg itu, mamangnya selalu ingetin: "Jangan lupa bayar ya Mas!"`
+//         },
+//         8: {
+//             title: "Menyanyi di Kamar Mandi",
+//             date: "18 Oktober 2025",
+//             category: "Musikal",
+//             media: "",
+//             story: `Lagi asik mandi, nyanyi-nyanyi lagu Bruno Mars full emotion. Sampe teriak-teriak high note-nya.
 
-Ternyata... MIC DROP KU MASIH NYALA DARI KEMAREN DAN TERHUBUNG KE SPEAKER BLUETOOTH DI RUANG TAMU!
+// Ternyata... MIC DROP KU MASIH NYALA DARI KEMAREN DAN TERHUBUNG KE SPEAKER BLUETOOTH DI RUANG TAMU!
 
-Adikku rekam, upload ke TikTok, sekarang dapat 500K views. Komentar pada bilang: "Suaranya bagus, tapinya..."
+// Adikku rekam, upload ke TikTok, sekarang dapat 500K views. Komentar pada bilang: "Suaranya bagus, tapinya..."
 
-Sekeluarga pada tau kalo aku suka nyanyi "When I Was Your Man" sambil nangis-nangis di kamar mandi.`
-        },
-        9: {
-            title: "Geleng-geleng Sendiri",
-            date: "15 Oktober 2025",
-            category: "Keseharian",
-            media: "",
-            story: `Naik angkot, lagi mikirin betapa absurdnya hidup. Geleng-geleng sendiri sambil senyum-senyum kecil.
+// Sekeluarga pada tau kalo aku suka nyanyi "When I Was Your Man" sambil nangis-nangis di kamar mandi.`
+//         },
+//         9: {
+//             title: "Geleng-geleng Sendiri",
+//             date: "15 Oktober 2025",
+//             category: "Keseharian",
+//             media: "",
+//             story: `Naik angkot, lagi mikirin betapa absurdnya hidup. Geleng-geleng sendiri sambil senyum-senyum kecil.
 
-Tiba-tiba nenek sebelahku nanya: "Ada apa Nak? Kenapa geleng-geleng? Nenek ada salah apa?"
+// Tiba-tiba nenek sebelahku nanya: "Ada apa Nak? Kenapa geleng-geleng? Nenek ada salah apa?"
 
-TERNYATA DIA KIRA AKU GELENGIN DIA!
+// TERNYATA DIA KIRA AKU GELENGIN DIA!
 
-Aku cuma bisa bilang: "Bukan Nek, saya lagi latihan buat drama sekolah."
+// Aku cuma bisa bilang: "Bukan Nek, saya lagi latihan buat drama sekolah."
 
-Dia cuma manggut-manggut: "Oh, pinter juga ya."`
-        },
-        10: {
-            title: "Jatuh di Depan Gebetan",
-            date: "12 Oktober 2025",
-            category: "Cinta & Romansa",
-            media: "",
-            story: `Lagi jalan sama gebetan di taman, pengen kelihatan cool. Liat anak skateboard lewat, pengen nunjukkin kalo aku juga bisa.
+// Dia cuma manggut-manggut: "Oh, pinter juga ya."`
+//         },
+//         10: {
+//             title: "Jatuh di Depan Gebetan",
+//             date: "12 Oktober 2025",
+//             category: "Cinta & Romansa",
+//             media: "",
+//             story: `Lagi jalan sama gebetan di taman, pengen kelihatan cool. Liat anak skateboard lewat, pengen nunjukkin kalo aku juga bisa.
 
-Pinjam skateboard-nya, bilang: "Liat ya, aku jago nih!"
+// Pinjam skateboard-nya, bilang: "Liat ya, aku jago nih!"
 
-Langkah pertama... langsung jatuh telentang. Bukan cuma jatuh, tapi celanaku sobek di bagian belakang.
+// Langkah pertama... langsung jatuh telentang. Bukan cuma jatuh, tapi celanaku sobek di bagian belakang.
 
-Dia cuma ketawa sambil nolongin aku. Sekarang kita jadian, tapi cerita jatuh itu selalu jadi bahan ledekannya.`
-        }
-    };
+// Dia cuma ketawa sambil nolongin aku. Sekarang kita jadian, tapi cerita jatuh itu selalu jadi bahan ledekannya.`
+//         }
+//     };
 
-    const homePage = document.getElementById('homePage');
-    const detailPage = document.getElementById('detailPage');
-    const cards = document.querySelectorAll('.card');
-    const backButton = document.getElementById('backButton');
-    const reportButton = document.getElementById('reportButton');
-    const reportModal = document.getElementById('reportModal');
-    const closeModal = document.getElementById('closeModal');
-    const submitReportBtn = document.querySelector('.submit-report');
-    const reportTextarea = document.querySelector('.report-textarea');
-    const reportOptions = document.querySelectorAll('input[name="reportReason"]');
-    const successMessage = document.querySelector('.success-message');
-
-    const postTitle = document.getElementById('postTitle');
-    const postDate = document.getElementById('postDate');
-    const postCategory = document.getElementById('postCategory');
-    const postMedia = document.getElementById('postMedia');
-    const postStory = document.getElementById('postStory');
-
-    function showDetailPage(postId) {
-        const post = postsData[postId];
-        
-        if (post) {
-            postTitle.textContent = post.title;
-            postDate.textContent = post.date;
-            postCategory.textContent = `Kategori: ${post.category}`;
-            postStory.textContent = post.story;
+      // public/js/posts.js atau dalam blade
+      //ini yg kutambah 
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            const detailPage = document.getElementById('detailPage');
+            const backButton = document.getElementById('backButton');
             
-            if (post.media) {
-                postMedia.style.display = 'block';
-                postMedia.src = "{{ asset('') }}" + post.media;
-                postMedia.alt = post.title;
-            } else {
-                postMedia.style.display = 'none';
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const postId = this.dataset.postId;
+                    loadPostDetail(postId);
+                });
+            });
+            
+            async function loadPostDetail(postId) {
+                try {
+                    const response = await fetch(`/posts/${postId}`);
+                    const post = await response.json();
+                    
+                    document.getElementById('postTitle').textContent = post.judul;
+                    document.getElementById('postDate').textContent = post.formatted_date;
+                    document.getElementById('postCategory').textContent = `Kategori: ${post.kategori}`;
+                    document.getElementById('postStory').textContent = post.isi;
+                    
+                    const postMedia = document.getElementById('postMedia');
+                    if (post.gambar) {
+                        postMedia.src = `/storage/${post.gambar}`;
+                        postMedia.style.display = 'block';
+                    } else {
+                        postMedia.style.display = 'none';
+                    }
+                    
+                    // Tampilkan detail page
+                    document.querySelector('.content-base').style.display = 'none';
+                    detailPage.style.display = 'block';
+                } catch (error) {
+                    console.error('Error loading post:', error);
+                }
             }
             
-            detailPage.dataset.currentPostId = postId;
+            backButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                detailPage.style.display = 'none';
+                document.querySelector('.content-base').style.display = 'block';
+            });
+        });  
+
+        const homePage = document.getElementById('homePage');
+        const detailPage = document.getElementById('detailPage');
+        const cards = document.querySelectorAll('.card');
+        const backButton = document.getElementById('backButton');
+        const reportButton = document.getElementById('reportButton');
+        const reportModal = document.getElementById('reportModal');
+        const closeModal = document.getElementById('closeModal');
+        const submitReportBtn = document.querySelector('.submit-report');
+        const reportTextarea = document.querySelector('.report-textarea');
+        const reportOptions = document.querySelectorAll('input[name="reportReason"]');
+        const successMessage = document.querySelector('.success-message');
+
+        const postTitle = document.getElementById('postTitle');
+        const postDate = document.getElementById('postDate');
+        const postCategory = document.getElementById('postCategory');
+        const postMedia = document.getElementById('postMedia');
+        const postStory = document.getElementById('postStory');
+
+    // function showDetailPage(postId) {
+    //     const post = postsData[postId];
+        
+    //     if (post) {
+    //         postTitle.textContent = post.title;
+    //         postDate.textContent = post.date;
+    //         postCategory.textContent = `Kategori: ${post.category}`;
+    //         postStory.textContent = post.story;
             
-            homePage.style.display = 'none';
-            detailPage.style.display = 'block';
+    //         if (post.media) {
+    //             postMedia.style.display = 'block';
+    //             postMedia.src = "{{ asset('') }}" + post.media;
+    //             postMedia.alt = post.title;
+    //         } else {
+    //             postMedia.style.display = 'none';
+    //         }
             
+    //         detailPage.dataset.currentPostId = postId;
+            
+    //         homePage.style.display = 'none';
+    //         detailPage.style.display = 'block';
+            
+    //         window.scrollTo(0, 0);
+    //     } else {
+    //         alert('Postingan tidak ditemukan!');
+    //     }
+    // }
+
+        function showDetailPage(postId) {
+        // Tampilkan loading
+        homePage.style.display = 'none';
+        detailPage.style.display = 'block';
+        postTitle.textContent = 'Memuat...';
+        postStory.textContent = 'Memuat konten...';
+        
+        // Fetch dari database
+        fetch(`/posts/${postId}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Post not found');
+                return response.json();
+            })
+            .then(post => {
+                postTitle.textContent = post.judul;
+                postDate.textContent = post.formatted_date;
+                postCategory.textContent = `Kategori: ${post.kategori}`;
+                postStory.textContent = post.isi;
+                
+                if (post.gambar) {
+                    postMedia.style.display = 'block';
+                    postMedia.src = `/storage/${post.gambar}`;
+                    postMedia.alt = post.judul;
+                } else {
+                    postMedia.style.display = 'none';
+                }
+                
+                detailPage.dataset.currentPostId = postId;
+                window.scrollTo(0, 0);
+            })
+            .catch(error => {
+                console.error('Error loading post:', error);
+                alert('Postingan tidak ditemukan!');
+                showHomePage();
+            });
+        }
+
+        function showHomePage() {
+            detailPage.style.display = 'none';
+            homePage.style.display = 'block';
             window.scrollTo(0, 0);
-        } else {
-            alert('Postingan tidak ditemukan!');
         }
-    }
 
-    function showHomePage() {
-        detailPage.style.display = 'none';
-        homePage.style.display = 'block';
-        window.scrollTo(0, 0);
-    }
-
-    function showReportModal() {
-        reportModal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function hideReportModal() {
-        reportModal.classList.remove('show');
-        document.body.style.overflow = 'auto';
-        
-        reportTextarea.value = '';
-        reportOptions.forEach(option => option.checked = false);
-        submitReportBtn.disabled = true;
-        successMessage.classList.remove('show');
-    }
-
-    function submitReport() {
-        const selectedReason = document.querySelector('input[name="reportReason"]:checked');
-        const additionalReason = reportTextarea.value.trim();
-        
-        if (!selectedReason) {
-            alert('Pilih alasan report terlebih dahulu!');
-            return;
+        function showReportModal() {
+            reportModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
         }
-        
-        const reportData = {
-            postId: detailPage.dataset.currentPostId,
-            reason: selectedReason.value,
-            details: additionalReason,
-            reporterUserId: getCurrentUserId(),
-            reportedUserId: getPostAuthorId(detailPage.dataset.currentPostId),
-            timestamp: new Date().toISOString()
-        };
-        
-        saveReport(reportData);
-        
-        penalizeUserForReport(detailPage.dataset.currentPostId);
-        
-        console.log('Report submitted for post:', reportData);
-        
-        successMessage.classList.add('show');
-        
-        setTimeout(() => {
-            hideReportModal();
-        }, 3000);
-    }
 
-    function getCurrentUserId() {
-        return localStorage.getItem('currentUserId') || 'anonymous';
-    }
-    
-    function getPostAuthorId(postId) {
-        const postAuthors = {
-            1: 'user123',
-            2: 'user456',
-            3: 'user789',
-            4: 'user101',
-            5: 'user_dela',
-            6: 'user112',
-            7: 'user131',
-            8: 'user415',
-            9: 'user161',
-            10: 'user718'
-        };
-        return postAuthors[postId] || 'anonymous';
-    }
-    
-    function saveReport(reportData) {
-        let reports = JSON.parse(localStorage.getItem('reports')) || [];
-        reports.push(reportData);
-        localStorage.setItem('reports', JSON.stringify(reports));
-    }
-    
-    function penalizeUserForReport(postId) {
-        const authorId = getPostAuthorId(postId);
-        
-        if (authorId === 'anonymous') {
-            console.log('Cannot penalize anonymous user');
-            return;
+        function hideReportModal() {
+            reportModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            
+            reportTextarea.value = '';
+            reportOptions.forEach(option => option.checked = false);
+            submitReportBtn.disabled = true;
+            successMessage.classList.remove('show');
         }
-        
-        const userKey = `user_${authorId}`;
-        let userData = JSON.parse(localStorage.getItem(userKey));
-        
-        if (userData) {
-            const xpPenalty = 50;
-            userData.xp = Math.max(0, userData.xp - xpPenalty);
+
+        function submitReport() {
+            const selectedReason = document.querySelector('input[name="reportReason"]:checked');
+            const additionalReason = reportTextarea.value.trim();
             
-            localStorage.setItem(userKey, JSON.stringify(userData));
-            
-            userData.reportCount = (userData.reportCount || 0) + 1;
-            localStorage.setItem(userKey, JSON.stringify(userData));
-            
-            console.log(`XP reduced by ${xpPenalty} for user ${authorId}. New XP: ${userData.xp}`);
-            
-            if (userData.reportCount >= 3) {
-                applyHeavyPenalty(userData, authorId);
+            if (!selectedReason) {
+                alert('Pilih alasan report terlebih dahulu!');
+                return;
             }
             
-            updateUserDisplayIfActive(authorId);
+            const reportData = {
+                postId: detailPage.dataset.currentPostId,
+                reason: selectedReason.value,
+                details: additionalReason,
+                reporterUserId: getCurrentUserId(),
+                reportedUserId: getPostAuthorId(detailPage.dataset.currentPostId),
+                timestamp: new Date().toISOString()
+            };
+            
+            saveReport(reportData);
+            
+            penalizeUserForReport(detailPage.dataset.currentPostId);
+            
+            console.log('Report submitted for post:', reportData);
+            
+            successMessage.classList.add('show');
+            
+            setTimeout(() => {
+                hideReportModal();
+            }, 3000);
         }
-    }
-    
-    function applyHeavyPenalty(userData, userId) {
-        userData.suspended = true;
-        userData.suspendedUntil = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-        localStorage.setItem(`user_${userId}`, JSON.stringify(userData));
+
+        function getCurrentUserId() {
+            return localStorage.getItem('currentUserId') || 'anonymous';
+        }
         
-        console.log(`User ${userId} suspended for 7 days due to multiple reports`);
-    }
-    
-    function updateUserDisplayIfActive(userId) {
-        const currentUser = localStorage.getItem('currentUserId');
+        function getPostAuthorId(postId) {
+            const postAuthors = {
+                1: 'user123',
+                2: 'user456',
+                3: 'user789',
+                4: 'user101',
+                5: 'user_dela',
+                6: 'user112',
+                7: 'user131',
+                8: 'user415',
+                9: 'user161',
+                10: 'user718'
+            };
+            return postAuthors[postId] || 'anonymous';
+        }
         
-        if (currentUser === userId) {
-            if (typeof window.updateProfileDisplay === 'function') {
-                window.updateProfileDisplay();
+        function saveReport(reportData) {
+            let reports = JSON.parse(localStorage.getItem('reports')) || [];
+            reports.push(reportData);
+            localStorage.setItem('reports', JSON.stringify(reports));
+        }
+        
+        function penalizeUserForReport(postId) {
+            const authorId = getPostAuthorId(postId);
+            
+            if (authorId === 'anonymous') {
+                console.log('Cannot penalize anonymous user');
+                return;
             }
             
-            showPenaltyNotification();
-        }
-    }
-    
-    function showPenaltyNotification() {
-        const notification = document.createElement('div');
-        notification.className = 'penalty-notification';
-        notification.innerHTML = `
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                <strong>Peringatan!</strong> XP Anda dikurangi 50 poin karena postingan Anda dilaporkan.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
+            const userKey = `user_${authorId}`;
+            let userData = JSON.parse(localStorage.getItem(userKey));
+            
+            if (userData) {
+                const xpPenalty = 50;
+                userData.xp = Math.max(0, userData.xp - xpPenalty);
+                
+                localStorage.setItem(userKey, JSON.stringify(userData));
+                
+                userData.reportCount = (userData.reportCount || 0) + 1;
+                localStorage.setItem(userKey, JSON.stringify(userData));
+                
+                console.log(`XP reduced by ${xpPenalty} for user ${authorId}. New XP: ${userData.xp}`);
+                
+                if (userData.reportCount >= 3) {
+                    applyHeavyPenalty(userData, authorId);
+                }
+                
+                updateUserDisplayIfActive(authorId);
             }
-        }, 5000);
-    }
-    
-    const style = document.createElement('style');
-    style.textContent = `
-        .penalty-notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            max-width: 400px;
         }
-    `;
-    document.head.appendChild(style);
-
-    cards.forEach(card => {
-        card.addEventListener('click', function() {
-            const postId = parseInt(this.dataset.postId);
-            showDetailPage(postId);
-        });
-    });
-
-    backButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        showHomePage();
-    });
-
-    reportButton.addEventListener('click', showReportModal);
-
-    closeModal.addEventListener('click', hideReportModal);
-
-    reportModal.addEventListener('click', function(e) {
-        if (e.target === reportModal) {
-            hideReportModal();
+        
+        function applyHeavyPenalty(userData, userId) {
+            userData.suspended = true;
+            userData.suspendedUntil = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+            localStorage.setItem(`user_${userId}`, JSON.stringify(userData));
+            
+            console.log(`User ${userId} suspended for 7 days due to multiple reports`);
         }
-    });
-
-    reportOptions.forEach(option => {
-        option.addEventListener('change', function() {
-            submitReportBtn.disabled = false;
-        });
-    });
-
-    submitReportBtn.addEventListener('click', submitReport);
-
-    const swipeLeft = document.querySelector('.swipe-left');
-    const swipeRight = document.querySelector('.swipe-right');
-    
-    [swipeLeft, swipeRight].forEach(container => {
-        container.addEventListener('mouseenter', () => {
-            container.style.animationPlayState = 'paused';
-        });
         
-        container.addEventListener('mouseleave', () => {
-            container.style.animationPlayState = 'running';
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        homePage.style.display = 'block';
-        detailPage.style.display = 'none';
+        function updateUserDisplayIfActive(userId) {
+            const currentUser = localStorage.getItem('currentUserId');
+            
+            if (currentUser === userId) {
+                if (typeof window.updateProfileDisplay === 'function') {
+                    window.updateProfileDisplay();
+                }
+                
+                showPenaltyNotification();
+            }
+        }
         
-        submitReportBtn.disabled = true;
+        function showPenaltyNotification() {
+            const notification = document.createElement('div');
+            notification.className = 'penalty-notification';
+            notification.innerHTML = `
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Peringatan!</strong> XP Anda dikurangi 50 poin karena postingan Anda dilaporkan.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
         
         const style = document.createElement('style');
         style.textContent = `
-            .swipe-left:hover, .swipe-right:hover {
-                animation-play-state: paused !important;
+            .penalty-notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                max-width: 400px;
             }
         `;
         document.head.appendChild(style);
-    });
 
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && reportModal.classList.contains('show')) {
-            hideReportModal();
-        }
-        
-        if (e.key === 'Backspace' && detailPage.style.display === 'block') {
+        cards.forEach(card => {
+            card.addEventListener('click', function() {
+                const postId = parseInt(this.dataset.postId);
+                showDetailPage(postId);
+            });
+        });
+
+        backButton.addEventListener('click', function(e) {
+            e.preventDefault();
             showHomePage();
-        }
-    });
+        });
+
+        reportButton.addEventListener('click', showReportModal);
+
+        closeModal.addEventListener('click', hideReportModal);
+
+        reportModal.addEventListener('click', function(e) {
+            if (e.target === reportModal) {
+                hideReportModal();
+            }
+        });
+
+        reportOptions.forEach(option => {
+            option.addEventListener('change', function() {
+                submitReportBtn.disabled = false;
+            });
+        });
+
+        submitReportBtn.addEventListener('click', submitReport);
+
+        const swipeLeft = document.querySelector('.swipe-left');
+        const swipeRight = document.querySelector('.swipe-right');
+        
+        [swipeLeft, swipeRight].forEach(container => {
+
+            container.addEventListener('mouseenter', () => {
+                container.style.animationPlayState = 'paused';
+            });
+            
+            container.addEventListener('mouseleave', () => {
+                container.style.animationPlayState = 'running';
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            homePage.style.display = 'block';
+            detailPage.style.display = 'none';
+            submitReportBtn.disabled = true;
+            
+            submitReportBtn.disabled = true;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                .swipe-left:hover, .swipe-right:hover {
+                    animation-play-state: paused !important;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && reportModal.classList.contains('show')) {
+                hideReportModal();
+            }
+            
+            if (e.key === 'Backspace' && detailPage.style.display === 'block') {
+                showHomePage();
+            }
+        });
+
+    
 </script>
 <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 </body>

@@ -491,10 +491,14 @@
             padding: 10px;
             background-color: rgba(255,255,255,0.05);
             border-radius: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .stat-item {
             text-align: center;
+            flex: 1 1 80px;
+            min-width: 70px;
         }
         
         .stat-value {
@@ -1946,6 +1950,7 @@
         }
 
         // ===== UPDATE REPORT STATS =====
+        
         function updateReportStats(reportCount) {
             const statsContainer = document.querySelector('.stats-container');
             if (!statsContainer) return;
@@ -2058,7 +2063,7 @@
         // ===== LOGOUT =====
         document.getElementById('logoutBtn')?.addEventListener('click', function() {
             if (confirm('Apakah Anda yakin ingin logout?')) {
-                window.location.href = '/logout';
+                window.location.href = '/login';
             }
         });
 
