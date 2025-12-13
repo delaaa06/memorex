@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,9 +27,14 @@ Route::get('/search', function () {
     return view('search');
 })->name('search');
 
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
+// Route::get('/profile', function () {
+//     return view('profile');
+// })->name('profile');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 Route::get('/support', function () {
     return view('support');
@@ -49,4 +55,19 @@ Route::get('/regis', function () {
 })->name('regis');
 
 Route::post('/regis', [RegisController::class, 'regis'])->name('regis.submit');
+
+// routes/web.php
+Route::middleware('auth')->group(function () {
+    // Profile routes
+    Route::post('/profile/add-xp', [ProfileController::class, 'addXp']);
+    Route::post('/profile/daily-login', [ProfileController::class, 'dailyLogin']);
+    Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar']);
+    Route::post('/profile/update-banner', [ProfileController::class, 'updateBanner']);
+    Route::get('/profile/reports', [ProfileController::class, 'getReports']);
+    
+    // Post interactions
+    Route::post('/posts/like', [PostController::class, 'like']);
+    Route::post('/posts/comment', [PostController::class, 'comment']);
+    Route::post('/posts/repost', [PostController::class, 'repost']);
+});
 

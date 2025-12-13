@@ -19,10 +19,19 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'username',
         'email',
-        'phone',
         'password',
+        'username',
+        'phone',
+        'xp',
+        'level',
+        'bio',
+        'avatar',
+        'banner',
+        'login_streak',
+        'last_login',
+        'total_likes',
+        'total_comments',
     ];
 
     /**
@@ -35,16 +44,32 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function komentars()
+    {
+        return $this->hasMany(Komentar::class, 'user_id');
     }
 }

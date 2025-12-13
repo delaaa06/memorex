@@ -2,64 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\post;
 use Illuminate\Http\Request;
+use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('upload');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        // Validasi input
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'story' => 'required|string',
+            'category' => 'required|string',
+            'datetime' => 'nullable|date',
+            'visibility' => 'required|string',
+            'gambar' => 'required|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:81920', // max 80MB
+        ]);
+
+        // Handle file upload
+        $gambarPath = null;
+        
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            
+            // Generate unique filename
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            
+            // Store file in storage/app/public/posts
+            $gambarPath = $file->storeAs('posts', $filename, 'public');
+        }
+
+        // Create post
+        Post::create([
+            'user_id' => Auth::id(),
+            'judul' => $request->title,
+            'isi' => $request->story,
+            'kategori' => $request->category,
+            'visibilitas' => $request->visibility,
+            'gambar' => $gambarPath,
+            'likes' => 0,
+        ]);
+
+        // Redirect kembali ke halaman upload (blank page seperti requirement)
+        return redirect()->route('upload');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(post $post)
+    public function like(Request $request)
     {
-        //
+        // TODO: Implement like functionality
+        $postId = $request->input('post_id');
+        $post = Post::findOrFail($postId);
+        $post->increment('likes');
+        
+        return response()->json([
+            'success' => true,
+            'likes' => $post->likes
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(post $post)
+    public function comment(Request $request)
     {
-        //
+        // TODO: Implement comment functionality
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, post $post)
+    public function repost(Request $request)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(post $post)
-    {
-        //
+        // TODO: Implement repost functionality
     }
 }

@@ -618,53 +618,59 @@
         </div>
         
         <div class="container mt-4">
-            <div class="profile-banner" id="profileBanner">
+            <div class="profile-banner" id="profileBanner"  style="background-image: url('{{ $user->banner ?? '' }}'); background-size: cover; background-position: center;">
                 <button class="edit-btn" data-bs-toggle="modal" data-bs-target="#bannerModal">
                     <i class="fas fa-camera"></i> Ubah Banner
                 </button>
                 <div class="profile-picture" id="profilePicture" data-bs-toggle="modal" data-bs-target="#avatarModal">
-                    <img src="https://i.pravatar.cc/120" alt="Foto Profil" id="profileImg">
+                    <img src="{{ $user->avatar ?? 'https://i.pravatar.cc/120' }}" alt="Foto Profil" id="profileImg">
                 </div>
             </div>
             
             <div class="profile-info">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <div class="level-badge">Level <span id="currentLevel">15</span></div>
-                        <div class="username" id="usernameDisplay">User#1234</div>
+                        <div class="level-badge">Level <span id="currentLevel">{{ $user->level }}</span></div>
+                        <div class="username" id="usernameDisplay">{{ $user->username ?? $user->name }}</div>
                         <div class="mb-2">
                             <span class="badge">Pemula</span>
                             <span class="badge" style="background-color: var(--info-color);">Aktif</span>
                             <span class="badge" style="background-color: var(--accent-color);">Kreator</span>
                         </div>
                         <div class="xp-container">
+                            @php
+                                $maxXp = $user->level * 1000;
+                                $xpProgress = ($user->xp / $maxXp) * 100;
+                                $xpToNext = $maxXp - $user->xp;
+                            @endphp
                             <div class="d-flex justify-content-between">
-                                <span>XP: <span id="currentXP">650</span>/1000</span>
-                                <span id="xpToNextLevel">350 XP menuju Level 16</span>
+                                <span>XP: <span id="currentXP">{{ $user->xp }}</span>/</span></span>
+                                <span id="xpToNextLevel">{{ $xpToNext }} XP menuju Level {{ $user->level + 1 }}</span>
+                            </div>
                             </div>
                             <div class="xp-bar">
-                                <div class="xp-progress" id="xpProgress"></div>
+                                <div class="xp-progress" id="xpProgress" style="width: {{ $xpProgress }}%></div>
                             </div>
                         </div>
                         <div class="bio mt-3" id="userBio">
-                            Halo! Saya pengguna baru di platform ini. Saya suka bermain game dan coding.
+                             {{ $user->bio ?? 'Belum ada bio' }}
                         </div>
                         
                         <div class="stats-container">
                             <div class="stat-item">
-                                <div class="stat-value" id="postCount">12</div>
+                                <div class="stat-value" id="postCount">{{ $user->posts_count ?? 0 }}</div>
                                 <div class="stat-label">Postingan</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" id="likeCount">47</div>
+                                <div class="stat-value" id="likeCount">{{ $user->total_likes ?? 0 }}</div>
                                 <div class="stat-label">Suka</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" id="commentCount">23</div>
+                                <div class="stat-value" id="commentCount">{{ $user->komentars_count ?? 0 }}</div>
                                 <div class="stat-label">Komentar</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" id="loginStreak">5</div>
+                                <div class="stat-value" id="loginStreak">{{ $user->login_streak ?? 0 }}</div>
                                 <div class="stat-label">Hari Login</div>
                             </div>
                         </div>
@@ -698,9 +704,9 @@
                 <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
                     <div class="post-card" data-post-id="1">
                         <div class="post-header">
-                            <img src="https://i.pravatar.cc/40" class="post-avatar" alt="Avatar">
+                            <img src="{{ auth()->user()->avatar ?? 'https://i.pravatar.cc/40' }}" class="post-avatar" alt="Avatar">
                             <div>
-                                <div class="username">User#1234</div>
+                                <div class="username">{{ auth()->user()->username }}</div>
                                 <small class="text-muted">2 jam yang lalu</small>
                             </div>
                         </div>
@@ -878,7 +884,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
         const swipeLeft = document.querySelector('.swipe-left');
         const swipeRight = document.querySelector('.swipe-right');
 
@@ -1407,6 +1413,678 @@
                
                 window.location.href = '{{ route('login') }}';
             }
+        });
+    </script> -->
+
+    <script>
+        // ===== CONFIGURATION =====
+        const xpValues = {
+            dailyLogin: 50,
+            likePost: 5,
+            commentPost: 10,
+            repost: 15,
+            changeAvatar: 10,
+            changeBanner: 15,
+            editProfile: 5
+        };
+
+        // Get CSRF Token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        // ===== SWIPE ANIMATION (dari kode lama) =====
+        const swipeLeft = document.querySelector('.swipe-left');
+        const swipeRight = document.querySelector('.swipe-right');
+        const leftCards = document.querySelectorAll('.swipe-left .card');
+        const rightCards = document.querySelectorAll('.swipe-right .card');
+
+        function pauseLeft() { if(swipeLeft) swipeLeft.style.animationPlayState = 'paused'; }
+        function resumeLeft() { if(swipeLeft) swipeLeft.style.animationPlayState = 'running'; }
+        function pauseRight() { if(swipeRight) swipeRight.style.animationPlayState = 'paused'; }
+        function resumeRight() { if(swipeRight) swipeRight.style.animationPlayState = 'running'; }
+
+        leftCards.forEach(card => {
+            card.addEventListener('mouseenter', pauseLeft);
+            card.addEventListener('mouseleave', resumeLeft);
+            card.addEventListener('touchstart', pauseLeft, { passive: true });
+            card.addEventListener('touchend', resumeLeft, { passive: true });
+            card.addEventListener('touchcancel', resumeLeft, { passive: true });
+        });
+
+        rightCards.forEach(card => {
+            card.addEventListener('mouseenter', pauseRight);
+            card.addEventListener('mouseleave', resumeRight);
+            card.addEventListener('touchstart', pauseRight, { passive: true });
+            card.addEventListener('touchend', resumeRight, { passive: true });
+            card.addEventListener('touchcancel', resumeRight, { passive: true });
+        });
+
+        // ===== XP NOTIFICATION =====
+        function showXpNotification(xpAmount, message) {
+            const notification = document.getElementById('xpNotification');
+            const notificationText = document.getElementById('xpNotificationText');
+            
+            if (notification && notificationText) {
+                notificationText.textContent = xpAmount > 0 ? `+${xpAmount} XP - ${message}` : message;
+                notification.style.display = 'block';
+                
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // ===== ADD XP TO DATABASE =====
+        async function addXP(amount, activity) {
+            try {
+                const response = await fetch('/profile/add-xp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        xp: amount,
+                        activity: activity
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showXpNotification(amount, activity);
+                    
+                    // Update UI
+                    document.getElementById('currentXP').textContent = data.user.xp;
+                    document.getElementById('currentLevel').textContent = data.user.level;
+                    
+                    // Update XP Progress Bar
+                    updateXPProgressBar(data.user.xp, data.user.level);
+                    
+                    // Check level up
+                    if (data.levelUp) {
+                        showXpNotification(0, `Selamat! Anda naik ke level ${data.user.level}`);
+                    }
+                }
+            } catch (error) {
+                console.error('Error adding XP:', error);
+            }
+        }
+
+        // ===== UPDATE XP PROGRESS BAR =====
+        function updateXPProgressBar(currentXp, level) {
+            const maxXpForLevel = level * 1000;
+            const xpForCurrentLevel = (level - 1) * 1000;
+            const xpInCurrentLevel = currentXp - xpForCurrentLevel;
+            const xpPercentage = (xpInCurrentLevel / 1000) * 100;
+            
+            const xpProgress = document.getElementById('xpProgress');
+            if (xpProgress) {
+                xpProgress.style.width = `${xpPercentage}%`;
+            }
+            
+            const xpToNextLevel = maxXpForLevel - currentXp;
+            const xpToNextLevelEl = document.getElementById('xpToNextLevel');
+            if (xpToNextLevelEl) {
+                xpToNextLevelEl.textContent = `${xpToNextLevel} XP menuju Level ${level + 1}`;
+            }
+        }
+
+        // ===== ADD ACTIVITY =====
+        function addActivity(text, icon, color) {
+            const activityTab = document.getElementById('activity');
+            if (!activityTab) return;
+            
+            const activityItem = document.createElement('div');
+            activityItem.className = 'activity-item';
+            activityItem.innerHTML = `
+                <i class="${icon} ${color} me-2"></i>
+                <span>${text}</span>
+                <small class="text-muted d-block">Baru saja</small>
+            `;
+
+            activityTab.insertBefore(activityItem, activityTab.firstChild);
+        }
+
+        // ===== DAILY LOGIN =====
+        document.getElementById('dailyLoginBtn')?.addEventListener('click', async function() {
+            try {
+                const response = await fetch('/profile/daily-login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    addXP(xpValues.dailyLogin, "Login harian");
+                    addActivity("Anda mengklaim XP login harian", "fas fa-calendar-day", "text-primary");
+                    
+                    // Update login streak
+                    document.getElementById('loginStreak').textContent = data.loginStreak;
+                    
+                    // Disable button
+                    this.disabled = true;
+                    this.innerHTML = '<i class="fas fa-check me-2"></i> XP Login Harian Sudah Diklaim';
+                } else {
+                    alert(data.message || 'XP login harian sudah diklaim hari ini');
+                }
+            } catch (error) {
+                console.error('Error claiming daily login:', error);
+            }
+        });
+
+        // ===== AVATAR UPLOAD =====
+        document.getElementById('avatarUpload')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatarPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('saveAvatar')?.addEventListener('click', async function() {
+            const fileInput = document.getElementById('avatarUpload');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Pilih gambar terlebih dahulu');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('avatar', file);
+            
+            try {
+                const response = await fetch('/profile/update-avatar', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update avatar di UI
+                    document.getElementById('profileImg').src = data.avatar;
+                    
+                    // Add XP
+                    await addXP(xpValues.changeAvatar, "Mengubah avatar");
+                    addActivity("Anda mengubah foto profil", "fas fa-camera", "text-info");
+                    
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('avatarModal'));
+                    modal.hide();
+                    
+                    alert('Avatar berhasil diubah!');
+                } else {
+                    alert(data.message || 'Gagal mengubah avatar');
+                }
+            } catch (error) {
+                console.error('Error updating avatar:', error);
+                alert('Terjadi kesalahan saat mengubah avatar');
+            }
+        });
+
+        // ===== BANNER UPLOAD =====
+        document.getElementById('bannerUpload')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('bannerPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('saveBanner')?.addEventListener('click', async function() {
+            const fileInput = document.getElementById('bannerUpload');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Pilih gambar terlebih dahulu');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('banner', file);
+            
+            try {
+                const response = await fetch('/profile/update-banner', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update banner di UI
+                    document.getElementById('profileBanner').style.backgroundImage = `url('${data.banner}')`;
+                    
+                    // Add XP
+                    await addXP(xpValues.changeBanner, "Mengubah banner");
+                    addActivity("Anda mengubah banner profil", "fas fa-image", "text-success");
+                    
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('bannerModal'));
+                    modal.hide();
+                    
+                    alert('Banner berhasil diubah!');
+                } else {
+                    alert(data.message || 'Gagal mengubah banner');
+                }
+            } catch (error) {
+                console.error('Error updating banner:', error);
+                alert('Terjadi kesalahan saat mengubah banner');
+            }
+        });
+
+        // ===== EDIT PROFILE =====
+        document.getElementById('saveProfile')?.addEventListener('click', async function() {
+            const username = document.getElementById('usernameInput').value;
+            const name = document.getElementById('nameInput')?.value;
+            const bio = document.getElementById('bioInput').value;
+            
+            try {
+                const response = await fetch('/profile/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        name: name,
+                        bio: bio
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update UI
+                    document.getElementById('usernameDisplay').textContent = username;
+                    document.getElementById('userBio').textContent = bio;
+                    
+                    // Add XP
+                    await addXP(xpValues.editProfile, "Mengedit profil");
+                    addActivity("Anda memperbarui profil", "fas fa-edit", "text-warning");
+                    
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                    modal.hide();
+                    
+                    alert('Profil berhasil diupdate!');
+                } else {
+                    alert(data.message || 'Gagal mengupdate profil');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Terjadi kesalahan saat mengupdate profil');
+            }
+        });
+
+        // ===== POST INTERACTIONS =====
+        document.addEventListener('click', function(e) {
+            // LIKE POST
+            if (e.target.closest('.like-btn')) {
+                const likeBtn = e.target.closest('.like-btn');
+                const postId = likeBtn.getAttribute('data-post-id');
+                likePost(postId, likeBtn);
+            }
+
+            // COMMENT POST
+            if (e.target.closest('.comment-btn')) {
+                const commentBtn = e.target.closest('.comment-btn');
+                const postId = commentBtn.getAttribute('data-post-id');
+                commentPost(postId, commentBtn);
+            }
+
+            // REPOST
+            if (e.target.closest('.repost-btn')) {
+                const repostBtn = e.target.closest('.repost-btn');
+                const postId = repostBtn.getAttribute('data-post-id');
+                repostPost(postId, repostBtn);
+            }
+        });
+
+        // ===== LIKE POST FUNCTION =====
+        async function likePost(postId, likeBtn) {
+            try {
+                const response = await fetch('/posts/like', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ post_id: postId })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const icon = likeBtn.querySelector('i');
+                    const likeCount = likeBtn.querySelector('.like-count');
+                    
+                    if (data.liked) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        if (likeCount) {
+                            likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                        }
+                        await addXP(xpValues.likePost, "Menyukai postingan");
+                        addActivity("Anda menyukai sebuah postingan", "fas fa-heart", "text-danger");
+                        
+                        // Update stats
+                        const likeCountStat = document.getElementById('likeCount');
+                        if (likeCountStat) {
+                            likeCountStat.textContent = parseInt(likeCountStat.textContent) + 1;
+                        }
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        if (likeCount) {
+                            likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                        }
+                        
+                        // Update stats
+                        const likeCountStat = document.getElementById('likeCount');
+                        if (likeCountStat) {
+                            likeCountStat.textContent = Math.max(0, parseInt(likeCountStat.textContent) - 1);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error liking post:', error);
+            }
+        }
+
+        // ===== COMMENT POST FUNCTION =====
+        async function commentPost(postId, commentBtn) {
+            const comment = prompt("Tulis komentar Anda:");
+            if (!comment) return;
+            
+            try {
+                const response = await fetch('/posts/comment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ 
+                        post_id: postId,
+                        comment: comment
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const commentCount = commentBtn.querySelector('.comment-count');
+                    if (commentCount) {
+                        commentCount.textContent = parseInt(commentCount.textContent) + 1;
+                    }
+                    
+                    await addXP(xpValues.commentPost, "Mengomentari postingan");
+                    addActivity("Anda mengomentari sebuah postingan", "fas fa-comment", "text-info");
+                    
+                    // Update stats
+                    const commentCountStat = document.getElementById('commentCount');
+                    if (commentCountStat) {
+                        commentCountStat.textContent = parseInt(commentCountStat.textContent) + 1;
+                    }
+                    
+                    alert('Komentar berhasil ditambahkan!');
+                }
+            } catch (error) {
+                console.error('Error commenting:', error);
+                alert('Terjadi kesalahan saat menambahkan komentar');
+            }
+        }
+
+        // ===== REPOST FUNCTION =====
+        async function repostPost(postId, repostBtn) {
+            if (!confirm('Apakah Anda yakin ingin membagikan postingan ini?')) return;
+            
+            try {
+                const response = await fetch('/posts/repost', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ post_id: postId })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const repostCount = repostBtn.querySelector('.repost-count');
+                    if (repostCount) {
+                        repostCount.textContent = parseInt(repostCount.textContent) + 1;
+                    }
+                    
+                    await addXP(xpValues.repost, "Membagikan postingan");
+                    addActivity("Anda membagikan sebuah postingan", "fas fa-share", "text-success");
+                    
+                    alert('Postingan berhasil dibagikan!');
+                } else {
+                    alert(data.message || 'Gagal membagikan postingan');
+                }
+            } catch (error) {
+                console.error('Error reposting:', error);
+                alert('Terjadi kesalahan saat membagikan postingan');
+            }
+        }
+
+        // ===== LOAD REPORTS & PENALTIES (dari kode lama) =====
+        async function loadReportsAndPenalties() {
+            try {
+                const response = await fetch('/profile/reports', {
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateReportBadge(data.reportCount, data.suspended);
+                    updateReportStats(data.reportCount);
+                    updatePenaltyHistory(data.penalties, data.totalXpPenalty, data.reportCount, data.suspended);
+                    
+                    if (data.suspended && data.suspendedUntil) {
+                        showSuspendedModal(new Date(data.suspendedUntil), data.reportCount, data.totalXpPenalty);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+            }
+        }
+
+        // ===== UPDATE REPORT BADGE =====
+        function updateReportBadge(reportCount, suspended) {
+            const badgeContainer = document.querySelector('.profile-info .mb-2');
+            if (!badgeContainer) return;
+            
+            const existingReportBadge = badgeContainer.querySelector('.badge-warning-report');
+            if (existingReportBadge) existingReportBadge.remove();
+            
+            const existingSuspendedBadge = badgeContainer.querySelector('.badge-danger');
+            if (existingSuspendedBadge) existingSuspendedBadge.remove();
+            
+            if (reportCount > 0) {
+                const reportBadge = document.createElement('span');
+                reportBadge.className = 'badge badge-warning-report';
+                reportBadge.style.backgroundColor = '#ff9800';
+                reportBadge.style.color = 'white';
+                reportBadge.textContent = `${reportCount} Report`;
+                reportBadge.title = `${reportCount} postingan Anda telah dilaporkan`;
+                badgeContainer.appendChild(reportBadge);
+            }
+            
+            if (suspended) {
+                const suspendedBadge = document.createElement('span');
+                suspendedBadge.className = 'badge badge-danger';
+                suspendedBadge.style.backgroundColor = '#dc3545';
+                suspendedBadge.style.color = 'white';
+                suspendedBadge.textContent = 'Suspended';
+                suspendedBadge.title = 'Akun Anda ditangguhkan';
+                badgeContainer.appendChild(suspendedBadge);
+            }
+        }
+
+        // ===== UPDATE REPORT STATS =====
+        function updateReportStats(reportCount) {
+            const statsContainer = document.querySelector('.stats-container');
+            if (!statsContainer) return;
+            
+            let reportStat = statsContainer.querySelector('.stat-report');
+            
+            if (!reportStat && reportCount > 0) {
+                reportStat = document.createElement('div');
+                reportStat.className = 'stat-item stat-report';
+                reportStat.innerHTML = `
+                    <div class="stat-value" id="reportCount">${reportCount}</div>
+                    <div class="stat-label">Laporan</div>
+                `;
+                statsContainer.appendChild(reportStat);
+            } else if (reportStat) {
+                reportStat.querySelector('#reportCount').textContent = reportCount;
+            }
+        }
+
+        // ===== UPDATE PENALTY HISTORY =====
+        function updatePenaltyHistory(penalties, totalXpPenalty, reportCount, suspended) {
+            const penaltyHistory = document.getElementById('penaltyHistory');
+            const penaltyList = document.getElementById('penaltyList');
+            
+            if (!penaltyHistory || !penaltyList) return;
+            
+            if (totalXpPenalty > 0 || reportCount > 0) {
+                penaltyHistory.style.display = 'block';
+                penaltyList.innerHTML = '';
+                
+                penalties.forEach(penalty => {
+                    const li = document.createElement('li');
+                    const reportDate = new Date(penalty.timestamp).toLocaleDateString('id-ID');
+                    li.textContent = `-${penalty.xp_penalty} XP (${reportDate}): ${penalty.reason}`;
+                    penaltyList.appendChild(li);
+                });
+                
+                if (suspended) {
+                    const li = document.createElement('li');
+                    li.style.color = '#dc3545';
+                    li.style.fontWeight = 'bold';
+                    li.textContent = `⚠️ Akun ditangguhkan selama 7 hari (menerima ${reportCount} laporan)`;
+                    penaltyList.appendChild(li);
+                }
+                
+                const totalLi = document.createElement('li');
+                totalLi.innerHTML = `<strong>Total XP yang hilang: -${totalXpPenalty}</strong>`;
+                penaltyList.appendChild(totalLi);
+            } else {
+                penaltyHistory.style.display = 'none';
+            }
+        }
+
+        // ===== SHOW SUSPENDED MODAL =====
+        function showSuspendedModal(untilDate, reportCount, totalXpPenalty) {
+            if (document.querySelector('.modal-suspended')) return;
+            
+            const modalHtml = `
+                <div class="modal fade modal-suspended" id="suspendedModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title"><i class="fas fa-ban me-2"></i>Akun Ditangguhkan</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-danger">
+                                    <h6><i class="fas fa-exclamation-triangle me-2"></i>Akses Anda dibatasi!</h6>
+                                    <p>Akun Anda telah ditangguhkan karena menerima terlalu banyak laporan.</p>
+                                    <p class="mb-0"><strong>Akun akan aktif kembali pada:</strong><br>
+                                    ${untilDate.toLocaleDateString('id-ID', { 
+                                        weekday: 'long', 
+                                        year: 'numeric', 
+                                        month: 'long', 
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}</p>
+                                </div>
+                                <div class="mt-3">
+                                    <h6>Alasan Penangguhan:</h6>
+                                    <ul>
+                                        <li>Postingan Anda dilaporkan karena melanggar aturan komunitas</li>
+                                        <li>Menerima ${reportCount} laporan dari pengguna lain</li>
+                                        <li>XP Anda telah dikurangi sebanyak ${totalXpPenalty} poin</li>
+                                    </ul>
+                                    <p class="text-muted mt-3">Selama penangguhan, Anda tidak dapat membuat postingan baru atau berinteraksi dengan postingan lain.</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = modalHtml;
+            document.body.appendChild(modalContainer);
+            
+            const modal = new bootstrap.Modal(document.getElementById('suspendedModal'));
+            modal.show();
+            
+            document.getElementById('suspendedModal').addEventListener('hidden.bs.modal', function() {
+                modalContainer.remove();
+            });
+        }
+
+        // ===== LOGOUT =====
+        document.getElementById('logoutBtn')?.addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                window.location.href = '/logout';
+            }
+        });
+
+        // ===== INITIALIZE ON PAGE LOAD =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Bootstrap tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Update XP progress bar on load
+            const currentXp = parseInt(document.getElementById('currentXP')?.textContent || 0);
+            const currentLevel = parseInt(document.getElementById('currentLevel')?.textContent || 1);
+            updateXPProgressBar(currentXp, currentLevel);
+            
+            // Load reports and penalties
+            loadReportsAndPenalties();
+            
+            // Set shine cursor (dari kode lama)
+            setTimeout(() => {
+                const shineElement = document.querySelector('.shine');
+                if (shineElement) {
+                    shineElement.style.cursor = 'pointer';
+                }
+            }, 1000);
         });
     </script>
     <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>

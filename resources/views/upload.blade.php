@@ -456,6 +456,25 @@
         <div class="form-container">
             <h2>Unggah Postingan 🎉</h2>
 
+            {{-- Tampilkan error validation --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <strong>Oops! Ada yang salah:</strong>
+                        <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                {{-- Tampilkan success message --}}
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                
             <form action="{{ route('upload.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
@@ -517,7 +536,7 @@
                 <input 
                     type="file"
                     id="media"
-                    name="media"
+                    name="gambar"
                     accept="image/*,video/*"
                     required
                 />
