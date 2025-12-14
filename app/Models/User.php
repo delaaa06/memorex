@@ -87,4 +87,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Like::class, 'user_id'); // Pakai full namespace
     }
+
+    public function addXp($amount)
+    {
+        $this->xp += $amount;
+        $this->checkLevelUp();
+        $this->save();
+    }
+
+    public function checkLevelUp()
+    {
+        while ($this->xp >= $this->level * 1000 && $this->level < 15) {
+            $this->level += 1;
+        }
+    }
 }

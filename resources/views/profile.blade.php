@@ -713,9 +713,17 @@
                 </div>
                 
                 <div class="mb-2">
-                    <span class="badge">Pemula</span>
+                    <!-- <span class="badge">Pemula</span>
                     <span class="badge" style="background-color: var(--info-color);">Aktif</span>
-                    <span class="badge" style="background-color: var(--accent-color);">Kreator</span>
+                    <span class="badge" style="background-color: var(--accent-color);">Kreator</span> -->
+
+                    @if($user->xp >= 1 && $user->xp <= 4999)
+                        <span class="badge">Pemula</span>
+                    @elseif($user->xp >= 5000 && $user->xp <= 9999)
+                        <span class="badge" style="background-color: var(--info-color);">Aktif</span>
+                    @elseif($user->xp >= 10000 && $user->xp <= 15000)
+                        <span class="badge" style="background-color: var(--accent-color);">Kreator</span>
+                    @endif
                 </div>
                 
                 <div class="xp-container">
@@ -723,6 +731,10 @@
                         $maxXp = $user->level * 1000;
                         $xpProgress = ($user->xp / $maxXp) * 100;
                         $xpToNext = $maxXp - $user->xp;
+                         if ($user->xp > $user->level * 1000) {
+                            $user->level = $user->level + 1;
+                            $user->save(); // Jangan lupa save untuk menyimpan ke database
+                        }
                     @endphp
                     <div class="d-flex justify-content-between">
                         <span>XP: <span id="currentXP">{{ $user->xp }}</span>/{{ $maxXp }}</span>
@@ -1008,9 +1020,6 @@
         </div>
     </div>
 
-
-    
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ===== DEBUG & FIX EDIT PROFILE =====
@@ -1275,6 +1284,7 @@
 
         // ===== UPDATE XP PROGRESS BAR =====
         function updateXPProgressBar(currentXp, level) {
+            const NextLevel = level + 1;
             const maxXpForLevel = level * 1000;
             const xpForCurrentLevel = (level - 1) * 1000;
             const xpInCurrentLevel = currentXp - xpForCurrentLevel;
