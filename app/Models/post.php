@@ -19,7 +19,7 @@ class Post extends Model
     ];
 
     protected $casts = [
-        'likes' => 'integer',
+        // 'likes' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

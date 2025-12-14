@@ -944,45 +944,45 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+    <script>
 
         document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.card');
             const detailPage = document.getElementById('detailPage');
             const backButton = document.getElementById('backButton');
             
-            cards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const postId = this.dataset.postId;
-                    loadPostDetail(postId);
-                });
-            });
+        //     cards.forEach(card => {
+        //         card.addEventListener('click', function() {
+        //             const postId = this.dataset.postId;
+        //             loadPostDetail(postId);
+        //         });
+        //     });
             
-            async function loadPostDetail(postId) {
-                try {
-                    const response = await fetch(`/posts/${postId}`);
-                    const post = await response.json();
+        //     async function loadPostDetail(postId) {
+        //         try {
+        //             const response = await fetch(`/posts/${postId}`);
+        //             const post = await response.json();
                     
-                    document.getElementById('postTitle').textContent = post.judul;
-                    document.getElementById('postDate').textContent = post.formatted_date;
-                    document.getElementById('postCategory').textContent = `Kategori: ${post.kategori}`;
-                    document.getElementById('postStory').textContent = post.isi;
+        //             document.getElementById('postTitle').textContent = post.judul;
+        //             document.getElementById('postDate').textContent = post.formatted_date;
+        //             document.getElementById('postCategory').textContent = `Kategori: ${post.kategori}`;
+        //             document.getElementById('postStory').textContent = post.isi;
                     
-                    const postMedia = document.getElementById('postMedia');
-                    if (post.gambar) {
-                        postMedia.src = `/storage/${post.gambar}`;
-                        postMedia.style.display = 'block';
-                    } else {
-                        postMedia.style.display = 'none';
-                    }
+        //             const postMedia = document.getElementById('postMedia');
+        //             if (post.gambar) {
+        //                 postMedia.src = `/storage/${post.gambar}`;
+        //                 postMedia.style.display = 'block';
+        //             } else {
+        //                 postMedia.style.display = 'none';
+        //             }
                     
-                    // Tampilkan detail page
-                    document.querySelector('.content-base').style.display = 'none';
-                    detailPage.style.display = 'block';
-                } catch (error) {
-                    console.error('Error loading post:', error);
-                }
-            }
+        //             // Tampilkan detail page
+        //             document.querySelector('.content-base').style.display = 'none';
+        //             detailPage.style.display = 'block';
+        //         } catch (error) {
+        //             console.error('Error loading post:', error);
+        //         }
+        //     }
             
             backButton.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1076,7 +1076,9 @@
                     const totalkomentarsEl = document.getElementById('totalkomentars');
                     
                     // Update likes - pakai post.likes karena itu dari database
-                    if (likesCountEl) likesCountEl.textContent = post.likes || 0;
+                    if (likesCountEl){
+                         likesCountEl.textContent = post.likes || 0;
+                    }
                     
                     // Load komentars untuk update count
                     loadkomentars(postId);
@@ -1480,183 +1482,183 @@
             });
         }
 
-    function getCurrentUserId() {
-            return localStorage.getItem('currentUserId') || 'anonymous';
-        }
-        
-    function getPostAuthorId(postId) {
-            const postAuthors = {
-                1: 'user123',
-                2: 'user456',
-                3: 'user789',
-                4: 'user101',
-                5: 'user_dela',
-                6: 'user112',
-                7: 'user131',
-                8: 'user415',
-                9: 'user161',
-                10: 'user718'
-            };
-            return postAuthors[postId] || 'anonymous';
-        }
-        
-        function saveReport(reportData) {
-            let reports = JSON.parse(localStorage.getItem('reports')) || [];
-            reports.push(reportData);
-            localStorage.setItem('reports', JSON.stringify(reports));
-        }
-        
-        function penalizeUserForReport(postId) {
-            const authorId = getPostAuthorId(postId);
-            
-            if (authorId === 'anonymous') {
-                console.log('Cannot penalize anonymous user');
-                return;
+        function getCurrentUserId() {
+                return localStorage.getItem('currentUserId') || 'anonymous';
             }
             
-            const userKey = `user_${authorId}`;
-            let userData = JSON.parse(localStorage.getItem(userKey));
+        function getPostAuthorId(postId) {
+                const postAuthors = {
+                    1: 'user123',
+                    2: 'user456',
+                    3: 'user789',
+                    4: 'user101',
+                    5: 'user_dela',
+                    6: 'user112',
+                    7: 'user131',
+                    8: 'user415',
+                    9: 'user161',
+                    10: 'user718'
+                };
+                return postAuthors[postId] || 'anonymous';
+            }
             
-            if (userData) {
-                const xpPenalty = 50;
-                userData.xp = Math.max(0, userData.xp - xpPenalty);
+            function saveReport(reportData) {
+                let reports = JSON.parse(localStorage.getItem('reports')) || [];
+                reports.push(reportData);
+                localStorage.setItem('reports', JSON.stringify(reports));
+            }
+            
+            function penalizeUserForReport(postId) {
+                const authorId = getPostAuthorId(postId);
                 
-                localStorage.setItem(userKey, JSON.stringify(userData));
-                
-                userData.reportCount = (userData.reportCount || 0) + 1;
-                localStorage.setItem(userKey, JSON.stringify(userData));
-                
-                console.log(`XP reduced by ${xpPenalty} for user ${authorId}. New XP: ${userData.xp}`);
-                
-                if (userData.reportCount >= 3) {
-                    applyHeavyPenalty(userData, authorId);
+                if (authorId === 'anonymous') {
+                    console.log('Cannot penalize anonymous user');
+                    return;
                 }
                 
-                updateUserDisplayIfActive(authorId);
-            }
-        }
-        
-        function applyHeavyPenalty(userData, userId) {
-            userData.suspended = true;
-            userData.suspendedUntil = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-            localStorage.setItem(`user_${userId}`, JSON.stringify(userData));
-            
-            console.log(`User ${userId} suspended for 7 days due to multiple reports`);
-        }
-        
-        function updateUserDisplayIfActive(userId) {
-            const currentUser = localStorage.getItem('currentUserId');
-            
-            if (currentUser === userId) {
-                if (typeof window.updateProfileDisplay === 'function') {
-                    window.updateProfileDisplay();
-                }
+                const userKey = `user_${authorId}`;
+                let userData = JSON.parse(localStorage.getItem(userKey));
                 
-                showPenaltyNotification();
-            }
-        }
-        
-        function showPenaltyNotification() {
-            const notification = document.createElement('div');
-            notification.className = 'penalty-notification';
-            notification.innerHTML = `
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <strong>Peringatan!</strong> XP Anda dikurangi 50 poin karena postingan Anda dilaporkan.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
+                if (userData) {
+                    const xpPenalty = 50;
+                    userData.xp = Math.max(0, userData.xp - xpPenalty);
+                    
+                    localStorage.setItem(userKey, JSON.stringify(userData));
+                    
+                    userData.reportCount = (userData.reportCount || 0) + 1;
+                    localStorage.setItem(userKey, JSON.stringify(userData));
+                    
+                    console.log(`XP reduced by ${xpPenalty} for user ${authorId}. New XP: ${userData.xp}`);
+                    
+                    if (userData.reportCount >= 3) {
+                        applyHeavyPenalty(userData, authorId);
+                    }
+                    
+                    updateUserDisplayIfActive(authorId);
                 }
-            }, 5000);
-        }
-        
-        const style = document.createElement('style');
-        style.textContent = `
-            .penalty-notification {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                z-index: 9999;
-                max-width: 400px;
             }
-        `;
-        document.head.appendChild(style);
-
-        cards.forEach(card => {
-            card.addEventListener('click', function() {
-                const postId = parseInt(this.dataset.postId);
-                showDetailPage(postId);
-            });
-        });
-
-        backButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            showHomePage();
-        });
-
-        reportButton.addEventListener('click', showReportModal);
-
-        closeModal.addEventListener('click', hideReportModal);
-
-        reportModal.addEventListener('click', function(e) {
-            if (e.target === reportModal) {
-                hideReportModal();
+            
+            function applyHeavyPenalty(userData, userId) {
+                userData.suspended = true;
+                userData.suspendedUntil = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+                localStorage.setItem(`user_${userId}`, JSON.stringify(userData));
+                
+                console.log(`User ${userId} suspended for 7 days due to multiple reports`);
             }
-        });
-
-        reportOptions.forEach(option => {
-            option.addEventListener('change', function() {
-                submitReportBtn.disabled = false;
-            });
-        });
-
-        submitReportBtn.addEventListener('click', submitReport);
-
-        const swipeLeft = document.querySelector('.swipe-left');
-        const swipeRight = document.querySelector('.swipe-right');
-        
-        [swipeLeft, swipeRight].forEach(container => {
-
-            container.addEventListener('mouseenter', () => {
-                container.style.animationPlayState = 'paused';
-            });
             
-            container.addEventListener('mouseleave', () => {
-                container.style.animationPlayState = 'running';
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            homePage.style.display = 'block';
-            detailPage.style.display = 'none';
-            submitReportBtn.disabled = true;
+            function updateUserDisplayIfActive(userId) {
+                const currentUser = localStorage.getItem('currentUserId');
+                
+                if (currentUser === userId) {
+                    if (typeof window.updateProfileDisplay === 'function') {
+                        window.updateProfileDisplay();
+                    }
+                    
+                    showPenaltyNotification();
+                }
+            }
             
-            submitReportBtn.disabled = true;
+            function showPenaltyNotification() {
+                const notification = document.createElement('div');
+                notification.className = 'penalty-notification';
+                notification.innerHTML = `
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Peringatan!</strong> XP Anda dikurangi 50 poin karena postingan Anda dilaporkan.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 5000);
+            }
             
             const style = document.createElement('style');
             style.textContent = `
-                .swipe-left:hover, .swipe-right:hover {
-                    animation-play-state: paused !important;
+                .penalty-notification {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 9999;
+                    max-width: 400px;
                 }
             `;
             document.head.appendChild(style);
-        });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && reportModal.classList.contains('show')) {
-                hideReportModal();
-            }
-            
-            if (e.key === 'Backspace' && detailPage.style.display === 'block') {
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const postId = parseInt(this.dataset.postId);
+                    showDetailPage(postId);
+                });
+            });
+
+            backButton.addEventListener('click', function(e) {
+                e.preventDefault();
                 showHomePage();
-            }
-        });
+            });
+
+            reportButton.addEventListener('click', showReportModal);
+
+            closeModal.addEventListener('click', hideReportModal);
+
+            reportModal.addEventListener('click', function(e) {
+                if (e.target === reportModal) {
+                    hideReportModal();
+                }
+            });
+
+            reportOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    submitReportBtn.disabled = false;
+                });
+            });
+
+            submitReportBtn.addEventListener('click', submitReport);
+
+            const swipeLeft = document.querySelector('.swipe-left');
+            const swipeRight = document.querySelector('.swipe-right');
+            
+            [swipeLeft, swipeRight].forEach(container => {
+
+                container.addEventListener('mouseenter', () => {
+                    container.style.animationPlayState = 'paused';
+                });
+                
+                container.addEventListener('mouseleave', () => {
+                    container.style.animationPlayState = 'running';
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                homePage.style.display = 'block';
+                detailPage.style.display = 'none';
+                submitReportBtn.disabled = true;
+                
+                submitReportBtn.disabled = true;
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    .swipe-left:hover, .swipe-right:hover {
+                        animation-play-state: paused !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && reportModal.classList.contains('show')) {
+                    hideReportModal();
+                }
+                
+                if (e.key === 'Backspace' && detailPage.style.display === 'block') {
+                    showHomePage();
+                }
+            });
 
     
     </script>

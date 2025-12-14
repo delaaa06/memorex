@@ -66,54 +66,7 @@ class PostController extends Controller
             'post' => $post
         ]);
     }
-
-    public function like(Request $request, $id)
-    {
-        $user = Auth::user();
-        $post = Post::findOrFail($id);
-        
-        $like = Like::where('user_id', $user->id)
-                    ->where('post_id', $post->id)
-                    ->first();
-        
-        if ($like) {
-            $like->delete();
-            $post->decrement('likes');
-            $liked = false;
-        } else {
-            Like::create([
-                'user_id' => $user->id,
-                'post_id' => $post->id
-            ]);
-            $post->increment('likes');
-            $liked = true;
-            
-            // ⭐ LOG ACTIVITY
-            Activity::log(
-                $user->id,
-                'like',
-                'Anda menyukai postingan "' . Str::limit($post->judul, 30) . '"',
-                ['post_id' => $post->id]
-            );
-        }
-        
-        return response()->json([
-            'success' => true,
-            'liked' => $liked,
-            'likes_count' => $post->likes
-        ]);
-    }
-
-    public function komentar(Request $request)
-    {
-        // TODO: Implement komentar functionality
-    }
-
-    public function repost(Request $request)
-    {
-        // TODO: Implement repost functionality
-    }
-
+    
     public function index()
     {
         // Ambil semua post yang visible, urutkan dari yang terbaru
@@ -133,12 +86,21 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::with('user')->findOrFail($id);
+
+        $isLiked = false;
+        if (Auth::check()) {
+            $isLiked = Like::where('post_id', $id)
+                        ->where('user_id', Auth::id())
+                        ->exists();
+        }
+
         return response()->json([
             'id' => $post->id,
             'judul' => $post->judul,
             'kategori' => $post->kategori,
             'isi' => $post->isi,
             'gambar' => $post->gambar,
+            'likes' => (int) $post->likes,
             'formatted_date' => $post->formatted_date,
             'user' => $post->user->name ?? 'Anonymous'
         ]);

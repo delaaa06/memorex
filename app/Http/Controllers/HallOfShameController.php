@@ -77,7 +77,7 @@ class HallOfShameController extends Controller
         ]);
     }
 
-    public function toggleLike(Post $post)
+   public function toggleLike(Post $post)
     {
         $user = Auth::user();
 
@@ -93,7 +93,7 @@ class HallOfShameController extends Controller
             // Unlike
             $like->delete();
             
-            // Hapus activity log untuk unlike
+            // Hapus activity log
             Activity::where('user_id', $user->id)
                     ->where('post_id', $post->id)
                     ->where('type', 'like')
@@ -108,6 +108,7 @@ class HallOfShameController extends Controller
             ]);
             
             $user->increment('xp', 5);
+            
             // Catat aktivitas LIKE
             Activity::create([
                 'user_id' => $user->id,
@@ -120,10 +121,17 @@ class HallOfShameController extends Controller
             
             $liked = true;
         }
+        
+        // ⭐ Hitung ulang dari database untuk akurasi 100%
+        $actualLikes = Like::where('post_id', $post->id)->count();
+        $post->update(['likes' => $actualLikes]);
+        $post->refresh();
 
         return response()->json([
+            'success' => true,
             'liked' => $liked,
-            'likes_count' => $post->likesCount()
+            'likes_count' => (int) $post->likes,
+            'message' => $liked ? 'Post liked!' : 'Post unliked!'
         ]);
     }
 
