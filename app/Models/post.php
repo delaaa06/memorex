@@ -101,7 +101,7 @@ class Post extends Model
 
      public function komentars()
     {
-        return $this->hasMany(komentar::class)->latest();
+        return $this->hasMany(komentar::class, 'post_id');
     }
 
     public function likes()
@@ -119,6 +119,11 @@ class Post extends Model
     public function likesCount()
     {
         return $this->likes()->count();
+    }
+    
+    public function komentarsCount()
+    {
+        return $this->komentars()->count();
     }
     // //ini yg kutambah
     // // Scope untuk postingan populer

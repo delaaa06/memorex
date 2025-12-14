@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Activity;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -16,8 +18,14 @@ class ProfileController extends Controller
         
         // Load posts untuk ditampilkan di tab
         $posts = $user->posts()->latest()->get();
+
+        $activities = $user ->activities()
+                            ->with('post')
+                            ->latest()
+                            ->take(10)
+                            ->get();
         
-        return view('profile', compact('user', 'posts'));
+        return view('profile', compact('user', 'posts', 'activities'));
     }
     
     public function update(Request $request)
@@ -65,35 +73,114 @@ class ProfileController extends Controller
     }
     
     // ===== DAILY LOGIN =====
+    // public function dailyLogin(Request $request)
+    // {
+    //     $user = auth()->user();
+        
+    //     // Cek apakah sudah login hari ini
+    //     if ($user->last_login && $user->last_login->isToday()) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'XP login harian sudah diklaim hari ini'
+    //         ]);
+    //     }
+        
+    //     // Update login streak
+    //     if ($user->last_login && $user->last_login->isYesterday()) {
+    //         // Streak lanjut
+    //         $user->login_streak++;
+    //     } else if (!$user->last_login || !$user->last_login->isYesterday()) {
+    //         // Reset streak
+    //         $user->login_streak = 1;
+    //     }
+        
+    //     $user->last_login = now();
+    //     $user->save();
+        
+    //     return response()->json([
+    //         'success' => true,
+    //         'loginStreak' => $user->login_streak
+    //     ]);
+    // }
+
+    // Tambahkan method ini di ProfileController.php
+
     public function dailyLogin(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         
-        // Cek apakah sudah login hari ini
-        if ($user->last_login && $user->last_login->isToday()) {
+        // Check if already claimed today
+        $lastLogin = $user->last_login;
+        $today = now()->toDateString();
+        
+        if ($lastLogin && $lastLogin === $today) {
             return response()->json([
                 'success' => false,
                 'message' => 'XP login harian sudah diklaim hari ini'
-            ]);
+            ], 400);
         }
         
-        // Update login streak
-        if ($user->last_login && $user->last_login->isYesterday()) {
-            // Streak lanjut
-            $user->login_streak++;
-        } else if (!$user->last_login || !$user->last_login->isYesterday()) {
-            // Reset streak
+        // Update streak
+        $yesterday = now()->subDay()->toDateString();
+        if ($lastLogin && $lastLogin === $yesterday) {
+            // Streak continues
+            $user->increment('login_streak');
+        } else {
+            // Streak reset
             $user->login_streak = 1;
         }
         
-        $user->last_login = now();
+        // Update last login date
+        $user->last_login = $today;
+        
+        // Add XP (50 XP untuk daily login)
+        $user->xp += 50;
+        
+        // Check level up
+        $maxXp = $user->level * 1000;
+        $levelUp = false;
+        
+        while ($user->xp >= $maxXp) {
+            $user->level++;
+            $maxXp = $user->level * 1000;
+            $levelUp = true;
+        }
+        
         $user->save();
+        
+        // Log activity
+        Activity::create([
+            'user_id' => $user->id,
+            'type' => 'login',
+            'description' => 'Anda mengklaim XP login harian',
+            'metadata' => json_encode(['streak' => $user->login_streak, 'xp' => 50])
+        ]);
         
         return response()->json([
             'success' => true,
-            'loginStreak' => $user->login_streak
+            'loginStreak' => $user->login_streak,
+            'user' => [
+                'xp' => $user->xp,
+                'level' => $user->level
+            ],
+            'levelUp' => $levelUp
         ]);
     }
+
+    public function checkDailyLogin()
+    {
+        $user = Auth::user();
+        $today = now()->toDateString();
+        $lastLogin = $user->last_login;
+        
+        $canClaim = !($lastLogin && $lastLogin === $today);
+        
+        return response()->json([
+            'canClaim' => $canClaim,
+            'lastClaim' => $lastLogin
+        ]);
+    }
+
     
     // ===== UPDATE AVATAR =====
     public function updateAvatar(Request $request)
@@ -144,6 +231,12 @@ class ProfileController extends Controller
         $path = $request->file('banner')->store('banners', 'public');
         $user->banner = '/storage/' . $path;
         $user->save();
+
+         Activity::create([
+            'user_id' => $user->id,
+            'type' => 'banner',
+            'description' => 'Anda mengubah banner profil',
+        ]);
         
         return response()->json([
             'success' => true,

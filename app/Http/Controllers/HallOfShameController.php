@@ -77,9 +77,8 @@ class HallOfShameController extends Controller
         ]);
     }
 
-    public function toggleLike($id)
+    public function toggleLike(Post $post)
     {
-        $post = Post::findOrFail($id);
         $user = Auth::user();
 
         if (!$user) {
@@ -108,6 +107,7 @@ class HallOfShameController extends Controller
                 'user_id' => $user->id
             ]);
             
+            $user->increment('xp', 5);
             // Catat aktivitas LIKE
             Activity::create([
                 'user_id' => $user->id,
@@ -127,9 +127,8 @@ class HallOfShameController extends Controller
         ]);
     }
 
-   public function storekomentar(Request $request, $id)
+   public function storekomentar(Request $request,Post $post)
     {
-        $post = Post::findOrFail($id);
         $user = Auth::user();
 
         if (!$user) {
@@ -144,11 +143,22 @@ class HallOfShameController extends Controller
         $komentar = komentar::create([
             'post_id' => $post->id,
             'user_id' => $user->id,
-            'isi_komen' => $request->content, // GANTI dari 'content' ke 'isi_komen'
+            'isi_komen' => $request->content,
+            'tgl_komen' => now(),
             'likes_komen' => 0,
             'reply_komen' => null,
             'report_komen' => null
         ]);
+
+        $user->increment('xp', 10);
+
+        $newLevel = floor($user->xp / 1000) + 1;
+        $oldLevel = $user->level;
+        
+        if ($newLevel > $oldLevel) {
+            $user->level = $newLevel;
+            $user->save();
+        }
 
         Activity::create([
             'user_id' => $user->id,
@@ -172,18 +182,17 @@ class HallOfShameController extends Controller
         ]);
     }
 
-    public function getkomentars($id)
+    public function getkomentars(Post $post)
     {
-        $post = Post::findOrFail($id);
-        $komentars = $post->komentars()->with('user')->get();
+        $komentars = $post->komentars()->with('user')->latest('tgl_komen')->get();
 
         return response()->json([
             'komentars' => $komentars->map(function($komentar) {
                 return [
                     'id' => $komentar->id,
-                    'content' => $komentar->content,
-                    'user_name' => $komentar->user->name,
-                    'created_at' => $komentar->created_at->diffForHumans()
+                    'content' => $komentar->isi_komen,
+                    'user_name' => $komentar->user->name ?? 'Anonymous',
+                    'created_at' => $komentar->tgl_komen ? \Carbon\Carbon::parse($komentar->tgl_komen)->diffForHumans() : 'baru saja'
                 ];
             })
         ]);

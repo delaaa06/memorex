@@ -9,6 +9,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\HallOfShameController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -34,10 +35,10 @@ Route::get('/search', function () {
 //     return view('profile');
 // })->name('profile');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-});
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+//     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+// });
 
 Route::get('/support', function () {
     return view('support');
@@ -60,19 +61,16 @@ Route::get('/regis', function () {
 Route::post('/regis', [RegisController::class, 'regis'])->name('regis.submit');
 
 // routes/web.php
-Route::middleware('auth')->group(function () {
-    // Profile routes
-    Route::post('/profile/add-xp', [ProfileController::class, 'addXp']);
-    Route::post('/profile/daily-login', [ProfileController::class, 'dailyLogin']);
-    Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar']);
-    Route::post('/profile/update-banner', [ProfileController::class, 'updateBanner']);
-    Route::get('/profile/reports', [ProfileController::class, 'getReports']);
+// Route::middleware('auth')->group(function () {
+//     // Profile routes
+//     // Route::post('/profile/add-xp', [ProfileController::class, 'addXp']);
+//     // Route::post('/profile/daily-login', [ProfileController::class, 'dailyLogin']);
+//     // Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar']);
+//     // Route::post('/profile/update-banner', [ProfileController::class, 'updateBanner']);
+//     // Route::get('/profile/reports', [ProfileController::class, 'getReports']);
+
     
-    // Post interactions
-    Route::post('/posts/like', [PostController::class, 'like']);
-    Route::post('/posts/komentar', [PostController::class, 'komentar']);
-    Route::post('/posts/repost', [PostController::class, 'repost']);
-});
+// });
 
 Route::get('/', [PostController::class, 'index'])->name('beranda');
 Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
@@ -94,17 +92,22 @@ Route::post('/reports', [ReportController::class, 'store'])->name('reports.store
 
 Route::get('/hall-of-shame', [HallOfShameController::class, 'index'])->name('hall-of-shame');
 Route::get('/hall-of-shame/posts/{id}', [HallOfShameController::class, 'show'])->name('hall-of-shame.show');
-Route::get('/posts/{id}/komentars', [HallOfShameController::class, 'getkomentars'])->name('posts.komentars');
+Route::post('/posts/{post}/like', [HallOfShameController::class, 'toggleLike'])->name('posts.like')->middleware('auth');
+Route::post('/posts/{post}/komentar', [HallOfShameController::class, 'storekomentar'])->name('posts.komentar')->middleware('auth');
+Route::get('/posts/{post}/komentars', [HallOfShameController::class, 'getkomentars'])->name('posts.komentars');
 
 Route::get('/search', [HallOfShameController::class, 'search'])->name('search');
 
 // Route untuk detail post
 Route::get('/hall-of-shame/posts/{id}', [HallOfShameController::class, 'showPost'])->name('posts.detail');
 
-// Route untuk like dan komentar (harus login)
-Route::middleware('auth')->group(function () {
-    Route::post('/posts/{id}/like', [HallOfShameController::class, 'toggleLike'])->name('posts.like');
-    Route::post('/posts/{id}/komentar', [HallOfShameController::class, 'storekomentar'])->name('posts.komentar');
+Route::middleware('auth')->group(function() {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/daily-login', [ProfileController::class, 'dailyLogin']);
+    Route::get('/profile/check-daily-login', [ProfileController::class, 'checkDailyLogin']);
+    Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar']);
+    Route::post('/profile/update-banner', [ProfileController::class, 'updateBanner']);
+    Route::post('/profile/update', [ProfileController::class, 'update']);
+    Route::post('/profile/add-xp', [ProfileController::class, 'addXp']);
+    Route::get('/profile/reports', [ProfileController::class, 'getReports']);
 });
-
-// Route untuk get komentars (public)

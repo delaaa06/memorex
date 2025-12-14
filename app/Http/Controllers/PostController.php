@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Like;
+use App\Models\Activity;
 
 class PostController extends Controller
 {
@@ -52,18 +53,54 @@ class PostController extends Controller
 
         // Redirect kembali ke halaman upload (blank page seperti requirement)
         return redirect()->route('upload');
-    }
 
-    public function like(Request $request)
-    {
-        // TODO: Implement like functionality
-        $postId = $request->input('post_id');
-        $post = Post::findOrFail($postId);
-        $post->increment('likes');
+        Activity::log(
+            $user->id,
+            'post',
+            'Anda membuat postingan baru: "' . $post->judul . '"',
+            ['post_id' => $post->id]
+        );
         
         return response()->json([
             'success' => true,
-            'likes' => $post->likes
+            'post' => $post
+        ]);
+    }
+
+    public function like(Request $request, $id)
+    {
+        $user = Auth::user();
+        $post = Post::findOrFail($id);
+        
+        $like = Like::where('user_id', $user->id)
+                    ->where('post_id', $post->id)
+                    ->first();
+        
+        if ($like) {
+            $like->delete();
+            $post->decrement('likes');
+            $liked = false;
+        } else {
+            Like::create([
+                'user_id' => $user->id,
+                'post_id' => $post->id
+            ]);
+            $post->increment('likes');
+            $liked = true;
+            
+            // ⭐ LOG ACTIVITY
+            Activity::log(
+                $user->id,
+                'like',
+                'Anda menyukai postingan "' . Str::limit($post->judul, 30) . '"',
+                ['post_id' => $post->id]
+            );
+        }
+        
+        return response()->json([
+            'success' => true,
+            'liked' => $liked,
+            'likes_count' => $post->likes
         ]);
     }
 

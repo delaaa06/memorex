@@ -36,16 +36,7 @@
             overflow-x: hidden;
             background: radial-gradient(circle at center, #fff 0%, #fff 60%, #fff4df 85%, #fff4df 100%);
         }
-/* 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, var(--yellow), var(--mint), var(--teal), var(--yellow));
-            background-size: 400% 400%;
-            animation: gradient 18s ease infinite;
-            z-index: -1;
-        } */
+
 
         @keyframes gradient {
             0% { background-position: 0% 50%; }
@@ -250,6 +241,7 @@
             box-shadow: 0px 8px 0px var(--primary);
             box-sizing: border-box;
             position: relative;
+            margin: 0 auto;
         }
 
         .post-title {
@@ -534,6 +526,78 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        .komentars-section-detail {
+            margin-top: 2rem;
+        }
+
+        .komentar-form-wrapper {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .komentar-form-detail textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .komentars-list-detail {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* komentar Item di Detail Page */
+        .komentar-item-detail {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .komentar-item-detail:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .komentar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .komentar-author {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        .komentar-date {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .komentar-content {
+            color: #212529;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Empty State */
+        .empty-komentars {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+        }
+
+        .empty-komentars i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
@@ -616,98 +680,6 @@
             </div>
         </div>
         
-        <!-- <div class="content-base">
-            <div class="swipe-left">
-                @for($i = 0; $i < 2; $i++) {{-- Loop untuk duplikasi card --}}
-                <div class="card" data-post-id="1">
-                    <p class="card-text">Hari ini aku ketemu mantan di mall, dia lagi sama pacar barunya</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="2">
-                    <p class="card-text">Gak sengaja kirim meme ke grup keluarga, padahal maksudnya ke temen</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="3">
-                    <p class="card-text">Salah manggil dosen pake nama "sayang", langsung mau masuk lobang</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="4">
-                    <p class="card-text">Nyapa orang yang kupikir temen ternyata orang lain wkwk</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="5">
-                    <p class="card-text">Kenapa choso ganteng banget ya Allah, ganteng imut comel swamiku muah muah</p>
-                    <div class="desc-card mt-3">From: Dela</div>
-                </div>
-                <div class="card" data-post-id="6">
-                    <p class="card-text">Kentut di lift penuh orang, semua pada ngeliatin</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="7">
-                    <p class="card-text">Lupa bayar di warteg, udah sampai rumah baru inget</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="8">
-                    <p class="card-text">Nyanyi kenceng di kamar mandi ternyata mic nya nyala ke speaker</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="9">
-                    <p class="card-text">Geleng-geleng sendiri ternyata orang sebelah kira diajak ngobrol</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="10">
-                    <p class="card-text">Jatuh di depan gebetan, padahal lagi pengen kelihatan keren</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                @endfor
-            </div>
-            <br>
-            <div class="swipe-right">
-                @for($i = 0; $i < 2; $i++) {{-- Loop untuk duplikasi card --}}
-                <div class="card" data-post-id="11">
-                    <p class="card-text">Lagi serius meeting tiba-tiba kucing lewat depan kamera</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="12">
-                    <p class="card-text">Salah transfer ke nomor yang mirip, uang sejuta melayang</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="13">
-                    <p class="card-text">Ngomong jelek tentang seseorang eh orangnya di belakang</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="14">
-                    <p class="card-text">Tidur di kelas terus ngiler, semua pada ketawa</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="15">
-                    <p class="card-text">Ngirim voice note marah ke orang yang salah</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="16">
-                    <p class="card-text">Foto selfie di kaca gedung eh ternyata orang dalem bisa liat</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="17">
-                    <p class="card-text">Nge-tweet ranty panjang lebar lupa akunnya public</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="18">
-                    <p class="card-text">Salah kirim screenshot chat ke orang yang dichat</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="19">
-                    <p class="card-text">Lagi interview kena disconnect karena kuota habis</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                <div class="card" data-post-id="20">
-                    <p class="card-text">Ngedance sendiri di kamar ternyata curtain kebuka</p>
-                    <div class="desc-card mt-3">From: Anonymous</div>
-                </div>
-                @endfor
-            </div>
-        </div> -->
-
         <div class="content-base">
             <div class="swipe-left">
                 @forelse($leftPosts as $post)
@@ -739,37 +711,7 @@
         </div>
     </main>
 
-    <main class="content detail-page" id="detailPage">
-        <!-- <div class="post-container">
-            <button class="report-button" id="reportButton">
-                <i class="fas fa-flag"></i> Report
-            </button>
-
-            <a href="#" class="back-button" id="backButton">
-                <i class="fas fa-arrow-left"></i> Kembali
-            </a>
-
-            <h1 class="post-title" id="postTitle">Judul Postingan Muncul di Sini</h1>
-
-            <div class="post-info">
-                Diposting pada: <b id="postDate">20 November 2025</b>
-            </div>
-
-            <div class="post-category" id="postCategory">
-                Kategori: Kucing
-            </div>
-
-            {{-- Menggunakan asset() untuk gambar --}}
-            <img src="{{ asset('4.jpg') }}" class="post-media" id="postMedia" alt="Media Postingan">
-
-            <div class="post-story" id="postStory">
-                Ini adalah isi cerita yang kamu tulis ketika upload.
-                
-                Bisa panjang, bisa berbaris baru,
-                semuanya akan tetap rapi karena pakai white-space: pre-line;
-            </div>
-        </div> -->
-
+    <!-- <main class="content detail-page" id="detailPage">
          <div class="post-container">
             <button class="report-button" id="reportButton">
                 <i class="fas fa-flag"></i> Report
@@ -791,6 +733,99 @@
 
             <div class="post-story" id="postStory"></div>
         </div>
+    </main> -->
+
+    <main class="main-content detail-page" id="detailPage" style="display: none;">
+        <div class="container">
+            <div class="post-container">
+                <button class="report-button" id="reportButton">
+                    <i class="fas fa-flag"></i> Report
+                </button>
+                <a href="#" class="back-button" id="backButton">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </a>
+
+                <h1 class="post-title" id="postTitle">Memuat...</h1>
+
+                <div class="post-info">
+                    Diposting pada: <b id="postDate"></b> • 
+                    Kategori: <span class="badge bg-primary" id="postCategory"></span>
+                </div>
+
+                <img src="" class="post-media" id="postMedia" alt="Media Postingan" style="display: none;">
+
+                <div class="post-story" id="postStory">Memuat konten...</div>
+
+                <!-- Like & komentar Actions -->
+                <div class="post-actions-detail mt-4 mb-4">
+                    <div class="d-flex gap-3 align-items-center">
+                        <!-- Like Button -->
+                        @auth
+                        <button class="btn btn-outline-danger like-btn-detail" id="likeButtonDetail" data-post-id="">
+                            <i class="fas fa-heart"></i>
+                            <span id="likesCountDetail">0</span> Likes
+                        </button>
+                        @else
+                        <a href="{{ route('login') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-heart"></i> Login untuk Like
+                        </a>
+                        @endauth
+                        
+                        <!-- komentar Count Badge -->
+                        <span class="badge bg-secondary">
+                            <i class="fas fa-komentar"></i>
+                            <span id="komentarsCountDetail">0</span> Komentar
+                        </span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- komentars Section -->
+                <div class="komentars-section-detail">
+                    <h4 class="mb-4">
+                        <i class="fas fa-komentars"></i> Komentar 
+                        (<span id="totalkomentars">0</span>)
+                    </h4>
+                    
+                    <!-- komentar Form -->
+                    @auth
+                    <div class="komentar-form-wrapper mb-4">
+                        <form id="komentarFormDetail" class="komentar-form-detail">
+                            @csrf
+                            <div class="mb-3">
+                                <textarea class="form-control" 
+                                        id="komentarContent" 
+                                        name="content" 
+                                        rows="3" 
+                                        placeholder="Tulis komentar Anda..." 
+                                        required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Kirim Komentar
+                            </button>
+                        </form>
+                    </div>
+                    @else
+                    <div class="alert alert-info">
+                        Silakan <a href="{{ route('login') }}" class="alert-link">login</a> untuk berkomentar
+                    </div>
+                    @endauth
+                    
+                    <!-- komentars List -->
+                    <div class="komentars-list-detail" id="komentarsListDetail">
+                        <!-- komentars akan dimuat via JavaScript -->
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="text-muted mt-2">Memuat komentar...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <div class="modal-overlay" id="reportModal">
@@ -907,155 +942,10 @@
         </div>
     </footer>
 
-   <script>
-//     const postsData = {
-//         1: {
-//             title: "Ketemu Mantan di Mall",
-//             date: "15 November 2025",
-//             category: "Cinta & Romansa",
-//             media: "4.jpg",
-//             story: `Hari ini aku lagi jalan-jalan di mall sendirian, tiba-tiba nemu mantan! Dia lagi jalan bareng pacar barunya yang keliatan lebih ganteng dan lebih stylish dari aku.
 
-// Aku langsung panik! Cepat-cepat sembunyi di balik tanaman hias dekat food court. Tapi nasib sial, ternyata dia liatin aku! Dia cuma senyum kecil terus lanjut jalan.
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
 
-// Malu banget! Aku masih pake kaos bekas lomba lari 5 tahun lalu sama celana training bolong. Sekarang aku masih nongkrong di toilet mall nungguin mereka pergi.`
-
-//         },
-//         2: {
-//             title: "Salah Kirim Meme ke Grup Keluarga",
-//             date: "10 November 2025",
-//             category: "Kecelakaan Digital",
-//             media: "",
-//             story: `Baru bangun tidur, buka WhatsApp langsung kirim meme receh ke temen. Eh ternyata salah kirim ke grup keluarga besar! Isinya meme "When you realize it's Monday tomorrow" dengan gambar orang nangis darah.
-
-// Satu menit kemudian, mama chat private: "Nak, ini gambar apa? Kok serem banget?"
-
-// Om-om dan tante-tante pada kasih reaksi "?" semua. Papa malah tanya: "Ini artinya apa? Kode apa?"
-
-// Aku bilang lagi tes fitur baru WhatsApp. Sekarang image-nya masih ada, jadi bahan ledekan tiap gathering keluarga.`
-//         },
-//         3: {
-//             title: "Salah Manggil Dosen 'Sayang'",
-//             date: "5 November 2025",
-//             category: "Kampus",
-//             media: "",
-//             story: `Lagi asik chat sama pacar sambil nunggu dosen masuk kelas. Dosennya dateng, aku tanpa sadar masih kebawa suasana chat.
-
-// Pas dia nawarin bantuan, aku langsung jawab: "Iya sayang, tunggu bentar ya..."
-
-// Sepi. Sunyi. Semua mata ngeliatin aku.
-
-// Dosennya cuma senyum tipis: "Sayang? Kita kan baru ketemu semester ini..."
-
-// Mau ngilang aja pengennya. Sampe sekarang tiap ketemu dosen itu, dia selalu panggil aku "sayang" di depan kelas.`
-//         },
-//         4: {
-//             title: "Nyapa Orang Salah",
-//             date: "1 November 2025",
-//             category: "Social Fails",
-//             media: "",
-//             story: `Di halte bus, liat temen dari belakang. Langsung tepuk pundak sambil teriak: "WOI GOBLOK!"
-
-// Eh ternyata orang lain. Bukan cuma orang lain, tapi bapak-bapak umur 50an yang lagi baca koran dengan tenang.
-
-// Dia pelan-pelan nutup korannya, liatin aku dari ujung kaki ke ujung rambut, lalu bilang: "Siapa yang goblok?"
-
-// Aku cuma bisa berkata: "Maaf pak, saya yang goblok."
-
-// Langsung lari ke arah bus yang kebetulan lagi datang.`
-//         },
-//         5: {
-//             title: "Pujian untuk Choso",
-//             date: "28 Oktober 2025",
-//             category: "Fandom",
-//             media: "",
-//             story: `AKU GAK TAHU LAGI HARUS GIMANA. SETIAP LIAT CHOSO DI JUJUTSU KAISEN LANGSUNG DEG-DEGAN.
-
-// Dia tuh... GANTENG BANGET SIH? Rambutnya, matanya, sifatnya yang protektif ke Yuuji, semuanya sempurna!
-
-// Aku sampe bikin 5 akun TikTok cuma buat edit Choso. Ig aku isinya cuma screenshot Choso doang. Temen-temen udah pada khawatir.
-
-// Tapi gimana lagi? Dia imut comel banget! SWAMIKU! MUAH MUAH! ❤️✨
-
-// #ChosoSupremacy #SaveMe`
-//         },
-//         6: {
-//             title: "Kentut di Lift Penuh",
-//             date: "25 Oktober 2025",
-//             category: "Momen Memalukan",
-//             media: "",
-//             story: `Naik lift di gedung kantor, 8 orang termasuk aku. Perut tiba-tiba mules, dan... itu terjadi.
-
-// Bukan cuma bunyi, tapi baunya... seperti telur busuk dicampur kubis.
-
-// Semua pada mengernyit. Ada yang tutup hidung, ada yang pelan-pelan mundur ke pojok.
-
-// Aku coba pura-pura liat ke atas seakan-akan mencari sumber suara. Tapi semua tahu.
-
-// Sampai lantai tujuan, lift kosong tinggal aku sendiri. Penyesalan sepanjang hidup.`
-//         },
-//         7: {
-//             title: "Lupa Bayar di Warteg",
-//             date: "20 Oktober 2025",
-//             category: "Keseharian",
-//             media: "",
-//             story: `Makan siang di warteg langganan, laper banget. Habis makan langsung buru-buru pulang karena ada meeting online.
-
-// Baru sampai rumah 30 menit, dapat telpon dari mamang warteg: "Mas, makanannya enak gak?"
-
-// Aku: "Enak bang Pak!"
-
-// Mamang: "Iya, bayarnya kapan?"
-
-// TERNYATA AKU LUBA BAYAR! Langsung balik ke warteg sambil bawa uang plus bonus karena malu.
-
-// Sekarang tiap ke warteg itu, mamangnya selalu ingetin: "Jangan lupa bayar ya Mas!"`
-//         },
-//         8: {
-//             title: "Menyanyi di Kamar Mandi",
-//             date: "18 Oktober 2025",
-//             category: "Musikal",
-//             media: "",
-//             story: `Lagi asik mandi, nyanyi-nyanyi lagu Bruno Mars full emotion. Sampe teriak-teriak high note-nya.
-
-// Ternyata... MIC DROP KU MASIH NYALA DARI KEMAREN DAN TERHUBUNG KE SPEAKER BLUETOOTH DI RUANG TAMU!
-
-// Adikku rekam, upload ke TikTok, sekarang dapat 500K views. Komentar pada bilang: "Suaranya bagus, tapinya..."
-
-// Sekeluarga pada tau kalo aku suka nyanyi "When I Was Your Man" sambil nangis-nangis di kamar mandi.`
-//         },
-//         9: {
-//             title: "Geleng-geleng Sendiri",
-//             date: "15 Oktober 2025",
-//             category: "Keseharian",
-//             media: "",
-//             story: `Naik angkot, lagi mikirin betapa absurdnya hidup. Geleng-geleng sendiri sambil senyum-senyum kecil.
-
-// Tiba-tiba nenek sebelahku nanya: "Ada apa Nak? Kenapa geleng-geleng? Nenek ada salah apa?"
-
-// TERNYATA DIA KIRA AKU GELENGIN DIA!
-
-// Aku cuma bisa bilang: "Bukan Nek, saya lagi latihan buat drama sekolah."
-
-// Dia cuma manggut-manggut: "Oh, pinter juga ya."`
-//         },
-//         10: {
-//             title: "Jatuh di Depan Gebetan",
-//             date: "12 Oktober 2025",
-//             category: "Cinta & Romansa",
-//             media: "",
-//             story: `Lagi jalan sama gebetan di taman, pengen kelihatan cool. Liat anak skateboard lewat, pengen nunjukkin kalo aku juga bisa.
-
-// Pinjam skateboard-nya, bilang: "Liat ya, aku jago nih!"
-
-// Langkah pertama... langsung jatuh telentang. Bukan cuma jatuh, tapi celanaku sobek di bagian belakang.
-
-// Dia cuma ketawa sambil nolongin aku. Sekarang kita jadian, tapi cerita jatuh itu selalu jadi bahan ledekannya.`
-//         }
-//     };
-
-      // public/js/posts.js atau dalam blade
-      //ini yg kutambah 
         document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.card');
             const detailPage = document.getElementById('detailPage');
@@ -1119,70 +1009,403 @@
         const postMedia = document.getElementById('postMedia');
         const postStory = document.getElementById('postStory');
 
-    // function showDetailPage(postId) {
-    //     const post = postsData[postId];
-        
-    //     if (post) {
-    //         postTitle.textContent = post.title;
-    //         postDate.textContent = post.date;
-    //         postCategory.textContent = `Kategori: ${post.category}`;
-    //         postStory.textContent = post.story;
-            
-    //         if (post.media) {
-    //             postMedia.style.display = 'block';
-    //             postMedia.src = "{{ asset('') }}" + post.media;
-    //             postMedia.alt = post.title;
-    //         } else {
-    //             postMedia.style.display = 'none';
-    //         }
-            
-    //         detailPage.dataset.currentPostId = postId;
-            
-    //         homePage.style.display = 'none';
-    //         detailPage.style.display = 'block';
-            
-    //         window.scrollTo(0, 0);
-    //     } else {
-    //         alert('Postingan tidak ditemukan!');
-    //     }
-    // }
 
-        function showDetailPage(postId) {
-        // Tampilkan loading
-        homePage.style.display = 'none';
-        detailPage.style.display = 'block';
-        postTitle.textContent = 'Memuat...';
-        postStory.textContent = 'Memuat konten...';
+        // function showDetailPage(postId) {
+        // // Tampilkan loading
+        // homePage.style.display = 'none';
+        // detailPage.style.display = 'block';
+        // postTitle.textContent = 'Memuat...';
+        // postStory.textContent = 'Memuat konten...';
         
-        // Fetch dari database
-        fetch(`/posts/${postId}`)
-            .then(response => {
-                if (!response.ok) throw new Error('Post not found');
-                return response.json();
-            })
-            .then(post => {
-                postTitle.textContent = post.judul;
-                postDate.textContent = post.formatted_date;
-                postCategory.textContent = `Kategori: ${post.kategori}`;
-                postStory.textContent = post.isi;
+        // // Fetch dari database
+        // fetch(`/posts/${postId}`)
+        //     .then(response => {
+        //         if (!response.ok) throw new Error('Post not found');
+        //         return response.json();
+        //     })
+        //     .then(post => {
+        //         postTitle.textContent = post.judul;
+        //         postDate.textContent = post.formatted_date;
+        //         postCategory.textContent = `Kategori: ${post.kategori}`;
+        //         postStory.textContent = post.isi;
+        
+        let currentPostId = null;
+
+        // ===== DIUPDATE - Tambah load likes & komentars =====
+        function showDetailPage(postId) {
+            currentPostId = postId; // TAMBAHAN: simpan post ID
+            
+            detailPage.dataset.currentPostId = postId;
+
+            // Tampilkan loading
+            homePage.style.display = 'none';
+            detailPage.style.display = 'block';
+            postTitle.textContent = 'Memuat...';
+            postStory.textContent = 'Memuat konten...';
+            window.scrollTo(0, 0);
+            
+            // Set post ID ke like button (TAMBAHAN)
+            const likeBtn = document.getElementById('likeButtonDetail');
+            if (likeBtn) {
+                likeBtn.setAttribute('data-post-id', postId);
+            }
+            
+            // Fetch dari database
+            fetch(`/hall-of-shame/posts/${postId}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Post not found');
+                    return response.json();
+                })
+                .then(post => {
+                    postTitle.textContent = post.judul;
+                    postDate.textContent = post.formatted_date;
+                    postCategory.textContent = post.kategori;
+                    postStory.textContent = post.isi;
+                    
+                    if (post.gambar) {
+                        postMedia.style.display = 'block';
+                        postMedia.src = `/storage/${post.gambar}`;
+                        postMedia.alt = post.judul;
+                    } else {
+                        postMedia.style.display = 'none';
+                    }
+                    
+                    // ===== FIX - Update likes count dari likesCount() bukan likes_count =====
+                    const likesCountEl = document.getElementById('likesCountDetail');
+                    const komentarsCountEl = document.getElementById('komentarsCountDetail');
+                    const totalkomentarsEl = document.getElementById('totalkomentars');
+                    
+                    // Update likes - pakai post.likes karena itu dari database
+                    if (likesCountEl) likesCountEl.textContent = post.likes || 0;
+                    
+                    // Load komentars untuk update count
+                    loadkomentars(postId);
+                    
+                    // Update like button state
+                    if (likeBtn && post.is_liked) {
+                        likeBtn.classList.add('liked');
+                    } else if (likeBtn) {
+                        likeBtn.classList.remove('liked');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading post:', error);
+                    alert('Postingan tidak ditemukan!');
+                    showHomePage();
+                });
+        }
+
+        // ===== FIX - Fungsi load komentars dengan update count =====
+        function loadkomentars(postId) {
+            const komentarsList = document.getElementById('komentarsListDetail');
+            
+            if (!komentarsList) return;
+            
+            // Show loading
+            komentarsList.innerHTML = `
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `;
+            
+            fetch(`/posts/${postId}/komentars`)
+                .then(res => res.json())
+                .then(data => {
+                    // ===== FIX - Update count terlebih dahulu =====
+                    const komentarsCountEl = document.getElementById('komentarsCountDetail');
+                    const totalkomentarsEl = document.getElementById('totalkomentars');
+                    const count = data.komentars ? data.komentars.length : 0;
+                    
+                    if (komentarsCountEl) komentarsCountEl.textContent = count;
+                    if (totalkomentarsEl) totalkomentarsEl.textContent = count;
+                    
+                    if (count === 0) {
+                        komentarsList.innerHTML = `
+                            <div class="empty-komentars">
+                                <i class="fas fa-inbox"></i>
+                                <p>Belum ada komentar. Jadilah yang pertama berkomentar!</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    komentarsList.innerHTML = data.komentars.map(komentar => `
+                        <div class="komentar-item-detail">
+                            <div class="komentar-header">
+                                <span class="komentar-author">${komentar.user_name}</span>
+                                <span class="komentar-date">${komentar.created_at}</span>
+                            </div>
+                            <p class="komentar-content">${komentar.content}</p>
+                        </div>
+                    `).join('');
+                })
+                .catch(err => {
+                    console.error('Error loading komentars:', err);
+                    if (komentarsList) {
+                        komentarsList.innerHTML = `
+                            <div class="alert alert-danger">Gagal memuat komentar</div>
+                        `;
+                    }
+                });
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.like-btn-detail')) {
+                e.preventDefault();
+                const btn = e.target.closest('.like-btn-detail');
+                const postId = btn.dataset.postId;
                 
-                if (post.gambar) {
-                    postMedia.style.display = 'block';
-                    postMedia.src = `/storage/${post.gambar}`;
-                    postMedia.alt = post.judul;
-                } else {
-                    postMedia.style.display = 'none';
+                console.log('Like button clicked, postId:', postId); // DEBUG
+                
+                if (!postId) {
+                    console.error('No post ID found');
+                    return;
                 }
                 
-                detailPage.dataset.currentPostId = postId;
-                window.scrollTo(0, 0);
-            })
-            .catch(error => {
-                console.error('Error loading post:', error);
-                alert('Postingan tidak ditemukan!');
-                showHomePage();
+                fetch(`/posts/${postId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => {
+                    console.log('Like response status:', res.status); // DEBUG
+                    if (!res.ok) {
+                        return res.json().then(err => Promise.reject(err));
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('Like data:', data); // DEBUG
+                    
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    
+                    // Update button state
+                    if (data.liked) {
+                        btn.classList.add('liked');
+                    } else {
+                        btn.classList.remove('liked');
+                    }
+                    
+                    // Update count
+                    const countEl = document.getElementById('likesCountDetail');
+                    if (countEl) {
+                        countEl.textContent = data.likes_count;
+                    }
+                })
+                .catch(err => {
+                    console.error('Like error:', err);
+                    alert('Terjadi kesalahan: ' + (err.error || err.message || 'Unknown'));
+                });
+            }
+        });
+
+        // ===== FIX - Handle komentar Form Submit dengan console log =====
+        const komentarForm = document.getElementById('komentarFormDetail');
+        if (komentarForm) {
+            komentarForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const textarea = document.getElementById('komentarContent');
+                const content = textarea.value.trim();
+                
+                console.log('Komentar submit, postId:', currentPostId, 'content:', content); // DEBUG
+                
+                if (!content || !currentPostId) {
+                    alert('Komentar tidak boleh kosong');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('content', content);
+                
+                fetch(`/posts/${currentPostId}/komentar`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => {
+                    console.log('Komentar response status:', res.status); // DEBUG
+                    if (!res.ok) {
+                        return res.json().then(err => Promise.reject(err));
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('Komentar data:', data); // DEBUG
+                    
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    
+                    // Reload komentars
+                    loadkomentars(currentPostId);
+                    
+                    // Reset form
+                    textarea.value = '';
+                    
+                    // Show success message
+                    const successMsg = document.createElement('div');
+                    successMsg.className = 'alert alert-success alert-dismissible fade show mt-2';
+                    successMsg.innerHTML = `
+                        Komentar berhasil dikirim!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+                    this.insertAdjacentElement('afterend', successMsg);
+                    
+                    setTimeout(() => successMsg.remove(), 3000);
+                })
+                .catch(err => {
+                    console.error('Komentar error:', err);
+                    alert('Terjadi kesalahan: ' + (err.error || err.message || 'Unknown'));
+                });
             });
         }
+
+        // ===== SISANYA TETAP SAMA - Tidak diubah =====
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.komentar-toggle-btn')) {
+                const btn = e.target.closest('.komentar-toggle-btn');
+                const postId = btn.dataset.postId;
+                const wrapper = document.getElementById(`komentars-wrapper-${postId}`);
+                
+                if (wrapper) {
+                    if (wrapper.style.display === 'none' || !wrapper.style.display) {
+                        wrapper.style.display = 'block';
+                    } else {
+                        wrapper.style.display = 'none';
+                    }
+                }
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.like-btn') && !e.target.closest('.like-btn-detail')) {
+                e.preventDefault();
+                const btn = e.target.closest('.like-btn');
+                const postId = btn.dataset.postId;
+                
+                fetch(`/posts/${postId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    
+                    if (data.liked) {
+                        btn.classList.add('liked');
+                    } else {
+                        btn.classList.remove('liked');
+                    }
+                    
+                    const countEl = btn.querySelector('.likes-count');
+                    if (countEl) {
+                        countEl.textContent = data.likes_count;
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Terjadi kesalahan');
+                });
+            }
+        });
+
+        document.addEventListener('submit', function(e) {
+            if (e.target.classList.contains('komentar-form')) {
+                e.preventDefault();
+                const form = e.target;
+                const postId = form.dataset.postId;
+                const input = form.querySelector('input[name="content"]');
+                const content = input.value.trim();
+                
+                if (!content) return;
+                
+                const formData = new FormData();
+                formData.append('content', content);
+                
+                fetch(`/posts/${postId}/komentar`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    
+                    const komentarsList = document.getElementById(`komentars-list-${postId}`);
+                    if (komentarsList) {
+                        const newkomentar = `
+                            <div class="komentar-item mb-2">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1">
+                                        <strong class="komentar-author">${data.komentar.user_name}</strong>
+                                        <p class="komentar-text mb-0">${data.komentar.content}</p>
+                                        <small class="text-muted">${data.komentar.created_at}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        komentarsList.insertAdjacentHTML('afterbegin', newkomentar);
+                    }
+                    
+                    const countSpan = document.querySelector(`[data-post-id="${postId}"].komentar-toggle-btn .komentars-count`);
+                    if (countSpan) {
+                        countSpan.textContent = parseInt(countSpan.textContent) + 1;
+                    }
+                    
+                    input.value = '';
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Terjadi kesalahan');
+                });
+            }
+        });
+
+        //         if (post.gambar) {
+        //             postMedia.style.display = 'block';
+        //             postMedia.src = `/storage/${post.gambar}`;
+        //             postMedia.alt = post.judul;
+        //         } else {
+        //             postMedia.style.display = 'none';
+        //         }
+                
+        //         detailPage.dataset.currentPostId = postId;
+        //         window.scrollTo(0, 0);
+        //     })
+        //     .catch(error => {
+        //         console.error('Error loading post:', error);
+        //         alert('Postingan tidak ditemukan!');
+        //         showHomePage();
+        //     });
+        // }
+
+
 
         function showHomePage() {
             detailPage.style.display = 'none';
@@ -1436,7 +1659,6 @@
         });
 
     
-</script>
-<script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
+    </script>
 </body>
 </html>
