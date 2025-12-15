@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Activity;
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\Like;
 use App\Models\komentar;
 use Illuminate\Support\Facades\Auth;  
@@ -14,16 +15,16 @@ class HallOfShameController extends Controller
 {
     public function index()
     {
-        // Ambil postingan populer berdasarkan likes, bulan ini
-        $popularPosts = Post::where('visibilitas', 'public')
+        $popularPosts = Post::whereIn ('visibilitas', ['public','anon'])
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->with('user')
             ->orderBy('likes', 'desc')
             ->take(12) // Ambil 12 postingan teratas
             ->get();
-        
+
         return view('hall-of-shame', compact('popularPosts'));
+        
     }
 
     public function search(Request $request)
@@ -47,7 +48,7 @@ class HallOfShameController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $popularPosts = Post::where('visibilitas', 'public')
+        $popularPosts = Post::where('visibilitas', 'public','anon')
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->with('user')
@@ -73,7 +74,7 @@ class HallOfShameController extends Controller
             'gambar' => $post->gambar,
             'likes' => $post->likes,
             'formatted_date' => $post->created_at->format('d F Y'),
-            'user' => $post->user->name ?? 'Anonymous'
+            'user' => $post->user->username ?? 'Anonymous'
         ]);
     }
 
@@ -107,7 +108,7 @@ class HallOfShameController extends Controller
                 'user_id' => $user->id
             ]);
             
-            $user->increment('xp', 5);
+            $user->xp +=5;
             
             // Catat aktivitas LIKE
             Activity::create([
@@ -132,6 +133,19 @@ class HallOfShameController extends Controller
             'liked' => $liked,
             'likes_count' => (int) $post->likes,
             'message' => $liked ? 'Post liked!' : 'Post unliked!'
+        ]);
+    }
+
+    // app/Http/Controllers/ProfileController.php
+    public function show($username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+        
+        $totalLikes = $user->posts()->withCount('likes')->get()->sum('likes_count');
+        
+        return view('profile', [
+            'user' => $user,
+            'total_likes' => $totalLikes
         ]);
     }
 

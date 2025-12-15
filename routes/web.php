@@ -92,7 +92,7 @@ Route::post('/reports', [ReportController::class, 'store'])->name('reports.store
 
 Route::get('/hall-of-shame', [HallOfShameController::class, 'index'])->name('hall-of-shame');
 Route::get('/hall-of-shame/posts/{id}', [HallOfShameController::class, 'show'])->name('hall-of-shame.show');
-Route::post('/posts/{post}/like', [HallOfShameController::class, 'toggleLike'])->name('posts.like')->middleware('auth');
+Route::post('/posts/{post}/like', [HallOfShameController::class, 'toggleLike'])->name('posts.like');
 Route::post('/posts/{post}/komentar', [HallOfShameController::class, 'storekomentar'])->name('posts.komentar')->middleware('auth');
 Route::get('/posts/{post}/komentars', [HallOfShameController::class, 'getkomentars'])->name('posts.komentars');
 

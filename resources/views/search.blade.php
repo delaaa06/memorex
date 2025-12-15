@@ -661,11 +661,20 @@
     </header>
 
     <main class="main-content" id="homePage">
-        <div class="container mt-4">
-            <h2>Hasil Pencarian: "{{ $query }}"</h2>
-            <p>Ditemukan {{ $searchResults->count() }} hasil</p>
+    <div class="container">
+        @if(isset($query) && $query != '')
+            <!-- JIKA ADA PENCARIAN - HANYA TAMPILKAN HASIL PENCARIAN -->
+            <div class="search-results-header">
+                <h2>
+                    <i class="fas fa-search"></i> Hasil Pencarian: "{{ $query }}"
+                </h2>
+                <p class="text-muted mb-0">Ditemukan {{ $searchResults->count() }} hasil</p>
+                <a href="{{ route('search') }}" class="btn btn-sm btn-light mt-2">
+                    <i class="fas fa-times"></i> Hapus Pencarian
+                </a>
+            </div>
             
-            <div class="posts-grid">
+            <div class="posts-grid mt-4">
                 @forelse($searchResults as $post)
                     <div class="post-card bg-white" data-post-id="{{ $post->id }}">
                         @if($post->gambar)
@@ -676,9 +685,11 @@
                         
                         <div class="post-card-body">
                             <h5 class="post-card-title">{{ Str::limit($post->judul, 50) }}</h5>
-                            <span class="post-card-badge">{{ $post->kategori }}</span>
+                            <span class="post-card-badge badge-search">{{ $post->kategori }}</span>
                             <p class="post-card-text">{{ Str::limit($post->isi, 120) }}</p>
-                            <small class="text-muted">Oleh: {{ $post->user->name ?? 'Anonymous' }}</small>
+                            <small class="text-muted">
+                                <i class="fas fa-user"></i> {{ $post->user->name ?? 'Anonymous' }}
+                            </small>
                         </div>
                         
                         <div class="post-card-footer">
@@ -690,17 +701,25 @@
                     </div>
                 @empty
                     <div class="col-12 text-center py-5">
-                        <p class="text-muted">Tidak ada hasil yang ditemukan untuk "{{ $query }}"</p>
+                        <i class="fas fa-search-minus fa-3x text-muted mb-3"></i>
+                        <p class="text-muted h5">Tidak ada hasil yang ditemukan untuk "{{ $query }}"</p>
+                        <p class="text-muted">Coba gunakan kata kunci lain atau periksa ejaan Anda</p>
+                        <a href="{{ route('beranda') }}" class="btn btn-primary mt-3">
+                            <i class="fas fa-home"></i> Kembali ke Beranda
+                        </a>
                     </div>
                 @endforelse
             </div>
-        </div>
-
-        <div class="container">
+        @else
+            <!-- JIKA TIDAK ADA PENCARIAN - TAMPILKAN POSTINGAN POPULER -->
             <h1 class="hall-of-shame-title">🔥 Postingan Populer Bulan Ini 🔥</h1>
             <p class="hall-of-shame-subtitle">Lihat konten yang paling banyak dibaca dan disukai oleh pengguna.</p>
 
             <div class="posts-grid">
+<!-- 
+                <p>Total: {{ $popularPosts->count() }}</p>
+                <p>Anon: {{ $popularPosts->where('visibilitas', 'anon')->count() }}</p> -->
+
                 @forelse($popularPosts as $post)
                     <div class="post-card bg-white" data-post-id="{{ $post->id }}">
                         @if($post->gambar)
@@ -734,8 +753,9 @@
                     </div>
                 @endforelse
             </div>
-        </div>
-    </main>
+        @endif
+    </div>
+</main>
 
     <main class="main-content detail-page" id="detailPage" style="display: none;">
         <div class="container">
@@ -751,7 +771,8 @@
 
                 <div class="post-info">
                     Diposting pada: <b id="postDate"></b> • 
-                    Kategori: <span class="badge bg-primary" id="postCategory"></span>
+                    Kategori: <span class="badge bg-primary" id="postCategory"></span> <br>
+                    oleh : <b id="username"></b>
                 </div>
 
                 <img src="" class="post-media" id="postMedia" alt="Media Postingan" style="display: none;">
@@ -946,408 +967,7 @@
         </div>
     </footer>
 
-    <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
-    
-    <!-- <script>
-            const homePage = document.getElementById('homePage');
-            const detailPage = document.getElementById('detailPage');
-            const backButton = document.getElementById('backButton');
-            const postTitle = document.getElementById('postTitle');
-            const postDate = document.getElementById('postDate');
-            const postCategory = document.getElementById('postCategory');
-            const postMedia = document.getElementById('postMedia');
-            const postStory = document.getElementById('postStory');
-
-
-
-            // ===== TAMBAHAN - Variable untuk tracking post ID =====
-            let currentPostId = null;
-
-            // ===== DIUPDATE - Tambah load likes & komentars =====
-            function showDetailPage(postId) {
-                currentPostId = postId; // TAMBAHAN: simpan post ID
-
-                
-                // Tampilkan loading
-                homePage.style.display = 'none';
-                detailPage.style.display = 'block';
-                postTitle.textContent = 'Memuat...';
-                postStory.textContent = 'Memuat konten...';
-                window.scrollTo(0, 0);
-                
-                // Set post ID ke like button (TAMBAHAN)
-                const likeBtn = document.getElementById('likeButtonDetail');
-                if (likeBtn) {
-                    likeBtn.setAttribute('data-post-id', postId);
-                }
-                
-                // Fetch dari database
-                fetch(`/hall-of-shame/posts/${postId}`)
-                    .then(response => {
-                        if (!response.ok) throw new Error('Post not found');
-                        return response.json();
-                    })
-                    .then(post => {
-                        postTitle.textContent = post.judul;
-                        postDate.textContent = post.formatted_date;
-                        postCategory.textContent = post.kategori; // Hapus "Kategori: " karena sudah ada badge
-                        postStory.textContent = post.isi;
-                        
-                        if (post.gambar) {
-                            postMedia.style.display = 'block';
-                            postMedia.src = `/storage/${post.gambar}`;
-                            postMedia.alt = post.judul;
-                        } else {
-                            postMedia.style.display = 'none';
-                        }
-                        
-                        // ===== TAMBAHAN - Update likes & komentars count =====
-                        const likesCountEl = document.getElementById('likesCountDetail');
-
-                        
-                        const komentarsCountEl = document.getElementById('komentarsCountDetail');
-                        const totalkomentarsEl = document.getElementById('totalkomentars');
-                        
-                        if (likesCountEl) likesCountEl.textContent = post.likes_count || 0;
-                        if (komentarsCountEl) komentarsCountEl.textContent = post.komentars_count || 0;
-                        if (totalkomentarsEl) totalkomentarsEl.textContent = post.komentars_count || 0;
-                        
-                        // Update like button state
-                        if (likeBtn && post.is_liked) {
-                            likeBtn.classList.add('liked');
-                        } else if (likeBtn) {
-                            likeBtn.classList.remove('liked');
-                        }
-                        
-                        // Load komentars
-                        loadkomentars(postId);
-                    })
-                    .catch(error => {
-                        console.error('Error loading post:', error);
-                        alert('Postingan tidak ditemukan!');
-                        showHomePage();
-                    });
-            }
-
-            // ===== TAMBAHAN - Fungsi load komentars =====
-            function loadkomentars(postId) {
-                fetch(`/posts/${postId}/komentars`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const komentarsList = document.getElementById('komentarsListDetail');
-                        
-                        if (!komentarsList) return;
-                        
-                        if (data.komentars.length === 0) {
-                            komentarsList.innerHTML = `
-                                <div class="empty-komentars">
-                                    <i class="fas fa-inbox"></i>
-                                    <p>Belum ada komentar. Jadilah yang pertama berkomentar!</p>
-                                </div>
-                            `;
-                            return;
-                        }
-                        
-                        komentarsList.innerHTML = data.komentars.map(komentar => `
-                            <div class="komentar-item-detail">
-                                <div class="komentar-header">
-                                    <span class="komentar-author">${komentar.user_name}</span>
-                                    <span class="komentar-date">${komentar.created_at}</span>
-                                </div>
-                                <p class="komentar-content">${komentar.content}</p>
-                            </div>
-                        `).join('');
-                    })
-                    .catch(err => {
-                        console.error('Error loading komentars:', err);
-                        const komentarsList = document.getElementById('komentarsListDetail');
-                        if (komentarsList) {
-                            komentarsList.innerHTML = `
-                                <div class="alert alert-danger">Gagal memuat komentar</div>
-                            `;
-                        }
-                    });
-            }
-
-            // ===== DIBIARKAN - TETAP PAKAI =====
-            function showHomePage() {
-                detailPage.style.display = 'none';
-                homePage.style.display = 'block';
-                window.scrollTo(0, 0);
-            }
-
-            // ===== DIGANTI - EVENT DELEGATION (Support Card Dinamis) =====
-            homePage.addEventListener('click', function(e) {
-                // Cek apakah yang diklik adalah tombol "Baca Selengkapnya"
-                const readMoreBtn = e.target.closest('.btn-custom-primary');
-                if (readMoreBtn) {
-                    e.preventDefault();
-                    const card = readMoreBtn.closest('.post-card');
-                    const postId = card.dataset.postId;
-                    if (postId) {
-                        showDetailPage(postId);
-                    }
-                    return;
-                }
-                
-                // Atau klik langsung di card (tapi bukan di button)
-                const card = e.target.closest('.post-card');
-                if (card && !e.target.closest('.btn-custom-primary')) {
-                    const postId = card.dataset.postId;
-                    if (postId) {
-                        showDetailPage(postId);
-                    }
-                }
-            });
-
-            // ===== DIBIARKAN - TETAP PAKAI =====
-            backButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                showHomePage();
-            });
-
-            // ===== DIBIARKAN - TETAP PAKAI =====
-            document.addEventListener('DOMContentLoaded', function() {
-                homePage.style.display = 'block';
-                detailPage.style.display = 'none';
-                
-                // Nav active state
-                const currentPage = window.location.pathname.split('/').pop();
-                const navLinks = document.querySelectorAll('.nav-link');
-                
-                navLinks.forEach(link => {
-                    if (link.getAttribute('href') === currentPage) {
-                        link.classList.add('active');
-                    } else {
-                        link.classList.remove('active');
-                    }
-                });
-            });
-
-            // ===== DIBIARKAN - TETAP PAKAI =====
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace' && detailPage.style.display === 'block') {
-                    e.preventDefault();
-                    showHomePage();
-                }
-            });
-
-            // ===== TAMBAHAN - Handle Like Button =====
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.like-btn-detail')) {
-                    e.preventDefault();
-                    const btn = e.target.closest('.like-btn-detail');
-                    const postId = btn.dataset.postId;
-                    
-                    if (!postId) return;
-                    
-                    fetch(`/posts/${postId}/like`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.error) {
-                            alert(data.error);
-                            return;
-                        }
-                        
-                        // Update button state
-                        if (data.liked) {
-                            btn.classList.add('liked');
-                        } else {
-                            btn.classList.remove('liked');
-                        }
-                        
-                        // Update count
-                        document.getElementById('likesCountDetail').textContent = data.likes_count;
-                    })
-                    .catch(err => {
-                        console.error('Error:', err);
-                        alert('Terjadi kesalahan');
-                    });
-                }
-            });
-
-            // ===== TAMBAHAN - Handle komentar Form Submit =====
-            const komentarForm = document.getElementById('komentarFormDetail');
-            if (komentarForm) {
-                komentarForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    const textarea = document.getElementById('komentarContent');
-                    const content = textarea.value.trim();
-                    
-                    if (!content || !currentPostId) return;
-                    
-                    const formData = new FormData();
-                    formData.append('content', content);
-                    
-                    fetch(`/posts/${currentPostId}/komentar`, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.error) {
-                            alert(data.error);
-                            return;
-                        }
-                        
-                        // Reload komentars
-                        loadkomentars(currentPostId);
-                        
-                        // Update counter
-                        const currentCount = parseInt(document.getElementById('komentarsCountDetail').textContent);
-                        document.getElementById('komentarsCountDetail').textContent = currentCount + 1;
-                        document.getElementById('totalkomentars').textContent = currentCount + 1;
-                        
-                        // Reset form
-                        textarea.value = '';
-                        
-                        // Show success message
-                        const successMsg = document.createElement('div');
-                        successMsg.className = 'alert alert-success alert-dismissible fade show';
-                        successMsg.innerHTML = `
-                            Komentar berhasil dikirim!
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        `;
-                        this.insertAdjacentElement('beforebegin', successMsg);
-                        
-                        setTimeout(() => successMsg.remove(), 3000);
-                    })
-                    .catch(err => {
-                        console.error('Error:', err);
-                        alert('Terjadi kesalahan');
-                    });
-                });
-            }
-
-            // ===== TAMBAHAN - Handle Toggle komentar Section di Card =====
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.komentar-toggle-btn')) {
-                    const btn = e.target.closest('.komentar-toggle-btn');
-                    const postId = btn.dataset.postId;
-                    const wrapper = document.getElementById(`komentars-wrapper-${postId}`);
-                    
-                    if (wrapper) {
-                        if (wrapper.style.display === 'none' || !wrapper.style.display) {
-                            wrapper.style.display = 'block';
-                        } else {
-                            wrapper.style.display = 'none';
-                        }
-                    }
-                }
-            });
-
-            // ===== TAMBAHAN - Handle Like di Card (List) =====
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.like-btn') && !e.target.closest('.like-btn-detail')) {
-                    e.preventDefault();
-                    const btn = e.target.closest('.like-btn');
-                    const postId = btn.dataset.postId;
-                    
-                    fetch(`/posts/${postId}/like`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.error) {
-                            alert(data.error);
-                            return;
-                        }
-                        
-                        // Update UI
-                        if (data.liked) {
-                            btn.classList.add('liked');
-                        } else {
-                            btn.classList.remove('liked');
-                        }
-                        
-                        btn.querySelector('.likes-count').textContent = data.likes_count;
-                    })
-                    .catch(err => {
-                        console.error('Error:', err);
-                        alert('Terjadi kesalahan');
-                    });
-                }
-            });
-
-            // ===== TAMBAHAN - Handle komentar Submit di Card (List) =====
-            document.addEventListener('submit', function(e) {
-                if (e.target.classList.contains('komentar-form')) {
-                    e.preventDefault();
-                    const form = e.target;
-                    const postId = form.dataset.postId;
-                    const input = form.querySelector('input[name="content"]');
-                    const content = input.value.trim();
-                    
-                    if (!content) return;
-                    
-                    const formData = new FormData();
-                    formData.append('content', content);
-                    
-                    fetch(`/posts/${postId}/komentar`, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.error) {
-                            alert(data.error);
-                            return;
-                        }
-                        
-                        // Add new komentar to list
-                        const komentarsList = document.getElementById(`komentars-list-${postId}`);
-                        if (komentarsList) {
-                            const newkomentar = `
-                                <div class="komentar-item mb-2">
-                                    <div class="d-flex">
-                                        <div class="flex-grow-1">
-                                            <strong class="komentar-author">${data.komentar.user_name}</strong>
-                                            <p class="komentar-text mb-0">${data.komentar.content}</p>
-                                            <small class="text-muted">${data.komentar.created_at}</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                            komentarsList.insertAdjacentHTML('afterbegin', newkomentar);
-                        }
-                        
-                        // Update komentar count
-                        const countSpan = document.querySelector(`[data-post-id="${postId}"].komentar-toggle-btn .komentars-count`);
-                        if (countSpan) {
-                            countSpan.textContent = parseInt(countSpan.textContent) + 1;
-                        }
-                        
-                        // Reset form
-                        input.value = '';
-                    })
-                    .catch(err => {
-                        console.error('Error:', err);
-                        alert('Terjadi kesalahan');
-                    });
-                }
-            });
-    </script> -->
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const homePage = document.getElementById('homePage');
         const detailPage = document.getElementById('detailPage');
@@ -1357,6 +977,7 @@
         const postCategory = document.getElementById('postCategory');
         const postMedia = document.getElementById('postMedia');
         const postStory = document.getElementById('postStory');
+        const postUsername = document.getElementById('username');
         
         const reportModal = document.getElementById('reportModal');
         const closeModal = document.getElementById('closeModal');
@@ -1575,6 +1196,7 @@
                     return response.json();
                 })
                 .then(post => {
+                    postUsername.textContent = post.user;
                     postTitle.textContent = post.judul;
                     postDate.textContent = post.formatted_date;
                     postCategory.textContent = post.kategori;

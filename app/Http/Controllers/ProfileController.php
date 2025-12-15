@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Activity;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
@@ -15,6 +16,9 @@ class ProfileController extends Controller
         
         // Load count untuk posts dan komentars
         $user->loadCount(['posts', 'komentars']);
+
+
+        $totalLikes = $user->posts()->withCount('likes')->get()->sum('likes_count');
         
         // Load posts untuk ditampilkan di tab
         $posts = $user->posts()->latest()->get();
@@ -25,7 +29,7 @@ class ProfileController extends Controller
                             ->take(10)
                             ->get();
         
-        return view('profile', compact('user', 'posts', 'activities'));
+        return view('profile', compact('user', 'posts', 'activities','totalLikes'));
     }
     
     public function update(Request $request)
@@ -109,9 +113,17 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         
+
+        // \Log::info('Daily Login dipanggil', ['user_id' => $user->id]);
         // Check if already claimed today
-        $lastLogin = $user->last_login;
+        $lastLogin = $user->last_login ? Carbon::parse($user->last_login)->toDateString() : null;
         $today = now()->toDateString();
+
+        //   \Log::info('Login check', [
+        //     'lastLogin' => $lastLogin,
+        //     'today' => $today,
+        //     'login_streak_before' => $user->login_streak
+        // ]);
         
         if ($lastLogin && $lastLogin === $today) {
             return response()->json([
@@ -124,7 +136,7 @@ class ProfileController extends Controller
         $yesterday = now()->subDay()->toDateString();
         if ($lastLogin && $lastLogin === $yesterday) {
             // Streak continues
-            $user->increment('login_streak');
+            $user->login_streak += 1;
         } else {
             // Streak reset
             $user->login_streak = 1;
@@ -132,6 +144,11 @@ class ProfileController extends Controller
         
         // Update last login date
         $user->last_login = $today;
+
+        // \Log::info('Before save', [
+        //     'login_streak_after' => $user->login_streak,
+        //     'last_login' => $user->last_login
+        // ]);
         
         // Add XP (50 XP untuk daily login)
         $user->xp += 50;
@@ -147,6 +164,9 @@ class ProfileController extends Controller
         }
         
         $user->save();
+
+
+        // \Log::info('After save', ['user' => $user->toArray()]);
         
         // Log activity
         Activity::create([

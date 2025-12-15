@@ -636,66 +636,6 @@
                     <img src="{{ $user->avatar ?? 'https://i.pravatar.cc/120' }}" alt="Foto Profil" id="profileImg">
                 </div>
             </div>
-            
-            <!-- <div class="profile-info">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="level-badge">Level <span id="currentLevel">{{ $user->level }}</span></div>
-                        <div class="username" id="usernameDisplay">{{ $user->username ?? $user->name }}</div>
-                        <div class="mb-2">
-                            <span class="badge">Pemula</span>
-                            <span class="badge" style="background-color: var(--info-color);">Aktif</span>
-                            <span class="badge" style="background-color: var(--accent-color);">Kreator</span>
-                        </div>
-                        <div class="xp-container">
-                            @php
-                                $maxXp = $user->level * 1000;
-                                $xpProgress = ($user->xp / $maxXp) * 100;
-                                $xpToNext = $maxXp - $user->xp;
-                            @endphp
-                            <div class="d-flex justify-content-between">
-                                <span>XP: <span id="currentXP">{{ $user->xp }}</span>/</span></span>
-                                <span id="xpToNextLevel">{{ $xpToNext }} XP menuju Level {{ $user->level + 1 }}</span>
-                            </div>
-                            </div>
-                            <div class="xp-bar">
-                                <div class="xp-progress" id="xpProgress" style="width: {{ $xpProgress }}%></div>
-                            </div>
-                        </div>
-                        <div class="bio mt-3" id="userBio">
-                             {{ $user->bio ?? 'Belum ada bio' }}
-                        </div>
-                        
-                        <div class="stats-container">
-                            <div class="stat-item">
-                                <div class="stat-value" id="postCount">{{ $user->posts_count ?? 0 }}</div>
-                                <div class="stat-label">Postingan</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value" id="likeCount">{{ $user->total_likes ?? 0 }}</div>
-                                <div class="stat-label">Suka</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value" id="komentarCount">{{ $user->komentars_count ?? 0 }}</div>
-                                <div class="stat-label">Komentar</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value" id="loginStreak">{{ $user->login_streak ?? 0 }}</div>
-                                <div class="stat-label">Hari Login</div>
-                            </div>
-                        </div>
-                        
-                        <div class="penalty-history" id="penaltyHistory" style="display: none;">
-                            <h6><i class="fas fa-exclamation-triangle me-2"></i>History Penalty</h6>
-                            <ul id="penaltyList">
-                            </ul>
-                        </div>
-                    </div>
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                        <i class="fas fa-edit"></i> Edit Profil
-                    </button>
-                </div>
-            </div> -->
 
             <div class="profile-info">
                 <div class="d-flex justify-content-between align-items-start mb-3">
@@ -713,10 +653,7 @@
                 </div>
                 
                 <div class="mb-2">
-                    <!-- <span class="badge">Pemula</span>
-                    <span class="badge" style="background-color: var(--info-color);">Aktif</span>
-                    <span class="badge" style="background-color: var(--accent-color);">Kreator</span> -->
-
+                    
                     @if($user->xp >= 1 && $user->xp <= 4999)
                         <span class="badge">Pemula</span>
                     @elseif($user->xp >= 5000 && $user->xp <= 9999)
@@ -755,7 +692,7 @@
                         <div class="stat-label">Postingan</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="likeCount">{{ $user->total_likes ?? 0 }}</div>
+                        <div class="stat-value" id="likeCount">{{ $totalLikes ?? 0 }}</div>
                         <div class="stat-label">Suka</div>
                     </div>
                     <div class="stat-item">
@@ -843,6 +780,8 @@
                                     'profile' => ['icon' => 'fa-user-edit', 'color' => 'warning'],
                                     'avatar' => ['icon' => 'fa-camera', 'color' => 'info'],
                                     'banner' => ['icon' => 'fa-image', 'color' => 'success'],
+                                    'reporting' => ['color' => 'danger'],
+                                    'reported' => ['color' => 'danger']
                                 ];
                                 
                                 $activityType = $activity->type ?? 'post';

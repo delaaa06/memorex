@@ -6,11 +6,15 @@ use App\Models\Report;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Activity;
+use Illuminate\Support\Str;
 
 class ReportController extends Controller
 {
     public function store(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
             'post_id' => 'required|exists:posts,id',
             'reason' => 'required|in:spam,harassment,hate,violence,inappropriate,fake,other',
@@ -41,6 +45,22 @@ class ReportController extends Controller
             'details' => $request->details,
             'status' => 'pending'
         ]);
+
+        Activity::create([
+                'user_id' => $user->id,
+                'post_id' => $post->id,
+                'type' => 'reporting',
+                'description' => 'Melaporkan postingan "' . Str::limit($post->judul, 30) . '"',
+                'color' => 'danger'
+            ]);
+            
+        Activity::create([
+                'user_id' => $post->user_id,
+                'post_id' => $post->id,
+                'type' => 'reported',
+                'description' => 'Postingan anda "' . Str::limit($post->judul, 30) . '" telah dilaporkan',
+                'color' => 'danger'
+            ]);
 
         // (Opsional) Auto-action kalau report >= threshold tertentu
         $reportCount = Report::where('post_id', $request->post_id)->count();

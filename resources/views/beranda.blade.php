@@ -598,6 +598,50 @@
             margin-bottom: 1rem;
             opacity: 0.5;
         }
+
+        .username {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+         .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid var(--info-color);
+        }
+        /* .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid var(--dark-bg);
+            position: absolute;
+            bottom: -60px;
+            left: 30px;
+            background-color: var(--darker-bg);
+            overflow: hidden;
+            cursor: pointer;
+        } */
+        
+        .profile-picture:hover {
+            transform: scale(1.05);
+        }
+        
+        /* .profile-picture img, .profile-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        } */
+
     </style>
 </head>
 <body>
@@ -738,6 +782,7 @@
     <main class="main-content detail-page" id="detailPage" style="display: none;">
         <div class="container">
             <div class="post-container">
+
                 <button class="report-button" id="reportButton">
                     <i class="fas fa-flag"></i> Report
                 </button>
@@ -749,7 +794,9 @@
 
                 <div class="post-info">
                     Diposting pada: <b id="postDate"></b> • 
-                    Kategori: <span class="badge bg-primary" id="postCategory"></span>
+                    Kategori: <span class="badge bg-primary" id="postCategory"></span><br>
+                    oleh : <b id="username"></b>
+
                 </div>
 
                 <img src="" class="post-media" id="postMedia" alt="Media Postingan" style="display: none;">
@@ -1008,28 +1055,15 @@
         const postCategory = document.getElementById('postCategory');
         const postMedia = document.getElementById('postMedia');
         const postStory = document.getElementById('postStory');
-
-
-        // function showDetailPage(postId) {
-        // // Tampilkan loading
-        // homePage.style.display = 'none';
-        // detailPage.style.display = 'block';
-        // postTitle.textContent = 'Memuat...';
-        // postStory.textContent = 'Memuat konten...';
-        
-        // // Fetch dari database
-        // fetch(`/posts/${postId}`)
-        //     .then(response => {
-        //         if (!response.ok) throw new Error('Post not found');
-        //         return response.json();
-        //     })
-        //     .then(post => {
-        //         postTitle.textContent = post.judul;
-        //         postDate.textContent = post.formatted_date;
-        //         postCategory.textContent = `Kategori: ${post.kategori}`;
-        //         postStory.textContent = post.isi;
+        const postUsername = document.getElementById('username');
         
         let currentPostId = null;
+
+        function ShowProfile(postId){
+            currentPostId = postId;
+
+
+        }
 
         // ===== DIUPDATE - Tambah load likes & komentars =====
         function showDetailPage(postId) {
@@ -1057,6 +1091,7 @@
                     return response.json();
                 })
                 .then(post => {
+                    postUsername.textContent = post.user;
                     postTitle.textContent = post.judul;
                     postDate.textContent = post.formatted_date;
                     postCategory.textContent = post.kategori;

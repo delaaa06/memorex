@@ -106,7 +106,7 @@ class Post extends Model
 
     public function likes()
     {
-        return $this->hasMany(Like::class);
+        return $this->hasMany(Like::class, 'post_id');
     }
 
     // Method helper
@@ -125,36 +125,5 @@ class Post extends Model
     {
         return $this->komentars()->count();
     }
-    // //ini yg kutambah
-    // // Scope untuk postingan populer
-    // public function scopePopular($query, $limit = 4)
-    // {
-    //     return $query->whereIn('visibilitas', ['public', 'anon'])
-    //                 ->orderBy('likes', 'desc')
-    //                 ->orderBy('created_at', 'desc')
-    //                 ->limit($limit);
-    // }
-
-    // // Helper untuk format likes (15000 jadi 15K)
-    // public function getFormattedLikesAttribute()
-    // {
-    //     if ($this->likes >= 1000) {
-    //         return round($this->likes / 1000, 1) . 'K';
-    //     }
-    //     return $this->likes;
-    // }
-
-    // // Helper untuk excerpt/preview isi postingan
-    // public function getExcerptAttribute($length = 100)
-    // {
-    //     return \Illuminate\Support\Str::limit(strip_tags($this->isi), $length);
-    // }
-
-    // // Helper untuk format tanggal yang lebih readable
-    // public function getFormattedDateAttribute()
-    // {
-    //     return $this->created_at->locale('id')->diffForHumans();
-    // }
-
 
 }

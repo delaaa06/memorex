@@ -66,7 +66,7 @@ class PostController extends Controller
             'post' => $post
         ]);
     }
-    
+
     public function index()
     {
         // Ambil semua post yang visible, urutkan dari yang terbaru
