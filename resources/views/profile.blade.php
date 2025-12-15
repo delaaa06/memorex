@@ -20,7 +20,7 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            background: radial-gradient(circle at center, #fff 0%, #fff 60%, #fff4df 85%, #fff4df 100%);
+            background: #fde3cf;
         }
         .content {
             flex: 1;
@@ -230,11 +230,11 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 5px solid var(--dark-bg);
+            border: 5px solid var(--darker-bg);
             position: absolute;
             bottom: -60px;
             left: 30px;
-            background-color: var(--darker-bg);
+            background-color: var(--dark-bg);
             overflow: hidden;
             cursor: pointer;
         }
@@ -250,7 +250,7 @@
         }
         
         .profile-info {
-            background-color: var(--darker-bg);
+            background-color: #ffffff;
             padding: 70px 20px 20px;
             border-radius: 0 0 8px 8px;
             margin-bottom: 20px;
@@ -314,6 +314,16 @@
             border-radius: 6px;
             width: 65%;
             transition: width 0.5s ease;
+        }
+
+        .bio {
+            color: #E18E2E !important;
+            font-size: 0.95rem;
+            font-style: italic;
+            padding: 10px 0;
+            border-left: 3px solid #FFE97A;
+            padding-left: 15px;
+            margin-top: 15px;
         }
         
         .post-card {
@@ -385,8 +395,8 @@
             background-color: rgba(0, 0, 0, 0.7);
         }
         
-        .modal-content {
-            background-color: var(--darker-bg);
+       .modal-content {
+            background-color: #ffffffff; 
             color: var(--light-text);
             border: 1px solid var(--border-color);
         }
@@ -574,6 +584,65 @@
             color: var(--gray-text);
             font-size: 0.9rem;
         }
+
+        .form-control[type="file"] {
+            color: var(--light-text); 
+        }
+
+        .form-control[type="file"]::file-selector-button {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .form-control[type="file"]::file-selector-button:hover {
+            background-color: #5568d3;
+        }
+
+        .form-control[type="file"]::-webkit-file-upload-button {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .form-control[type="file"]::-webkit-file-upload-button:hover {
+            background-color: #5568d3;
+        }
+
+        #avatarUpload,
+        #bannerUpload {
+            background-color: #000000ff;
+            color: #ffffff !important; 
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #avatarUpload::placeholder,
+        #bannerUpload::placeholder {
+            color: #888;
+        }
+
+        .form-control, .form-select {
+            background-color: #2d3035;
+            border: 1px solid var(--border-color);
+            color: #ffffff !important; /* Putih */
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #2d3035;
+            border-color: var(--info-color);
+            color: #ffffff !important; /* Putih */
+            box-shadow: 0 0 0 0.25rem rgba(67, 181, 173, 0.25);
+        }
     </style>
 </head>
 <body>
@@ -581,7 +650,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ asset('foto/maskotweb.jpeg') }}" alt="🤡"></a>
+                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ asset('images/foto/maskotweb.png') }}" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -810,12 +879,6 @@
                 <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h5 class="teksFooter"><b>MemoraX</b></h5>
                     <p class="text-white text-decoration-none">platform tempat siapa saja bisa berbagi dan membaca cerita tentang momen memalukan dengan cara yang seru, ringan, dan menghibur.</p>
-                </div>
-
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h5 class="teksFooter"><b>Tautan Cepat</b></h5>
-                    <p><a href="#" class="text-white text-decoration-none">FAQ</a></p>
-                    <p><a href="#" class="text-white text-decoration-none">Karir</a></p>
                 </div>
 
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">

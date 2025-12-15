@@ -98,6 +98,8 @@
             object-fit: cover;
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
+            object-fit: cover; /* TAMBAHKAN INI */
+            object-position: center;
         }
 
         .post-card-body {
@@ -177,6 +179,8 @@
             
             .post-card-img {
                 height: 180px;
+                object-fit: cover; /* TAMBAHKAN INI */
+                object-position: center;
             }
         }
 
@@ -215,7 +219,7 @@
             box-shadow: 0px 8px 0px var(--color-dark-tosca);
             box-sizing: border-box;
             position: relative;
-            margin: 0 auto;
+            margin:  45px auto;
         }
 
         .post-title {
@@ -626,7 +630,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('beranda') }}"><img class="maskotweb" src="{{ asset('foto/maskotweb.jpeg') }}" alt="🤡"></a>
+                <a class="navbar-brand" href="{{ route('beranda') }}"><img class="maskotweb" src="{{ asset('images/foto/maskotweb.png') }}" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -938,12 +942,6 @@
                 <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                      <h5 class="teksFooter"><b>MemoraX</b></h5>
                     <p class="text-white text-decoration-none">platform tempat siapa saja bisa berbagi dan membaca cerita tentang momen memalukan dengan cara yang seru, ringan, dan menghibur.</p>
-                </div>
-
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h5 class="teksFooter"><b>Tautan Cepat</b></h5>
-                    <p><a href="#" class="text-white text-decoration-none">FAQ</a></p>
-                    <p><a href="#" class="text-white text-decoration-none">Karir</a></p>
                 </div>
 
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">

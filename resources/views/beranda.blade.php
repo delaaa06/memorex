@@ -178,8 +178,11 @@
         }
         
         .card-text{
-            font-family: 'Segoe Script', cursive;
-            font-size: 20px;
+            color: #666;
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            font-size: larger;
         }
         
         .desc-card{
@@ -241,7 +244,7 @@
             box-shadow: 0px 8px 0px var(--primary);
             box-sizing: border-box;
             position: relative;
-            margin: 0 auto;
+            margin: 45px auto;
         }
 
         .post-title {
@@ -475,6 +478,12 @@
             border-color: var(--orange);
         }
 
+        .card-fitur .badge {
+            font-family: 'Comic Sans MS', 'Segoe Script', cursive;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+
         .submit-report {
             width: 100%;
             padding: 14px;
@@ -650,7 +659,7 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
                 {{-- Menggunakan asset() helper untuk gambar --}}
-                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ asset('foto/maskotweb.jpeg') }}" alt="🤡"></a>
+                <a class="navbar-brand" href="#"><img class="maskotweb" src="{{ asset('images/foto/maskotweb.png') }}" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -697,7 +706,7 @@
                     </div>    
                 </div>
                 <p class="mt-3 fs-5 text-secondary">
-                    Ceritakan pengalaman absurd mu tanpa takut ketauan
+                    Ceritakan pengalaman absurd tanpa takut ketauan
                 </p>
             </div>
             <div class="row g-4 mt-5 justify-content-center">
@@ -715,10 +724,17 @@
                     </div>
                 </div>
 
+                                <div class="col-12 col-md-4 col-lg-3">
+                    <div class="card-fitur text-center">
+                        <span class="badge bg-light text-dark">Feedback</span>
+                        <p class="card-text mt-3">Beri masukan tentang website kami</p>
+                    </div>
+                </div>
+
                 <div class="col-12 col-md-4 col-lg-3">
                     <div class="card-fitur text-center">
                         <span class="badge bg-light text-dark">Support</span>
-                        <p class="card-text mt-3">Dukung kami</p>
+                        <p class="card-text mt-3">Dukung kami via Saweria</p>
                     </div>
                 </div>
             </div>
@@ -969,12 +985,6 @@
                 <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h5 class="teksFooter"><b>MemoraX</b></h5>
                     <p class="text-white text-decoration-none">platform tempat siapa saja bisa berbagi dan membaca cerita tentang momen memalukan dengan cara yang seru, ringan, dan menghibur.</p>
-                </div>
-
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h5 class="teksFooter"><b>Tautan Cepat</b></h5>
-                    <p><a href="#" class="text-white text-decoration-none">FAQ</a></p>
-                    <p><a href="#" class="text-white text-decoration-none">Karir</a></p>
                 </div>
 
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">

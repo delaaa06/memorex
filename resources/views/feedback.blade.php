@@ -11,11 +11,11 @@
 
     <style>
         :root {
-            --yellow: #FFE97A;
-            --orange: #E18E2E;
+            --yellow: #ffd91bff;
+            --orange: #ffb350ff;
             --red: #EA4828;
-            --mint: #43B5AD;
-            --teal: #279D9F;
+            --mint: #E18E2E;
+            --teal: #df8c2eff;
             --primary: var(--teal);
             --secondary: var(--mint);
             --accent: var(--yellow);
@@ -134,7 +134,7 @@
         .feedback-container {
             max-width: 800px;
             margin: 40px auto;
-            background: white;
+            background: #fffdf8ff;
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
@@ -553,7 +553,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('beranda') }}"><img class="maskotweb" src="{{ asset('foto/maskotweb.jpeg') }}" alt="🤡"></a>
+                <a class="navbar-brand" href="{{ route('beranda') }}"><img class="maskotweb" src="{{ asset('images/foto/maskotweb.png') }}" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -802,12 +802,6 @@
                 <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h5 class="teksFooter"><b>MemoraX</b></h5>
                     <p class="text-white text-decoration-none">platform tempat siapa saja bisa berbagi dan membaca cerita tentang momen memalukan dengan cara yang seru, ringan, dan menghibur.</p>
-                </div>
-
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h5 class="teksFooter"><b>Tautan Cepat</b></h5>
-                    <p><a href="#" class="text-white text-decoration-none">FAQ</a></p>
-                    <p><a href="#" class="text-white text-decoration-none">Karir</a></p>
                 </div>
 
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">

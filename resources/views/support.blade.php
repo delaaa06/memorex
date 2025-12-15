@@ -18,6 +18,7 @@
             margin: 0;
             display: flex;
             flex-direction: column;
+            background: #fde3cf;
         }
         .content {
             flex: 1;
@@ -168,7 +169,7 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         }
         .card:hover{
-            border-color: #5675b3;
+            border-color: #df8c2eff;
             transform: scale(1.05) translateY(-10px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
@@ -213,7 +214,7 @@
 
         .support-header h2 {
             font-weight: 700;
-            color: #279D9F;
+            color: #df8c2eff;
             margin-bottom: 10px;
         }
 
@@ -257,7 +258,7 @@
             <div class="container-fluid">
                 {{-- Menggunakan asset() untuk gambar --}}
                 <a class="navbar-brand" href="{{ route('beranda') }}">
-                    <img class="maskotweb" src="{{ asset('foto/maskotweb.jpeg') }}" alt="🤡">
+                    <img class="maskotweb" src="{{ asset('images/foto/maskotweb.png') }}" alt="🤡">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -298,7 +299,7 @@
             <div class="text-center">
                 <div class="support-card">
                     <i class="fas fa-heart" style="font-size: 64px; color: #EA4828; margin-bottom: 20px;"></i>
-                    <h3 style="color: #279D9F; margin-bottom: 15px;">Terima kasih atas dukungannya!</h3>
+                    <h3 style="color: #df8c2eff; margin-bottom: 15px;">Terima kasih atas dukungannya!</h3>
                     <p style="color: #666; margin-bottom: 30px;">
                         Dukungan Anda sangat berarti bagi kami untuk terus mengembangkan platform ini.
                     </p>
@@ -317,12 +318,6 @@
                 <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h5 class="teksFooter"><b>MemoraX</b></h5>
                     <p class="text-white text-decoration-none">platform tempat siapa saja bisa berbagi dan membaca cerita tentang momen memalukan dengan cara yang seru, ringan, dan menghibur.</p>
-                </div>
-
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h5 class="teksFooter"><b>Tautan Cepat</b></h5>
-                    <p><a href="#" class="text-white text-decoration-none">FAQ</a></p>
-                    <p><a href="#" class="text-white text-decoration-none">Karir</a></p>
                 </div>
 
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
@@ -344,6 +339,8 @@
         </div>
     </footer>
 
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const swipeLeft = document.querySelector('.swipe-left');
         const swipeRight = document.querySelector('.swipe-right');
@@ -382,6 +379,5 @@
             }
         }, 1000);
     </script>
-    <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

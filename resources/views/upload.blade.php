@@ -13,8 +13,8 @@
             --yellow: #FFE97A;
             --orange: #E18E2E;
             --red: #EA4828;
-            --mint: #43B5AD;
-            --teal: #279D9F;
+            --mint: #E18E2E;
+            --teal: #df8c2eff;
 
             --primary: var(--teal);
             --secondary: var(--mint);
@@ -38,7 +38,7 @@
             content: "";
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, var(--yellow) 0%, var(--mint) 100%);
+            background: #fde3cf;
             z-index: -2;
         }
         body::after {
@@ -422,7 +422,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('beranda') }}"><img class="maskotweb" src="{{ asset('foto/maskotweb.jpeg') }}" alt="🤡"></a>
+                <a class="navbar-brand" href="{{ route('beranda') }}"><img class="maskotweb" src="{{ asset('images/foto/maskotweb.png') }}" alt="🤡"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -555,12 +555,6 @@
                     <p class="text-white text-decoration-none">platform tempat siapa saja bisa berbagi dan membaca cerita tentang momen memalukan dengan cara yang seru, ringan, dan menghibur.</p>
                 </div>
 
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h5 class="teksFooter"><b>Tautan Cepat</b></h5>
-                    <p><a href="#" class="text-white text-decoration-none">FAQ</a></p>
-                    <p><a href="#" class="text-white text-decoration-none">Karir</a></p>
-                </div>
-
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h5 class="teksFooter"><b>Kontak</b></h5>
                     <p class="text-white text-decoration-none">Alamat: Surabaya</p>
@@ -579,6 +573,7 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const swipeLeft = document.querySelector('.swipe-left');
         const swipeRight = document.querySelector('.swipe-right');
@@ -623,6 +618,5 @@
             }
         }, 1000);
     </script>
-    <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
