@@ -730,7 +730,12 @@
                     <div class="card" data-post-id="{{ $post->id }}">
                         <p class="card-text">{{ Str::limit($post->isi, 100) }}</p>
                         <div class="desc-card mt-3">
-                            From: {{ $post->user->name ?? 'Anonymous' }}
+                            From: 
+                            @if ($post->visibilitas == 'anon')
+                                Anonymous
+                            @else
+                                {{ $post->user->name ?? 'Anonymous' }}
+                            @endif
                         </div>
                     </div>
                 @empty

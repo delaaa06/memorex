@@ -742,7 +742,7 @@
                             @endif
                             
                             <h6 class="fw-bold">{{ $post->judul }}</h6>
-                            <p>{{ Str::limit($post->isi, 150) }}</p>
+                            <p>{{ ($post->isi) }}</p>
                             
                             <div class="post-actions">
                                 <div class="post-action like-btn" data-post-id="{{ $post->id }}">
@@ -753,10 +753,10 @@
                                     <i class="far fa-comment"></i> 
                                     <span class="komentar-count">{{ $post->komentars_count }}</span>
                                 </div>
-                                <div class="post-action">
+                                <!-- <div class="post-action">
                                     <i class="far fa-eye"></i> 
                                     <span>{{ $post->views ?? 0 }}</span>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     @empty

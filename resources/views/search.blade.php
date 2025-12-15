@@ -716,9 +716,6 @@
             <p class="hall-of-shame-subtitle">Lihat konten yang paling banyak dibaca dan disukai oleh pengguna.</p>
 
             <div class="posts-grid">
-<!-- 
-                <p>Total: {{ $popularPosts->count() }}</p>
-                <p>Anon: {{ $popularPosts->where('visibilitas', 'anon')->count() }}</p> -->
 
                 @forelse($popularPosts as $post)
                     <div class="post-card bg-white" data-post-id="{{ $post->id }}">
@@ -772,7 +769,7 @@
                 <div class="post-info">
                     Diposting pada: <b id="postDate"></b> • 
                     Kategori: <span class="badge bg-primary" id="postCategory"></span> <br>
-                    oleh : <b id="username"></b>
+                       oleh : <b id="username"></b>
                 </div>
 
                 <img src="" class="post-media" id="postMedia" alt="Media Postingan" style="display: none;">
@@ -1201,6 +1198,12 @@
                     postDate.textContent = post.formatted_date;
                     postCategory.textContent = post.kategori;
                     postStory.textContent = post.isi;
+
+                    // if (data.visibilitas === 'anon') {
+                    //     postUsername.textContent = 'Anonymous';
+                    // } else {
+                    //     postUsername.textContent = post.user;
+                    // }
                     
                     if (post.gambar) {
                         postMedia.style.display = 'block';

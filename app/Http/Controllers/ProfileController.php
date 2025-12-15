@@ -75,56 +75,14 @@ class ProfileController extends Controller
             'levelUp' => $newLevel > $oldLevel
         ]);
     }
-    
-    // ===== DAILY LOGIN =====
-    // public function dailyLogin(Request $request)
-    // {
-    //     $user = auth()->user();
-        
-    //     // Cek apakah sudah login hari ini
-    //     if ($user->last_login && $user->last_login->isToday()) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'XP login harian sudah diklaim hari ini'
-    //         ]);
-    //     }
-        
-    //     // Update login streak
-    //     if ($user->last_login && $user->last_login->isYesterday()) {
-    //         // Streak lanjut
-    //         $user->login_streak++;
-    //     } else if (!$user->last_login || !$user->last_login->isYesterday()) {
-    //         // Reset streak
-    //         $user->login_streak = 1;
-    //     }
-        
-    //     $user->last_login = now();
-    //     $user->save();
-        
-    //     return response()->json([
-    //         'success' => true,
-    //         'loginStreak' => $user->login_streak
-    //     ]);
-    // }
-
-    // Tambahkan method ini di ProfileController.php
 
     public function dailyLogin(Request $request)
     {
         $user = Auth::user();
         
-
-        // \Log::info('Daily Login dipanggil', ['user_id' => $user->id]);
-        // Check if already claimed today
         $lastLogin = $user->last_login ? Carbon::parse($user->last_login)->toDateString() : null;
         $today = now()->toDateString();
 
-        //   \Log::info('Login check', [
-        //     'lastLogin' => $lastLogin,
-        //     'today' => $today,
-        //     'login_streak_before' => $user->login_streak
-        // ]);
-        
         if ($lastLogin && $lastLogin === $today) {
             return response()->json([
                 'success' => false,
@@ -145,12 +103,6 @@ class ProfileController extends Controller
         // Update last login date
         $user->last_login = $today;
 
-        // \Log::info('Before save', [
-        //     'login_streak_after' => $user->login_streak,
-        //     'last_login' => $user->last_login
-        // ]);
-        
-        // Add XP (50 XP untuk daily login)
         $user->xp += 50;
         
         // Check level up
@@ -164,9 +116,6 @@ class ProfileController extends Controller
         }
         
         $user->save();
-
-
-        // \Log::info('After save', ['user' => $user->toArray()]);
         
         // Log activity
         Activity::create([

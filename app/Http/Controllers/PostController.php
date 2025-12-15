@@ -70,7 +70,7 @@ class PostController extends Controller
     public function index()
     {
         // Ambil semua post yang visible, urutkan dari yang terbaru
-        $posts = Post::where('visibilitas', 'public')
+        $posts = Post::whereIn('visibilitas', ['public','anon'])
                     ->with('user') // Eager load user relationship
                     ->latest()
                     ->get();
@@ -83,27 +83,5 @@ class PostController extends Controller
         return view('beranda', compact('leftPosts', 'rightPosts'));
     }
     
-    public function show($id)
-    {
-        $post = Post::with('user')->findOrFail($id);
-
-        $isLiked = false;
-        if (Auth::check()) {
-            $isLiked = Like::where('post_id', $id)
-                        ->where('user_id', Auth::id())
-                        ->exists();
-        }
-
-        return response()->json([
-            'id' => $post->id,
-            'judul' => $post->judul,
-            'kategori' => $post->kategori,
-            'isi' => $post->isi,
-            'gambar' => $post->gambar,
-            'likes' => (int) $post->likes,
-            'formatted_date' => $post->formatted_date,
-            'user' => $post->user->name ?? 'Anonymous'
-        ]);
-    }
     
 }

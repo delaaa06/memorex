@@ -31,7 +31,7 @@ class HallOfShameController extends Controller
     {
         $query = $request->input('q'); 
         
-        $searchResults = Post::where('visibilitas', 'public')
+        $searchResults = Post::whereIn('visibilitas', ['public','anon'])
             ->where(function($q) use ($query) {
                 // Search di judul dan isi
                 $q->where('judul', 'like', "%$query%")
@@ -48,7 +48,7 @@ class HallOfShameController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $popularPosts = Post::where('visibilitas', 'public','anon')
+        $popularPosts = Post::whereIn('visibilitas', ['public','anon'])
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->with('user')
@@ -63,18 +63,18 @@ class HallOfShameController extends Controller
     {
         $post = Post::with('user')->findOrFail($id);
         
-        // Increment view count (opsional, perlu tambah kolom 'views')
-        // $post->increment('views');
-        
         return response()->json([
             'id' => $post->id,
             'judul' => $post->judul,
             'kategori' => $post->kategori,
             'isi' => $post->isi,
             'gambar' => $post->gambar,
-            'likes' => $post->likes,
-            'formatted_date' => $post->created_at->format('d F Y'),
-            'user' => $post->user->username ?? 'Anonymous'
+            'likes' => (int) $post->likes,
+            'formatted_date' => $post->formatted_date,
+            'user' => ($post->visibilitas === 'anon') 
+                        ? 'Anonymous' 
+                        : ($post->user->username ?? 'Anonymous'),
+            'visibilitas' => $post->visibilitas
         ]);
     }
 

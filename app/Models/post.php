@@ -86,7 +86,7 @@ class Post extends Model
     // Scope untuk filter visibility
     public function scopePublic($query)
     {
-        return $query->where('visibilitas', 'public');
+        return $query->where('visibilitas',[ 'public','anon']);
     }
 
     public function scopeByCategory($query, $category)
