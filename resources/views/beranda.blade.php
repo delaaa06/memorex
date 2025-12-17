@@ -682,7 +682,7 @@
             <div class="text-center">
                 <div class="judul">
                     <div class="shine typewriter">
-                    <span>M</span><span>e</span><span>m</span><span>o</span><span>r</span><span>a</span><span>X</span>
+                    <span>M</span><span>e</span><span>m</span><span>o</span><span>r</span><span>e</span><span>X</span>
                     </div>    
                 </div>
                 <p class="mt-3 fs-5 text-secondary">
