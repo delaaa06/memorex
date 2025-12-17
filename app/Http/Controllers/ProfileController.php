@@ -12,15 +12,9 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
-        
-        // Load count untuk posts dan komentars
+        $user = auth()->user();        
         $user->loadCount(['posts', 'komentars']);
-
-
         $totalLikes = $user->posts()->withCount('likes')->get()->sum('likes_count');
-        
-        // Load posts untuk ditampilkan di tab
         $posts = $user->posts()->latest()->get();
 
         $activities = $user ->activities()
@@ -41,8 +35,7 @@ class ProfileController extends Controller
             'username' => 'nullable|string|max:255|unique:users,username,' . $user->id,
             'bio' => 'nullable|string|max:500',
         ]);
-        
-        // Update user data
+
         $user->update($validated);
         
         return response()->json([
@@ -51,16 +44,12 @@ class ProfileController extends Controller
         ]);
     }
     
-    // ===== ADD XP =====
     public function addXp(Request $request)
     {
         $user = auth()->user();
         $xpToAdd = $request->xp;
-        
         $oldLevel = $user->level;
         $user->xp += $xpToAdd;
-        
-        // Hitung level baru (setiap 1000 XP = 1 level)
         $newLevel = floor($user->xp / 1000) + 1;
         $user->level = $newLevel;
         
@@ -90,22 +79,15 @@ class ProfileController extends Controller
             ], 400);
         }
         
-        // Update streak
         $yesterday = now()->subDay()->toDateString();
         if ($lastLogin && $lastLogin === $yesterday) {
-            // Streak continues
             $user->login_streak += 1;
         } else {
-            // Streak reset
             $user->login_streak = 1;
         }
-        
-        // Update last login date
         $user->last_login = $today;
 
         $user->xp += 50;
-        
-        // Check level up
         $maxXp = $user->level * 1000;
         $levelUp = false;
         
@@ -116,8 +98,7 @@ class ProfileController extends Controller
         }
         
         $user->save();
-        
-        // Log activity
+
         Activity::create([
             'user_id' => $user->id,
             'type' => 'login',
@@ -150,8 +131,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    
-    // ===== UPDATE AVATAR =====
     public function updateAvatar(Request $request)
     {
         $request->validate([
@@ -160,7 +139,6 @@ class ProfileController extends Controller
         
         $user = auth()->user();
         
-        // Hapus avatar lama jika ada
         if ($user->avatar) {
             $oldPath = str_replace('/storage/', '', $user->avatar);
             if (Storage::disk('public')->exists($oldPath)) {
@@ -168,7 +146,6 @@ class ProfileController extends Controller
             }
         }
         
-        // Simpan avatar baru
         $path = $request->file('avatar')->store('avatars', 'public');
         $user->avatar = '/storage/' . $path;
         $user->save();
@@ -179,7 +156,6 @@ class ProfileController extends Controller
         ]);
     }
     
-    // ===== UPDATE BANNER =====
     public function updateBanner(Request $request)
     {
         $request->validate([
@@ -188,7 +164,6 @@ class ProfileController extends Controller
         
         $user = auth()->user();
         
-        // Hapus banner lama jika ada
         if ($user->banner) {
             $oldPath = str_replace('/storage/', '', $user->banner);
             if (Storage::disk('public')->exists($oldPath)) {
@@ -196,7 +171,6 @@ class ProfileController extends Controller
             }
         }
         
-        // Simpan banner baru
         $path = $request->file('banner')->store('banners', 'public');
         $user->banner = '/storage/' . $path;
         $user->save();
@@ -213,13 +187,9 @@ class ProfileController extends Controller
         ]);
     }
     
-    // ===== GET REPORTS & PENALTIES =====
     public function getReports()
     {
         $user = auth()->user();
-        
-        // TODO: Implementasi sistem report sesuai kebutuhan
-        // Untuk sekarang return data kosong
         
         return response()->json([
             'success' => true,

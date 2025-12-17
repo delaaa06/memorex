@@ -23,12 +23,11 @@ class Feedback extends Model
     ];
 
     protected $casts = [
-        'categories' => 'array', // Auto convert JSON ke array
+        'categories' => 'array', 
         'allow_contact' => 'boolean',
         'created_at' => 'datetime',
     ];
 
-    // Relasi ke User
     public function user()
     {
         return $this->belongsTo(User::class);

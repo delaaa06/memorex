@@ -21,7 +21,6 @@ class Report extends Model
         'reviewed_at' => 'datetime',
     ];
 
-    // Relasi
     public function post()
     {
         return $this->belongsTo(Post::class);

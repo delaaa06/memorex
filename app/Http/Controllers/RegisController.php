@@ -34,8 +34,6 @@ class RegisController extends Controller
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
-        
-        // Buat user baru
         $user = User::create([
             'name' => $validated['first_name'] . ' ' . $validated['last_name'],
             'email' => $validated['email'],
@@ -44,7 +42,6 @@ class RegisController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        // Auto login setelah registrasi
         Auth::login($user);
 
         return redirect('/')->with('success', 'Registrasi berhasil! Selamat datang.');

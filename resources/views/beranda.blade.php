@@ -557,7 +557,6 @@
             overflow-y: auto;
         }
 
-        /* komentar Item di Detail Page */
         .komentar-item-detail {
             background: white;
             border: 1px solid #dee2e6;
@@ -595,7 +594,6 @@
             margin: 0;
         }
 
-        /* Empty State */
         .empty-komentars {
             text-align: center;
             padding: 3rem 1rem;
@@ -628,28 +626,10 @@
             margin-right: 10px;
             border: 2px solid var(--info-color);
         }
-        /* .profile-picture {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 5px solid var(--dark-bg);
-            position: absolute;
-            bottom: -60px;
-            left: 30px;
-            background-color: var(--darker-bg);
-            overflow: hidden;
-            cursor: pointer;
-        } */
         
         .profile-picture:hover {
             transform: scale(1.05);
         }
-        
-        /* .profile-picture img, .profile-banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        } */
 
     </style>
 </head>
@@ -800,10 +780,8 @@
 
                 <div class="post-story" id="postStory">Memuat konten...</div>
 
-                <!-- Like & komentar Actions -->
                 <div class="post-actions-detail mt-4 mb-4">
                     <div class="d-flex gap-3 align-items-center">
-                        <!-- Like Button -->
                         @auth
                         <button class="btn btn-outline-danger like-btn-detail" id="likeButtonDetail" data-post-id="">
                             <i class="fas fa-heart"></i>
@@ -815,7 +793,6 @@
                         </a>
                         @endauth
                         
-                        <!-- komentar Count Badge -->
                         <span class="badge bg-secondary">
                             <i class="fas fa-komentar"></i>
                             <span id="komentarsCountDetail">0</span> Komentar
@@ -825,14 +802,12 @@
 
                 <hr>
 
-                <!-- komentars Section -->
                 <div class="komentars-section-detail">
                     <h4 class="mb-4">
                         <i class="fas fa-komentars"></i> Komentar 
                         (<span id="totalkomentars">0</span>)
                     </h4>
                     
-                    <!-- komentar Form -->
                     @auth
                     <div class="komentar-form-wrapper mb-4">
                         <form id="komentarFormDetail" class="komentar-form-detail">
@@ -856,9 +831,7 @@
                     </div>
                     @endauth
                     
-                    <!-- komentars List -->
                     <div class="komentars-list-detail" id="komentarsListDetail">
-                        <!-- komentars akan dimuat via JavaScript -->
                         <div class="text-center py-4">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -1023,26 +996,22 @@
 
         }
 
-        // ===== DIUPDATE - Tambah load likes & komentars =====
         function showDetailPage(postId) {
-            currentPostId = postId; // TAMBAHAN: simpan post ID
+            currentPostId = postId; 
             
             detailPage.dataset.currentPostId = postId;
 
-            // Tampilkan loading
             homePage.style.display = 'none';
             detailPage.style.display = 'block';
             postTitle.textContent = 'Memuat...';
             postStory.textContent = 'Memuat konten...';
             window.scrollTo(0, 0);
             
-            // Set post ID ke like button (TAMBAHAN)
             const likeBtn = document.getElementById('likeButtonDetail');
             if (likeBtn) {
                 likeBtn.setAttribute('data-post-id', postId);
             }
             
-            // Fetch dari database
             fetch(`/hall-of-shame/posts/${postId}`)
                 .then(response => {
                     if (!response.ok) throw new Error('Post not found');
@@ -1063,20 +1032,16 @@
                         postMedia.style.display = 'none';
                     }
                     
-                    // ===== FIX - Update likes count dari likesCount() bukan likes_count =====
                     const likesCountEl = document.getElementById('likesCountDetail');
                     const komentarsCountEl = document.getElementById('komentarsCountDetail');
                     const totalkomentarsEl = document.getElementById('totalkomentars');
                     
-                    // Update likes - pakai post.likes karena itu dari database
                     if (likesCountEl){
                          likesCountEl.textContent = post.likes || 0;
                     }
                     
-                    // Load komentars untuk update count
                     loadkomentars(postId);
                     
-                    // Update like button state
                     if (likeBtn && post.is_liked) {
                         likeBtn.classList.add('liked');
                     } else if (likeBtn) {
@@ -1090,13 +1055,11 @@
                 });
         }
 
-        // ===== FIX - Fungsi load komentars dengan update count =====
         function loadkomentars(postId) {
             const komentarsList = document.getElementById('komentarsListDetail');
             
             if (!komentarsList) return;
             
-            // Show loading
             komentarsList.innerHTML = `
                 <div class="text-center py-4">
                     <div class="spinner-border text-primary" role="status">
@@ -1108,7 +1071,6 @@
             fetch(`/posts/${postId}/komentars`)
                 .then(res => res.json())
                 .then(data => {
-                    // ===== FIX - Update count terlebih dahulu =====
                     const komentarsCountEl = document.getElementById('komentarsCountDetail');
                     const totalkomentarsEl = document.getElementById('totalkomentars');
                     const count = data.komentars ? data.komentars.length : 0;
@@ -1152,7 +1114,7 @@
                 const btn = e.target.closest('.like-btn-detail');
                 const postId = btn.dataset.postId;
                 
-                console.log('Like button clicked, postId:', postId); // DEBUG
+                console.log('Like button clicked, postId:', postId); 
                 
                 if (!postId) {
                     console.error('No post ID found');
@@ -1168,28 +1130,26 @@
                     }
                 })
                 .then(res => {
-                    console.log('Like response status:', res.status); // DEBUG
+                    console.log('Like response status:', res.status); 
                     if (!res.ok) {
                         return res.json().then(err => Promise.reject(err));
                     }
                     return res.json();
                 })
                 .then(data => {
-                    console.log('Like data:', data); // DEBUG
+                    console.log('Like data:', data); 
                     
                     if (data.error) {
                         alert(data.error);
                         return;
                     }
                     
-                    // Update button state
                     if (data.liked) {
                         btn.classList.add('liked');
                     } else {
                         btn.classList.remove('liked');
                     }
                     
-                    // Update count
                     const countEl = document.getElementById('likesCountDetail');
                     if (countEl) {
                         countEl.textContent = data.likes_count;
@@ -1202,7 +1162,6 @@
             }
         });
 
-        // ===== FIX - Handle komentar Form Submit dengan console log =====
         const komentarForm = document.getElementById('komentarFormDetail');
         if (komentarForm) {
             komentarForm.addEventListener('submit', function(e) {
@@ -1211,7 +1170,7 @@
                 const textarea = document.getElementById('komentarContent');
                 const content = textarea.value.trim();
                 
-                console.log('Komentar submit, postId:', currentPostId, 'content:', content); // DEBUG
+                console.log('Komentar submit, postId:', currentPostId, 'content:', content); 
                 
                 if (!content || !currentPostId) {
                     alert('Komentar tidak boleh kosong');
@@ -1230,27 +1189,24 @@
                     }
                 })
                 .then(res => {
-                    console.log('Komentar response status:', res.status); // DEBUG
+                    console.log('Komentar response status:', res.status); 
                     if (!res.ok) {
                         return res.json().then(err => Promise.reject(err));
                     }
                     return res.json();
                 })
                 .then(data => {
-                    console.log('Komentar data:', data); // DEBUG
+                    console.log('Komentar data:', data); 
                     
                     if (data.error) {
                         alert(data.error);
                         return;
                     }
                     
-                    // Reload komentars
                     loadkomentars(currentPostId);
                     
-                    // Reset form
                     textarea.value = '';
                     
-                    // Show success message
                     const successMsg = document.createElement('div');
                     successMsg.className = 'alert alert-success alert-dismissible fade show mt-2';
                     successMsg.innerHTML = `

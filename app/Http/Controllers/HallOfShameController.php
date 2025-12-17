@@ -20,7 +20,7 @@ class HallOfShameController extends Controller
             ->whereYear('created_at', now()->year)
             ->with('user')
             ->orderBy('likes', 'desc')
-            ->take(12) // Ambil 12 postingan teratas
+            ->take(12)
             ->get();
 
         return view('hall-of-shame', compact('popularPosts'));
@@ -33,12 +33,9 @@ class HallOfShameController extends Controller
         
         $searchResults = Post::whereIn('visibilitas', ['public','anon'])
             ->where(function($q) use ($query) {
-                // Search di judul dan isi
                 $q->where('judul', 'like', "%$query%")
                 ->orWhere('isi', 'like', "%$query%")
-                // Search di kategori
                 ->orWhere('kategori', 'like', "%$query%")
-                // Search di username (relasi user)
                 ->orWhereHas('user', function($userQuery) use ($query) {
                     $userQuery->where('name', 'like', "%$query%")
                             ->orWhere('username', 'like', "%$query%");
@@ -91,10 +88,8 @@ class HallOfShameController extends Controller
                     ->first();
 
         if ($like) {
-            // Unlike
             $like->delete();
             
-            // Hapus activity log
             Activity::where('user_id', $user->id)
                     ->where('post_id', $post->id)
                     ->where('type', 'like')
@@ -102,7 +97,6 @@ class HallOfShameController extends Controller
             
             $liked = false;
         } else {
-            // Like
             Like::create([
                 'post_id' => $post->id,
                 'user_id' => $user->id
@@ -110,7 +104,6 @@ class HallOfShameController extends Controller
             
             $user->xp +=5;
             
-            // Catat aktivitas LIKE
             Activity::create([
                 'user_id' => $user->id,
                 'post_id' => $post->id,
@@ -123,7 +116,6 @@ class HallOfShameController extends Controller
             $liked = true;
         }
         
-        // ⭐ Hitung ulang dari database untuk akurasi 100%
         $actualLikes = Like::where('post_id', $post->id)->count();
         $post->update(['likes' => $actualLikes]);
         $post->refresh();
@@ -136,7 +128,6 @@ class HallOfShameController extends Controller
         ]);
     }
 
-    // app/Http/Controllers/ProfileController.php
     public function show($username)
     {
         $user = User::where('username', $username)->firstOrFail();
@@ -161,7 +152,6 @@ class HallOfShameController extends Controller
             'content' => 'required|string|max:1000'
         ]);
 
-        // Sesuaikan dengan kolom di tabel komentar
         $komentar = komentar::create([
             'post_id' => $post->id,
             'user_id' => $user->id,
@@ -197,7 +187,7 @@ class HallOfShameController extends Controller
             'success' => true,
             'komentar' => [
                 'id' => $komentar->id,
-                'content' => $komentar->isi_komen, // GANTI
+                'content' => $komentar->isi_komen, 
                 'user_name' => $komentar->user->name,
                 'created_at' => $komentar->tgl_komen ? \Carbon\Carbon::parse($komentar->tgl_komen)->diffForHumans() : 'baru saja'
             ]

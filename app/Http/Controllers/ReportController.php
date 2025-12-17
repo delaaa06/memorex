@@ -21,10 +21,7 @@ class ReportController extends Controller
             'details' => 'nullable|string|max:1000'
         ]);
 
-        // Ambil post untuk dapat author
         $post = Post::findOrFail($request->post_id);
-
-        // Cek apakah user sudah pernah report post ini
         $existingReport = Report::where('post_id', $request->post_id)
                                 ->where('reporter_user_id', Auth::id())
                                 ->first();
@@ -36,7 +33,6 @@ class ReportController extends Controller
             ], 400);
         }
 
-        // Simpan report
         $report = Report::create([
             'post_id' => $request->post_id,
             'reporter_user_id' => Auth::id(),
@@ -62,11 +58,9 @@ class ReportController extends Controller
                 'color' => 'danger'
             ]);
 
-        // (Opsional) Auto-action kalau report >= threshold tertentu
         $reportCount = Report::where('post_id', $request->post_id)->count();
         
         if ($reportCount >= 5) {
-            // Auto hide post atau suspend user
             $post->update(['visibilitas' => 'hidden']);
         }
 

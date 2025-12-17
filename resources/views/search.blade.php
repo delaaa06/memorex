@@ -98,7 +98,7 @@
             object-fit: cover;
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
-            object-fit: cover; /* TAMBAHKAN INI */
+            object-fit: cover; 
             object-position: center;
         }
 
@@ -179,7 +179,7 @@
             
             .post-card-img {
                 height: 180px;
-                object-fit: cover; /* TAMBAHKAN INI */
+                object-fit: cover; 
                 object-position: center;
             }
         }
@@ -298,7 +298,6 @@
             margin-right: 3px;
         }
 
-        /* Post Detail Actions */
         .post-actions-detail .btn {
             padding: 0.5rem 1.5rem;
             font-weight: 500;
@@ -324,7 +323,6 @@
             border-color: #bd2130;
         }
 
-        /* komentars Section Detail */
         .komentars-section-detail {
             margin-top: 2rem;
         }
@@ -346,7 +344,6 @@
             overflow-y: auto;
         }
 
-        /* komentar Item di Detail Page */
         .komentar-item-detail {
             background: white;
             border: 1px solid #dee2e6;
@@ -384,7 +381,6 @@
             margin: 0;
         }
 
-        /* Empty State */
         .empty-komentars {
             text-align: center;
             padding: 3rem 1rem;
@@ -397,7 +393,6 @@
             opacity: 0.5;
         }
 
-        /* Report Button & Modal */
         .report-button {
             position: absolute;
             top: 28px;
@@ -667,7 +662,6 @@
     <main class="main-content" id="homePage">
     <div class="container">
         @if(isset($query) && $query != '')
-            <!-- JIKA ADA PENCARIAN - HANYA TAMPILKAN HASIL PENCARIAN -->
             <div class="search-results-header">
                 <h2>
                     <i class="fas fa-search"></i> Hasil Pencarian: "{{ $query }}"
@@ -715,7 +709,6 @@
                 @endforelse
             </div>
         @else
-            <!-- JIKA TIDAK ADA PENCARIAN - TAMPILKAN POSTINGAN POPULER -->
             <h1 class="hall-of-shame-title">🔥 Postingan Populer Bulan Ini 🔥</h1>
             <p class="hall-of-shame-subtitle">Lihat konten yang paling banyak dibaca dan disukai oleh pengguna.</p>
 
@@ -780,10 +773,8 @@
 
                 <div class="post-story" id="postStory">Memuat konten...</div>
 
-                <!-- Like & komentar Actions -->
                 <div class="post-actions-detail mt-4 mb-4">
                     <div class="d-flex gap-3 align-items-center">
-                        <!-- Like Button -->
                         @auth
                         <button class="btn btn-outline-danger like-btn-detail" id="likeButtonDetail" data-post-id="">
                             <i class="fas fa-heart"></i>
@@ -795,7 +786,6 @@
                         </a>
                         @endauth
                         
-                        <!-- komentar Count Badge -->
                         <span class="badge bg-secondary">
                             <i class="fas fa-komentar"></i>
                             <span id="komentarsCountDetail">0</span> Komentar
@@ -805,14 +795,12 @@
 
                 <hr>
 
-                <!-- komentars Section -->
                 <div class="komentars-section-detail">
                     <h4 class="mb-4">
                         <i class="fas fa-komentars"></i> Komentar 
                         (<span id="totalkomentars">0</span>)
                     </h4>
                     
-                    <!-- komentar Form -->
                     @auth
                     <div class="komentar-form-wrapper mb-4">
                         <form id="komentarFormDetail" class="komentar-form-detail">
@@ -836,9 +824,7 @@
                     </div>
                     @endauth
                     
-                    <!-- komentars List -->
                     <div class="komentars-list-detail" id="komentarsListDetail">
-                        <!-- komentars akan dimuat via JavaScript -->
                         <div class="text-center py-4">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -1013,7 +999,6 @@
             const postId = detailPage.dataset.currentPostId;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            // Disable button saat loading
             submitReportBtn.disabled = true;
             submitReportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
             
@@ -1160,31 +1145,24 @@
 
         submitReportBtn.addEventListener('click', submitReport);
 
-
-
-        // ===== TAMBAHAN - Variable untuk tracking post ID =====
         let currentPostId = null;
 
-        // ===== DIUPDATE - Tambah load likes & komentars =====
         function showDetailPage(postId) {
-            currentPostId = postId; // TAMBAHAN: simpan post ID
+            currentPostId = postId; 
             
             detailPage.dataset.currentPostId = postId;
 
-            // Tampilkan loading
             homePage.style.display = 'none';
             detailPage.style.display = 'block';
             postTitle.textContent = 'Memuat...';
             postStory.textContent = 'Memuat konten...';
             window.scrollTo(0, 0);
             
-            // Set post ID ke like button (TAMBAHAN)
             const likeBtn = document.getElementById('likeButtonDetail');
             if (likeBtn) {
                 likeBtn.setAttribute('data-post-id', postId);
             }
             
-            // Fetch dari database
             fetch(`/hall-of-shame/posts/${postId}`)
                 .then(response => {
                     if (!response.ok) throw new Error('Post not found');
@@ -1231,7 +1209,6 @@
             
             if (!komentarsList) return;
             
-            // Show loading
             komentarsList.innerHTML = `
                 <div class="text-center py-4">
                     <div class="spinner-border text-primary" role="status">
@@ -1243,7 +1220,6 @@
             fetch(`/posts/${postId}/komentars`)
                 .then(res => res.json())
                 .then(data => {
-                    // ===== FIX - Update count terlebih dahulu =====
                     const komentarsCountEl = document.getElementById('komentarsCountDetail');
                     const totalkomentarsEl = document.getElementById('totalkomentars');
                     const count = data.komentars ? data.komentars.length : 0;
@@ -1372,14 +1348,12 @@
                         return;
                     }
                     
-                    // Update button state
                     if (data.liked) {
                         btn.classList.add('liked');
                     } else {
                         btn.classList.remove('liked');
                     }
                     
-                    // Update count
                     const countEl = document.getElementById('likesCountDetail');
                     if (countEl) {
                         countEl.textContent = data.likes_count;
@@ -1419,27 +1393,24 @@
                     }
                 })
                 .then(res => {
-                    console.log('Komentar response status:', res.status); // DEBUG
+                    console.log('Komentar response status:', res.status); 
                     if (!res.ok) {
                         return res.json().then(err => Promise.reject(err));
                     }
                     return res.json();
                 })
                 .then(data => {
-                    console.log('Komentar data:', data); // DEBUG
+                    console.log('Komentar data:', data); 
                     
                     if (data.error) {
                         alert(data.error);
                         return;
                     }
                     
-                    // Reload komentars
                     loadkomentars(currentPostId);
                     
-                    // Reset form
                     textarea.value = '';
                     
-                    // Show success message
                     const successMsg = document.createElement('div');
                     successMsg.className = 'alert alert-success alert-dismissible fade show mt-2';
                     successMsg.innerHTML = `
@@ -1457,7 +1428,6 @@
             });
         }
 
-        // ===== SISANYA TETAP SAMA - Tidak diubah =====
         document.addEventListener('click', function(e) {
             if (e.target.closest('.komentar-toggle-btn')) {
                 const btn = e.target.closest('.komentar-toggle-btn');

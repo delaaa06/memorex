@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class FeedbackController extends Controller
 {
-    // Submit feedback baru
     public function store(Request $request)
     {
         if (!Auth::check()) {
@@ -33,7 +32,6 @@ class FeedbackController extends Controller
 
         DB::beginTransaction();
         try {
-            // Simpan feedback
             $feedback = Feedback::create([
                 'user_id' => Auth::id(),
                 'rating' => $validated['rating'],
@@ -46,7 +44,6 @@ class FeedbackController extends Controller
                 'xp_earned' => 50
             ]);
 
-            // Tambah XP ke user
             $user = Auth::user();
             $user->increment('xp', 50);
 
@@ -69,7 +66,6 @@ class FeedbackController extends Controller
         }
     }
 
-    // Ambil feedback terbaru dari pengguna lain
     public function getRecent()
     {
         $feedbacks = Feedback::with('user:id,name,username,avatar')
@@ -81,7 +77,6 @@ class FeedbackController extends Controller
         return response()->json($feedbacks);
     }
 
-    // Ambil statistik feedback
     public function getStats()
     {
         $stats = [
@@ -90,14 +85,12 @@ class FeedbackController extends Controller
             'total_xp_earned' => Feedback::where('user_id', Auth::id())->sum('xp_earned'),
         ];
 
-        // Hitung ranking user berdasarkan XP
         $userRank = User::where('xp', '>', Auth::user()->xp)->count() + 1;
         $stats['user_rank'] = $userRank;
 
         return response()->json($stats);
     }
 
-    // Riwayat feedback user yang login
     public function getUserFeedbacks()
     {
         $feedbacks = Feedback::where('user_id', Auth::id())

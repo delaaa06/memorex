@@ -794,7 +794,6 @@
             </ul>
             
             <div class="tab-content" id="profileTabContent">
-                <!-- TAB POSTINGAN - DARI DATABASE -->
                 <div class="tab-pane fade show active" id="posts" role="tabpanel">
                     @forelse($user->posts as $post)
                         <div class="post-card" data-post-id="{{ $post->id }}">
@@ -822,10 +821,6 @@
                                     <i class="far fa-comment"></i> 
                                     <span class="komentar-count">{{ $post->komentars_count }}</span>
                                 </div>
-                                <!-- <div class="post-action">
-                                    <i class="far fa-eye"></i> 
-                                    <span>{{ $post->views ?? 0 }}</span>
-                                </div> -->
                             </div>
                         </div>
                     @empty
@@ -923,14 +918,12 @@
                         </small>
                     </div>
                     
-                    <!-- Preview Container -->
                     <div class="avatar-preview-container" id="avatarPreviewContainer">
                         <img src="{{ $user->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&size=200&background=667eea&color=fff' }}" 
                             id="avatarPreview" 
                             alt="Preview Avatar">
                     </div>
                     
-                    <!-- Loading Indicator -->
                     <div class="avatar-loading d-none" id="avatarLoading">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -992,13 +985,11 @@
                         <input type="text" class="form-control" id="usernameInput" value="{{ $user->username ?? $user->name }}">
                     </div>
 
-                    <!-- 2. INPUT NAME -->
                     <div class="mb-3">
                         <label for="nameInput" class="form-label">Nama Lengkap</label>
                         <input type="text" class="form-control" id="nameInput" value="{{ $user->name }}">
                     </div>
 
-                    <!-- 3. INPUT BIO -->
                     <div class="mb-3">
                         <label for="bioInput" class="form-label">Bio</label>
                         <textarea class="form-control" id="bioInput" rows="3">{{ $user->bio ?? '' }}</textarea>
@@ -1015,15 +1006,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ===== DEBUG & FIX EDIT PROFILE =====
         document.addEventListener('DOMContentLoaded', function() {
             console.log('=== DEBUG: Page Loaded ===');
             
-            // Check CSRF Token
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             console.log('CSRF Token:', csrfToken ? 'Found ✓' : 'NOT FOUND ✗');
             
-            // Check Save Button
             const saveProfileBtn = document.getElementById('saveProfile');
             console.log('Save Button:', saveProfileBtn ? 'Found ✓' : 'NOT FOUND ✗');
             
@@ -1032,7 +1020,6 @@
                 return;
             }
             
-            // Check Input Fields
             const usernameInput = document.getElementById('usernameInput');
             const nameInput = document.getElementById('nameInput');
             const bioInput = document.getElementById('bioInput');
@@ -1041,19 +1028,16 @@
             console.log('Name Input:', nameInput ? 'Found ✓' : 'NOT FOUND ✗');
             console.log('Bio Input:', bioInput ? 'Found ✓' : 'NOT FOUND ✗');
             
-            // Add Click Event
             saveProfileBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
                 console.log('=== DEBUG: Button Clicked ===');
                 
-                // Validate Elements
                 if (!usernameInput || !nameInput || !bioInput) {
                     console.error('❌ Input fields tidak lengkap!');
                     alert('Error: Form tidak lengkap. Silakan refresh halaman.');
                     return;
                 }
                 
-                // Get Values
                 const username = usernameInput.value.trim();
                 const name = nameInput.value.trim();
                 const bio = bioInput.value.trim();
@@ -1062,7 +1046,6 @@
                 console.log('Name:', name);
                 console.log('Bio:', bio);
                 
-                // Validate
                 if (!username) {
                     alert('Username tidak boleh kosong');
                     usernameInput.focus();
@@ -1075,14 +1058,12 @@
                     return;
                 }
                 
-                // Check CSRF Token
                 if (!csrfToken) {
                     console.error('❌ CSRF Token tidak ditemukan!');
                     alert('Error: CSRF Token tidak ditemukan. Silakan refresh halaman.');
                     return;
                 }
                 
-                // Loading State
                 const btn = this;
                 const originalHTML = btn.innerHTML;
                 btn.disabled = true;
@@ -1114,7 +1095,6 @@
                     if (data.success) {
                         console.log('✅ Update berhasil!');
                         
-                        // Update UI
                         const usernameDisplay = document.getElementById('usernameDisplay');
                         const userBio = document.getElementById('userBio');
                         
@@ -1128,7 +1108,6 @@
                             console.log('Updated userBio');
                         }
                         
-                        // Close Modal
                         const modalElement = document.getElementById('editProfileModal');
                         const modalInstance = bootstrap.Modal.getInstance(modalElement);
                         
@@ -1136,7 +1115,6 @@
                             modalInstance.hide();
                             console.log('Modal closed via Bootstrap');
                         } else {
-                            // Manual close
                             modalElement.classList.remove('show');
                             modalElement.style.display = 'none';
                             document.body.classList.remove('modal-open');
@@ -1147,7 +1125,6 @@
                         
                         alert('✅ Profil berhasil diupdate!');
                         
-                        // Reload page untuk refresh data
                         setTimeout(() => {
                             window.location.reload();
                         }, 500);
@@ -1171,7 +1148,6 @@
     </script>
 
     <script>
-        // ===== CONFIGURATION =====
         const xpValues = {
             dailyLogin: 50,
             likePost: 5,
@@ -1542,7 +1518,6 @@
             const bannerModalEl = document.getElementById('bannerModal');
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             
-            // Check elements
             console.log('Elements check:');
             console.log('  Upload Input:', bannerUpload ? '✅' : '❌');
             console.log('  Save Button:', saveBannerBtn ? '✅' : '❌');

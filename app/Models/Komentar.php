@@ -9,7 +9,7 @@ class komentar extends Model
 {
     protected $table = 'komentar';
 
-    public $timestamps = false; // Karena pakai tgl_komen manual
+    public $timestamps = false; 
 
     protected $fillable = [
         'post_id',
@@ -27,13 +27,11 @@ class komentar extends Model
         'report_komen' => 'integer',
     ];
 
-    // Relationship with Post
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class, 'post_id');
     }
 
-    // Relationship with User
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

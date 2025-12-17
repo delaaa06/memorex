@@ -17,30 +17,25 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
         $request->validate([
             'title' => 'required|string|max:255',
             'story' => 'required|string',
             'category' => 'required|string',
             'datetime' => 'nullable|date',
             'visibility' => 'required|string',
-            'gambar' => 'required|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:81920', // max 80MB
+            'gambar' => 'required|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:81920', 
         ]);
 
-        // Handle file upload
         $gambarPath = null;
         
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             
-            // Generate unique filename
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             
-            // Store file in storage/app/public/posts
             $gambarPath = $file->storeAs('posts', $filename, 'public');
         }
 
-        // Create post
         Post::create([
             'user_id' => Auth::id(),
             'judul' => $request->title,
@@ -51,7 +46,6 @@ class PostController extends Controller
             'likes' => 0,
         ]);
 
-        // Redirect kembali ke halaman upload (blank page seperti requirement)
         return redirect()->route('upload');
 
         Activity::log(
@@ -69,13 +63,11 @@ class PostController extends Controller
 
     public function index()
     {
-        // Ambil semua post yang visible, urutkan dari yang terbaru
         $posts = Post::whereIn('visibilitas', ['public','anon'])
-                    ->with('user') // Eager load user relationship
+                    ->with('user') 
                     ->latest()
                     ->get();
         
-        // Split posts menjadi 2 bagian untuk swipe-left dan swipe-right
         $midpoint = ceil($posts->count() / 2);
         $leftPosts = $posts->take($midpoint);
         $rightPosts = $posts->skip($midpoint);

@@ -820,389 +820,11 @@
         </div>
     </footer>
 
-    <!-- <script>
-        let currentUserId = localStorage.getItem('currentUserId') || 'user123';
-        let userData = JSON.parse(localStorage.getItem(`user_${currentUserId}`)) || {};
-        let feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
-        let currentRating = 0;
-
-        const stars = document.querySelectorAll('.star');
-        const overallRatingValue = document.getElementById('overallRatingValue');
-        const ratingLabel = document.getElementById('ratingLabel');
-        const feedbackTitle = document.getElementById('feedbackTitle');
-        const feedbackText = document.getElementById('feedbackText');
-        const titleCount = document.getElementById('titleCount');
-        const textCount = document.getElementById('textCount');
-        const submitBtn = document.getElementById('submitFeedbackBtn');
-        const feedbackForm = document.getElementById('feedbackForm');
-        const successMessage = document.getElementById('successMessage');
-        const xpNotification = document.getElementById('xpNotification');
-        const xpNotificationText = document.getElementById('xpNotificationText');
-        const closeNotification = document.getElementById('closeNotification');
-
-        stars.forEach(star => {
-            star.addEventListener('click', function() {
-                const rating = parseInt(this.getAttribute('data-rating'));
-                currentRating = rating;
-                overallRatingValue.value = rating;
-                
-                stars.forEach((s, index) => {
-                    if (index < rating) {
-                        s.classList.add('active');
-                        s.textContent = '★';
-                    } else {
-                        s.classList.remove('active');
-                        s.textContent = '☆';
-                    }
-                });
-                
-                const labels = ['Sangat Buruk', 'Buruk', 'Cukup', 'Baik', 'Sangat Baik'];
-                ratingLabel.textContent = labels[rating - 1];
-                
-                validateForm();
-            });
-            
-            star.addEventListener('mouseover', function() {
-                const rating = parseInt(this.getAttribute('data-rating'));
-                stars.forEach((s, index) => {
-                    if (index < rating) {
-                        s.style.color = '#ffc107';
-                    } else {
-                        s.style.color = '#ddd';
-                    }
-                });
-            });
-            
-            star.addEventListener('mouseout', function() {
-                stars.forEach((s, index) => {
-                    if (index < currentRating) {
-                        s.style.color = '#ffc107';
-                    } else {
-                        s.style.color = '#ddd';
-                    }
-                });
-            });
-        });
-
-        feedbackTitle.addEventListener('input', function() {
-            const count = this.value.length;
-            titleCount.textContent = count;
-            titleCount.style.color = count > 100 ? '#dc3545' : '#666';
-            validateForm();
-        });
-
-        feedbackText.addEventListener('input', function() {
-            const count = this.value.length;
-            textCount.textContent = count;
-            textCount.style.color = count > 1000 ? '#dc3545' : '#666';
-            validateForm();
-        });
-
-        function validateForm() {
-            const titleValid = feedbackTitle.value.length >= 5 && feedbackTitle.value.length <= 100;
-            const textValid = feedbackText.value.length >= 50 && feedbackText.value.length <= 1000;
-            const ratingValid = currentRating > 0;
-            
-            const categories = document.querySelectorAll('.category-checkbox:checked');
-            const categoriesValid = categories.length > 0;
-            
-            submitBtn.disabled = !(titleValid && textValid && ratingValid && categoriesValid);
-            
-            if (!submitBtn.disabled) {
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Feedback & Dapatkan 50 XP!';
-            }
-        }
-
-        window.fillSuggestion = function(text) {
-            feedbackText.value = text;
-            feedbackText.dispatchEvent(new Event('input'));
-        };
-
-        feedbackForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (submitBtn.disabled) return;
-            
-            const categories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
-                .map(cb => cb.value);
-            
-            const feedbackData = {
-                id: Date.now(),
-                userId: currentUserId,
-                userName: document.getElementById('userName').value || 'Anonymous',
-                userEmail: document.getElementById('userEmail').value || '',
-                rating: currentRating,
-                title: feedbackTitle.value,
-                text: feedbackText.value,
-                categories: categories,
-                allowContact: document.getElementById('allowContact').checked,
-                timestamp: new Date().toISOString(),
-                xpAwarded: 50
-            };
-            
-            feedbacks.push(feedbackData);
-            localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
-            
-            awardXP(feedbackData.xpAwarded);
-            
-            showSuccessMessage();
-            
-            updateStatistics();
-            
-            resetForm();
-            
-            showXPNotification(feedbackData.xpAwarded);
-        });
-
-        function awardXP(amount) {
-            const userKey = `user_${currentUserId}`;
-            let userData = JSON.parse(localStorage.getItem(userKey)) || {
-                userId: currentUserId,
-                xp: 1000,
-                level: 1,
-                feedbackCount: 0
-            };
-            
-            userData.xp = (userData.xp || 0) + amount;
-            userData.feedbackCount = (userData.feedbackCount || 0) + 1;
-            
-            checkLevelUp(userData);
-            
-            localStorage.setItem(userKey, JSON.stringify(userData));
-            
-            if (typeof window.updateProfileDisplay === 'function') {
-                window.updateProfileDisplay();
-            }
-            
-            return userData;
-        }
-
-        function checkLevelUp(userData) {
-            const oldLevel = userData.level || 1;
-            const newLevel = Math.floor(userData.xp / 100) + 1;
-            
-            if (newLevel > oldLevel) {
-                userData.level = newLevel;
-                showLevelUpNotification(newLevel);
-            }
-        }
-
-        function showLevelUpNotification(level) {
-            const notification = document.createElement('div');
-            notification.className = 'xp-notification';
-            notification.innerHTML = `
-                <i class="fas fa-trophy"></i>
-                <span>Selamat! Anda naik ke Level ${level}!</span>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-            `;
-            
-            document.body.appendChild(notification);
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 5000);
-        }
-
-        function showSuccessMessage() {
-            successMessage.classList.add('show');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-check"></i> Feedback Terkirim!';
-            
-            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            setTimeout(() => {
-                successMessage.classList.remove('show');
-            }, 5000);
-        }
-
-        function showXPNotification(amount) {
-            xpNotificationText.textContent = `+${amount} XP untuk feedback Anda!`;
-            xpNotification.classList.add('show');
-            
-            setTimeout(() => {
-                xpNotification.classList.remove('show');
-            }, 5000);
-        }
-
-        closeNotification.addEventListener('click', function() {
-            xpNotification.classList.remove('show');
-        });
-
-        function updateStatistics() {
-            document.getElementById('totalFeedbacks').textContent = feedbacks.length;
-            
-            if (feedbacks.length > 0) {
-                const avgRating = (feedbacks.reduce((sum, fb) => sum + fb.rating, 0) / feedbacks.length).toFixed(1);
-                document.getElementById('averageRating').textContent = avgRating;
-            }
-            
-            const userFeedbacks = feedbacks.filter(fb => fb.userId === currentUserId);
-            const xpEarned = userFeedbacks.reduce((sum, fb) => sum + fb.xpAwarded, 0);
-            document.getElementById('xpEarned').textContent = xpEarned;
-            
-            const allUsers = {};
-            feedbacks.forEach(fb => {
-                allUsers[fb.userId] = (allUsers[fb.userId] || 0) + 1;
-            });
-            
-            const sortedUsers = Object.entries(allUsers).sort((a, b) => b[1] - a[1]);
-            const userRank = sortedUsers.findIndex(([userId]) => userId === currentUserId) + 1;
-            
-            if (userRank > 0) {
-                const rankSuffix = userRank === 1 ? 'st' : userRank === 2 ? 'nd' : userRank === 3 ? 'rd' : 'th';
-                document.getElementById('userRank').textContent = `${userRank}${rankSuffix}`;
-            }
-            
-            loadRecentFeedbacks();
-        }
-
-        function loadRecentFeedbacks() {
-            const container = document.getElementById('recentFeedbacks');
-            const recent = feedbacks.slice(-3).reverse();
-            
-            container.innerHTML = '';
-            
-            if (recent.length === 0) {
-                container.innerHTML = '<p class="text-muted text-center">Belum ada feedback</p>';
-                return;
-            }
-            
-            recent.forEach(fb => {
-                const card = document.createElement('div');
-                card.className = 'feedback-card';
-                
-                const date = new Date(fb.timestamp).toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric'
-                });
-                
-                let starsHtml = '';
-                for (let i = 1; i <= 5; i++) {
-                    starsHtml += i <= fb.rating ? '★' : '☆';
-                }
-                
-                card.innerHTML = `
-                    <div class="feedback-header">
-                        <div class="feedback-user">${fb.userName}</div>
-                        <div class="feedback-date">${date}</div>
-                    </div>
-                    <div class="feedback-content">
-                        <strong>${fb.title}</strong>
-                        <p class="mt-2">${fb.text.substring(0, 150)}${fb.text.length > 150 ? '...' : ''}</p>
-                    </div>
-                    <div class="feedback-rating">
-                        ${starsHtml}
-                    </div>
-                    <div class="mt-2">
-                        ${fb.categories.map(cat => `<span class="badge bg-primary me-1">${cat}</span>`).join('')}
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-        }
-
-        function resetForm() {
-            currentRating = 0;
-            overallRatingValue.value = 0;
-            stars.forEach(star => {
-                star.classList.remove('active');
-                star.textContent = '★';
-                star.style.color = '#ddd';
-            });
-            ratingLabel.textContent = 'Belum ada rating';
-            
-            feedbackForm.reset();
-            feedbackTitle.value = '';
-            feedbackText.value = '';
-            
-            titleCount.textContent = '0';
-            textCount.textContent = '0';
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Feedback & Dapatkan 50 XP!';
-            
-            document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!localStorage.getItem('currentUserId')) {
-                localStorage.setItem('currentUserId', 'user123');
-            }
-            
-            const userKey = `user_${currentUserId}`;
-            if (!localStorage.getItem(userKey)) {
-                const initialUserData = {
-                    userId: currentUserId,
-                    username: `User#${currentUserId.slice(-3)}`,
-                    xp: 1000,
-                    level: 10,
-                    feedbackCount: 0
-                };
-                localStorage.setItem(userKey, JSON.stringify(initialUserData));
-            }
-            
-            if (!localStorage.getItem('feedbacks')) {
-                const sampleFeedbacks = [
-                    {
-                        id: 1,
-                        userId: 'user456',
-                        userName: 'Budi',
-                        rating: 5,
-                        title: 'Platform yang sangat menghibur!',
-                        text: 'Saya suka sekali dengan konsepnya. Membaca cerita-cerita absurd orang lain bikin hari saya lebih cerah. UI-nya juga lucu dan menarik.',
-                        categories: ['user-experience', 'design'],
-                        timestamp: new Date(Date.now() - 86400000).toISOString(),
-                        xpAwarded: 50
-                    },
-                    {
-                        id: 2,
-                        userId: 'user_dela',
-                        userName: 'Dela',
-                        rating: 4,
-                        title: 'Saran untuk fitur filter',
-                        text: 'Bisa ditambahkan fitur filter berdasarkan kategori atau trending? Biar lebih mudah cari cerita yang sesuai mood.',
-                        categories: ['features', 'suggestions'],
-                        timestamp: new Date(Date.now() - 172800000).toISOString(),
-                        xpAwarded: 50
-                    }
-                ];
-                localStorage.setItem('feedbacks', JSON.stringify(sampleFeedbacks));
-                feedbacks = sampleFeedbacks;
-            }
-            
-            updateStatistics();
-            
-            document.querySelectorAll('.category-checkbox').forEach(cb => {
-                cb.addEventListener('change', validateForm);
-            });
-            
-            feedbackTitle.addEventListener('input', validateForm);
-            feedbackText.addEventListener('input', validateForm);
-            
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
-            tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-        });
-
-        window.addEventListener('storage', function(e) {
-            if (e.key === `user_${currentUserId}`) {
-                updateStatistics();
-            }
-        });
-    </script> -->
-
     <script>
-        // Get CSRF token from meta tag
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
-        // State variables
         let currentRating = 0;
 
-        // DOM Elements
         const stars = document.querySelectorAll('.star');
         const overallRatingValue = document.getElementById('overallRatingValue');
         const ratingLabel = document.getElementById('ratingLabel');
@@ -1217,15 +839,12 @@
         const xpNotificationText = document.getElementById('xpNotificationText');
         const closeNotification = document.getElementById('closeNotification');
 
-        // ===== STAR RATING FUNCTIONALITY =====
         stars.forEach(star => {
-            // Click handler
             star.addEventListener('click', function() {
                 const rating = parseInt(this.getAttribute('data-rating'));
                 currentRating = rating;
                 overallRatingValue.value = rating;
                 
-                // Update star display
                 stars.forEach((s, index) => {
                     if (index < rating) {
                         s.classList.add('active');
@@ -1236,14 +855,12 @@
                     }
                 });
                 
-                // Update label
                 const labels = ['Sangat Buruk', 'Buruk', 'Cukup', 'Baik', 'Sangat Baik'];
                 ratingLabel.textContent = labels[rating - 1];
                 
                 validateForm();
             });
             
-            // Hover effect
             star.addEventListener('mouseover', function() {
                 const rating = parseInt(this.getAttribute('data-rating'));
                 stars.forEach((s, index) => {
@@ -1266,7 +883,6 @@
             });
         });
 
-        // ===== CHARACTER COUNTER =====
         feedbackTitle.addEventListener('input', function() {
             const count = this.value.length;
             titleCount.textContent = count;
@@ -1281,7 +897,6 @@
             validateForm();
         });
 
-        // ===== FORM VALIDATION =====
         function validateForm() {
             const titleValid = feedbackTitle.value.length >= 5 && feedbackTitle.value.length <= 100;
             const textValid = feedbackText.value.length >= 50 && feedbackText.value.length <= 1000;
@@ -1297,28 +912,23 @@
             }
         }
 
-        // Add validation listener to category checkboxes
         document.querySelectorAll('.category-checkbox').forEach(cb => {
             cb.addEventListener('change', validateForm);
         });
 
-        // ===== SUGGESTION CLICK =====
         window.fillSuggestion = function(text) {
             feedbackText.value = text;
             feedbackText.dispatchEvent(new Event('input'));
         };
 
-        // ===== FORM SUBMISSION (LARAVEL API) =====
         feedbackForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (submitBtn.disabled) return;
             
-            // Disable button and show loading
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
             
-            // Collect form data
             const categories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
                 .map(cb => cb.value);
             
@@ -1333,7 +943,6 @@
             };
             
             try {
-                // Send to Laravel backend
                 const response = await fetch('/feedback', {
                     method: 'POST',
                     headers: {
@@ -1347,20 +956,15 @@
                 const result = await response.json();
                 
                 if (response.ok && result.success) {
-                    // Show success message
                     showSuccessMessage();
                     
-                    // Show XP notification
                     showXPNotification(result.xp_earned);
                     
-                    // Update statistics
                     await loadStats();
                     await loadRecentFeedbacks();
                     
-                    // Reset form
                     resetForm();
                 } else {
-                    // Handle validation errors
                     throw new Error(result.message || 'Gagal mengirim feedback');
                 }
                 
@@ -1372,7 +976,6 @@
             }
         });
 
-        // ===== SHOW SUCCESS MESSAGE =====
         function showSuccessMessage() {
             successMessage.classList.add('show');
             successMessage.style.display = 'block';
@@ -1384,7 +987,6 @@
             }, 5000);
         }
 
-        // ===== SHOW XP NOTIFICATION =====
         function showXPNotification(amount) {
             xpNotificationText.textContent = `+${amount} XP untuk feedback Anda!`;
             xpNotification.classList.add('show');
@@ -1398,7 +1000,6 @@
             xpNotification.classList.remove('show');
         });
 
-        // ===== RESET FORM =====
         function resetForm() {
             currentRating = 0;
             overallRatingValue.value = 0;
@@ -1424,7 +1025,6 @@
             document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
         }
 
-        // ===== LOAD STATISTICS FROM API =====
         async function loadStats() {
             try {
                 const response = await fetch('/feedback/stats', {
@@ -1446,7 +1046,6 @@
             }
         }
 
-        // ===== LOAD RECENT FEEDBACKS FROM API =====
         async function loadRecentFeedbacks() {
             try {
                 const response = await fetch('/feedback/recent', {
@@ -1498,13 +1097,10 @@
             }
         }
 
-        // ===== INITIALIZE ON PAGE LOAD =====
         document.addEventListener('DOMContentLoaded', function() {
-            // Load initial data
             loadStats();
             loadRecentFeedbacks();
             
-            // Initial validation state
             validateForm();
         });
     </script>
