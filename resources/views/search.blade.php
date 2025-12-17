@@ -1197,12 +1197,6 @@
                     postCategory.textContent = post.kategori;
                     postStory.textContent = post.isi;
 
-                    // if (data.visibilitas === 'anon') {
-                    //     postUsername.textContent = 'Anonymous';
-                    // } else {
-                    //     postUsername.textContent = post.user;
-                    // }
-                    
                     if (post.gambar) {
                         postMedia.style.display = 'block';
                         postMedia.src = `/storage/${post.gambar}`;
@@ -1211,18 +1205,14 @@
                         postMedia.style.display = 'none';
                     }
                     
-                    // ===== FIX - Update likes count dari likesCount() bukan likes_count =====
                     const likesCountEl = document.getElementById('likesCountDetail');
                     const komentarsCountEl = document.getElementById('komentarsCountDetail');
                     const totalkomentarsEl = document.getElementById('totalkomentars');
                     
-                    // Update likes - pakai post.likes karena itu dari database
                     if (likesCountEl) likesCountEl.textContent = post.likes || 0;
                     
-                    // Load komentars untuk update count
                     loadkomentars(postId);
                     
-                    // Update like button state
                     if (likeBtn && post.is_liked) {
                         likeBtn.classList.add('liked');
                     } else if (likeBtn) {
@@ -1236,7 +1226,6 @@
                 });
         }
 
-        // ===== FIX - Fungsi load komentars dengan update count =====
         function loadkomentars(postId) {
             const komentarsList = document.getElementById('komentarsListDetail');
             
@@ -1347,14 +1336,13 @@
             }
         });
 
-        // ===== FIX - Handle Like Button dengan console log =====
         document.addEventListener('click', function(e) {
             if (e.target.closest('.like-btn-detail')) {
                 e.preventDefault();
                 const btn = e.target.closest('.like-btn-detail');
                 const postId = btn.dataset.postId;
                 
-                console.log('Like button clicked, postId:', postId); // DEBUG
+                console.log('Like button clicked, postId:', postId); 
                 
                 if (!postId) {
                     console.error('No post ID found');
@@ -1370,14 +1358,14 @@
                     }
                 })
                 .then(res => {
-                    console.log('Like response status:', res.status); // DEBUG
+                    console.log('Like response status:', res.status); 
                     if (!res.ok) {
                         return res.json().then(err => Promise.reject(err));
                     }
                     return res.json();
                 })
                 .then(data => {
-                    console.log('Like data:', data); // DEBUG
+                    console.log('Like data:', data); 
                     
                     if (data.error) {
                         alert(data.error);
@@ -1404,7 +1392,6 @@
             }
         });
 
-        // ===== FIX - Handle komentar Form Submit dengan console log =====
         const komentarForm = document.getElementById('komentarFormDetail');
         if (komentarForm) {
             komentarForm.addEventListener('submit', function(e) {

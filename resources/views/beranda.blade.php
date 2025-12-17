@@ -776,30 +776,6 @@
         </div>
     </main>
 
-    <!-- <main class="content detail-page" id="detailPage">
-         <div class="post-container">
-            <button class="report-button" id="reportButton">
-                <i class="fas fa-flag"></i> Report
-            </button>
-
-            <a href="#" class="back-button" id="backButton">
-                <i class="fas fa-arrow-left"></i> Kembali
-            </a>
-
-            <h1 class="post-title" id="postTitle"></h1>
-
-            <div class="post-info">
-                Diposting pada: <b id="postDate"></b>
-            </div>
-
-            <div class="post-category" id="postCategory"></div>
-
-            <img src="" class="post-media" id="postMedia" alt="Media Postingan" style="display: none;">
-
-            <div class="post-story" id="postStory"></div>
-        </div>
-    </main> -->
-
     <main class="main-content detail-page" id="detailPage" style="display: none;">
         <div class="container">
             <div class="post-container">
@@ -1012,40 +988,7 @@
             const cards = document.querySelectorAll('.card');
             const detailPage = document.getElementById('detailPage');
             const backButton = document.getElementById('backButton');
-            
-        //     cards.forEach(card => {
-        //         card.addEventListener('click', function() {
-        //             const postId = this.dataset.postId;
-        //             loadPostDetail(postId);
-        //         });
-        //     });
-            
-        //     async function loadPostDetail(postId) {
-        //         try {
-        //             const response = await fetch(`/posts/${postId}`);
-        //             const post = await response.json();
-                    
-        //             document.getElementById('postTitle').textContent = post.judul;
-        //             document.getElementById('postDate').textContent = post.formatted_date;
-        //             document.getElementById('postCategory').textContent = `Kategori: ${post.kategori}`;
-        //             document.getElementById('postStory').textContent = post.isi;
-                    
-        //             const postMedia = document.getElementById('postMedia');
-        //             if (post.gambar) {
-        //                 postMedia.src = `/storage/${post.gambar}`;
-        //                 postMedia.style.display = 'block';
-        //             } else {
-        //                 postMedia.style.display = 'none';
-        //             }
-                    
-        //             // Tampilkan detail page
-        //             document.querySelector('.content-base').style.display = 'none';
-        //             detailPage.style.display = 'block';
-        //         } catch (error) {
-        //             console.error('Error loading post:', error);
-        //         }
-        //     }
-            
+
             backButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 detailPage.style.display = 'none';
@@ -1438,27 +1381,7 @@
                 });
             }
         });
-
-        //         if (post.gambar) {
-        //             postMedia.style.display = 'block';
-        //             postMedia.src = `/storage/${post.gambar}`;
-        //             postMedia.alt = post.judul;
-        //         } else {
-        //             postMedia.style.display = 'none';
-        //         }
-                
-        //         detailPage.dataset.currentPostId = postId;
-        //         window.scrollTo(0, 0);
-        //     })
-        //     .catch(error => {
-        //         console.error('Error loading post:', error);
-        //         alert('Postingan tidak ditemukan!');
-        //         showHomePage();
-        //     });
-        // }
-
-
-
+        
         function showHomePage() {
             detailPage.style.display = 'none';
             homePage.style.display = 'block';

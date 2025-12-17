@@ -986,16 +986,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- <div class="mb-3">
-                        <label for="nameInput" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="nameInput" value="{{$user->name}}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="bioInput" class="form-label">Bio</label>
-                        <textarea class="form-control" id="bioInput" rows="3">{{$user->bio}}</textarea>
-                    </div> -->
-
-                    <!-- 1. INPUT USERNAME -->
+                    
                     <div class="mb-3">
                         <label for="usernameInput" class="form-label">Username</label>
                         <input type="text" class="form-control" id="usernameInput" value="{{ $user->username ?? $user->name }}">
@@ -1191,8 +1182,6 @@
             editProfile: 5
         };
 
-        // Get CSRF Token
-        // const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
         function getCsrfToken() {
             const metaToken = document.querySelector('meta[name="csrf-token"]');
@@ -1200,7 +1189,6 @@
                 return metaToken.getAttribute('content');
             }
             
-            // Fallback: coba dari input hidden
             const inputToken = document.querySelector('input[name="_token"]');
             if (inputToken) {
                 return inputToken.value;
@@ -1213,7 +1201,6 @@
         const csrfToken = getCsrfToken();
 
 
-        // ===== XP NOTIFICATION =====
         function showXpNotification(xpAmount, message) {
             const notification = document.getElementById('xpNotification');
             const notificationText = document.getElementById('xpNotificationText');
@@ -1228,7 +1215,6 @@
             }
         }
 
-        // ===== ADD XP TO DATABASE =====
         async function addXP(amount, activity) {
 
             if (!csrfToken) {
@@ -1259,11 +1245,6 @@
                 if (data.success) {
                     showXpNotification(amount, activity);
                     
-                    // // Update UI
-                    // document.getElementById('currentXP').textContent = data.user.xp;
-                    // document.getElementById('currentLevel').textContent = data.user.level;
-                    
-                    // Update UI
                     const currentXPEl = document.getElementById('currentXP');
                     const currentLevelEl = document.getElementById('currentLevel');
                     
@@ -1271,10 +1252,8 @@
                     if (currentLevelEl) currentLevelEl.textContent = data.user.level;
                     
 
-                    // Update XP Progress Bar
                     updateXPProgressBar(data.user.xp, data.user.level);
                     
-                    // Check level up
                     if (data.levelUp) {
                         showXpNotification(0, `Selamat! Anda naik ke level ${data.user.level}`);
                     }
@@ -1284,7 +1263,6 @@
             }
         }
 
-        // ===== UPDATE XP PROGRESS BAR =====
         function updateXPProgressBar(currentXp, level) {
             const NextLevel = level + 1;
             const maxXpForLevel = level * 1000;
@@ -1304,7 +1282,6 @@
             }
         }
 
-        // ===== ADD ACTIVITY =====
         function addActivity(text, icon, color) {
             const activityTab = document.getElementById('activity');
             if (!activityTab) return;
@@ -1320,12 +1297,10 @@
             activityTab.insertBefore(activityItem, activityTab.firstChild);
         }
 
-        // ===== FIX 3: DAILY LOGIN WITH AUTO XP =====
         document.getElementById('dailyLoginBtn')?.addEventListener('click', async function() {
             const btn = this;
             const originalHTML = btn.innerHTML;
             
-            // Loading state
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Memproses...';
             
@@ -1342,24 +1317,19 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    // ⭐ ADD XP OTOMATIS
                     await addXP(xpValues.dailyLogin, "Login harian");
                     
-                    // Add activity
                     addActivity("Anda mengklaim XP login harian", "fas fa-calendar-day", "text-primary");
                     
-                    // Update login streak
                     const loginStreakEl = document.getElementById('loginStreak');
                     if (loginStreakEl) {
                         loginStreakEl.textContent = data.loginStreak;
                     }
                     
-                    // Success state
                     btn.classList.remove('daily-login-btn');
                     btn.classList.add('btn-secondary');
                     btn.innerHTML = '<i class="fas fa-check me-2"></i> XP Login Harian Sudah Diklaim';
                     
-                    // Show success alert
                     const alert = document.createElement('div');
                     alert.className = 'alert alert-success alert-dismissible fade show mt-3';
                     alert.innerHTML = `
@@ -1382,16 +1352,13 @@
             }
         });
 
-        // ===== POST INTERACTIONS =====
         document.addEventListener('click', function(e) {
-            // LIKE POST
             if (e.target.closest('.like-btn')) {
                 const likeBtn = e.target.closest('.like-btn');
                 const postId = likeBtn.getAttribute('data-post-id');
                 likePost(postId, likeBtn);
             }
 
-            // COMMENT POST
             if (e.target.closest('.komentar-btn')) {
                 const komentarBtn = e.target.closest('.komentar-btn');
                 const postId = komentarBtn.getAttribute('data-post-id');
@@ -1399,7 +1366,6 @@
             }
         });
 
-        // ===== LIKE POST FUNCTION =====
         async function likePost(postId, likeBtn) {
             try {
                 const response = await fetch(`/posts/${postId}/like`, {
@@ -1426,7 +1392,6 @@
                         await addXP(xpValues.likePost, "Menyukai postingan");
                         addActivity("Anda menyukai sebuah postingan", "fas fa-heart", "text-danger");
                         
-                        // Update stats
                         const likeCountStat = document.getElementById('likeCount');
                         if (likeCountStat) {
                             likeCountStat.textContent = parseInt(likeCountStat.textContent || 0) + 1;
@@ -1438,7 +1403,6 @@
                             likeCount.textContent = Math.max(0, parseInt(likeCount.textContent || 0) - 1);
                         }
                         
-                        // Update stats
                         const likeCountStat = document.getElementById('likeCount');
                         if (likeCountStat) {
                             likeCountStat.textContent = Math.max(0, parseInt(likeCountStat.textContent || 0) - 1);
@@ -1450,7 +1414,6 @@
             }
         }
 
-        // ===== COMMENT POST FUNCTION =====
         async function komentarPost(postId, komentarBtn) {
             const komentar = prompt("Tulis komentar Anda:");
             if (!komentar || !komentar.trim()) return;
@@ -1479,7 +1442,6 @@
                     await addXP(xpValues.komentarPost, "Mengomentari postingan");
                     addActivity("Anda mengomentari sebuah postingan", "fas fa-comment", "text-info");
                     
-                    // Update stats
                     const komentarCountStat = document.getElementById('komentarCount');
                     if (komentarCountStat) {
                         komentarCountStat.textContent = parseInt(komentarCountStat.textContent || 0) + 1;
@@ -1493,7 +1455,6 @@
             }
         }
 
-        // ===== LOGOUT =====
         document.getElementById('logoutBtn')?.addEventListener('click', function() {
             if (confirm('Apakah Anda yakin ingin logout?')) {
                 window.location.href = '{{ route("login") }}';
@@ -1503,7 +1464,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Profile page loaded');
             
-            // Update XP progress bar on load
             const currentXp = parseInt(document.getElementById('currentXP')?.textContent || 0);
             const currentLevel = parseInt(document.getElementById('currentLevel')?.textContent || 1);
             updateXPProgressBar(currentXp, currentLevel);
@@ -1520,7 +1480,6 @@
                 const btn = this;
                 const originalHTML = btn.innerHTML;
                 
-                // Loading state
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Memproses...';
                 
@@ -1537,7 +1496,6 @@
                     const data = await response.json();
                     
                     if (data.success) {
-                        // Update XP dan Level langsung dari response
                         const currentXPEl = document.getElementById('currentXP');
                         const currentLevelEl = document.getElementById('currentLevel');
                         const loginStreakEl = document.getElementById('loginStreak');
@@ -1546,18 +1504,14 @@
                         if (currentLevelEl) currentLevelEl.textContent = data.user.level;
                         if (loginStreakEl) loginStreakEl.textContent = data.loginStreak;
                         
-                        // Update progress bar
                         updateXPProgressBar(data.user.xp, data.user.level);
                         
-                        // Show notification
                         showXpNotification(50, "Login harian");
                         
-                        // Success state
                         btn.classList.remove('daily-login-btn');
                         btn.classList.add('btn-secondary');
                         btn.innerHTML = '<i class="fas fa-check me-2"></i> XP Login Harian Sudah Diklaim';
                         
-                        // Show level up if applicable
                         if (data.levelUp) {
                             setTimeout(() => {
                                 showXpNotification(0, `Selamat! Anda naik ke level ${data.user.level}`);
@@ -1601,30 +1555,24 @@
                 return;
             }
             
-            // Fix modal on show
             bannerModalEl.addEventListener('show.bs.modal', function() {
                 console.log('🔓 Modal opening...');
-                // Remove any stuck aria-hidden
                 this.removeAttribute('aria-hidden');
                 this.setAttribute('aria-modal', 'true');
             });
             
-            // Fix modal on shown
             bannerModalEl.addEventListener('shown.bs.modal', function() {
                 console.log('✅ Modal opened');
-                // Ensure buttons are clickable
                 saveBannerBtn.disabled = false;
                 saveBannerBtn.style.pointerEvents = 'auto';
             });
             
-            // Preview on file select
             bannerUpload.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 console.log('📁 File selected:', file?.name || 'None');
                 
                 if (!file) return;
                 
-                // Validate
                 const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
                 if (!validTypes.includes(file.type)) {
                     alert('❌ Format file tidak didukung!');
@@ -1640,7 +1588,6 @@
                 
                 console.log('✅ Valid:', (file.size/1024).toFixed(2), 'KB');
                 
-                // Preview
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     bannerPreview.src = e.target.result;
@@ -1649,7 +1596,6 @@
                 reader.readAsDataURL(file);
             });
             
-            // Save with pointer events fix
             saveBannerBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1691,19 +1637,16 @@
                     if (data.success) {
                         console.log('✅ SUCCESS!');
                         
-                        // Update UI
                         const profileBanner = document.getElementById('profileBanner');
                         if (profileBanner) {
                             profileBanner.style.backgroundImage = `url('${data.banner}')`;
                         }
                         
-                        // Force close modal
                         const modal = bootstrap.Modal.getInstance(bannerModalEl);
                         if (modal) {
                             modal.hide();
                         }
                         
-                        // Manual cleanup
                         bannerModalEl.classList.remove('show');
                         bannerModalEl.style.display = 'none';
                         bannerModalEl.setAttribute('aria-hidden', 'true');
@@ -1732,7 +1675,6 @@
                 }
             });
             
-            // Manual close button
             const closeBtn = document.getElementById('closeBannerModal');
             const cancelBtn = document.getElementById('cancelBannerBtn');
             
@@ -1744,7 +1686,6 @@
                         const modal = bootstrap.Modal.getInstance(bannerModalEl);
                         if (modal) modal.hide();
                         
-                        // Force cleanup
                         setTimeout(() => {
                             bannerModalEl.classList.remove('show');
                             bannerModalEl.style.display = 'none';
@@ -1765,7 +1706,6 @@
     </script>
 
     <script>
-        // ===== AVATAR UPLOAD SYSTEM =====
         document.addEventListener('DOMContentLoaded', function() {
             console.log('=== AVATAR UPLOAD INIT ===');
             
@@ -1776,7 +1716,6 @@
             const avatarLoading = document.getElementById('avatarLoading');
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             
-            // Check elements
             console.log('Elements check:');
             console.log('  Upload Input:', avatarUpload ? '✅' : '❌');
             console.log('  Save Button:', saveAvatarBtn ? '✅' : '❌');
@@ -1789,7 +1728,6 @@
                 return;
             }
             
-            // Fix modal on show
             avatarModalEl.addEventListener('show.bs.modal', function() {
                 console.log('🔓 Avatar modal opening...');
                 this.removeAttribute('aria-hidden');
@@ -1802,14 +1740,12 @@
                 saveAvatarBtn.style.pointerEvents = 'auto';
             });
             
-            // Preview on file select
             avatarUpload.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 console.log('📁 Avatar file selected:', file?.name || 'None');
                 
                 if (!file) return;
                 
-                // Validate file type
                 const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
                 if (!validTypes.includes(file.type)) {
                     alert('❌ Format file tidak didukung! Gunakan JPG, PNG, atau GIF.');
@@ -1817,7 +1753,6 @@
                     return;
                 }
                 
-                // Validate file size (2MB)
                 if (file.size > 2 * 1024 * 1024) {
                     alert('❌ Ukuran file terlalu besar! Maksimal 2MB.');
                     this.value = '';
@@ -1826,13 +1761,11 @@
                 
                 console.log('✅ Valid:', (file.size/1024).toFixed(2), 'KB');
                 
-                // Show preview
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     avatarPreview.src = e.target.result;
                     console.log('✅ Avatar preview updated');
                     
-                    // Add animation
                     avatarPreview.style.animation = 'fadeIn 0.3s ease';
                 };
                 reader.onerror = () => {
@@ -1842,7 +1775,6 @@
                 reader.readAsDataURL(file);
             });
             
-            // Save avatar
             saveAvatarBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1866,7 +1798,6 @@
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Mengupload...';
                 
-                // Show loading
                 if (avatarLoading) {
                     avatarLoading.classList.remove('d-none');
                 }
@@ -1895,29 +1826,24 @@
                         console.log('✅ AVATAR UPLOADED!');
                         console.log('   New URL:', data.avatar);
                         
-                        // Update all avatar instances
                         const profileImg = document.getElementById('profileImg');
                         if (profileImg) {
                             profileImg.src = data.avatar;
                             console.log('✅ Main avatar updated');
                         }
                         
-                        // Update avatar in posts if exists
                         const postAvatars = document.querySelectorAll('.post-avatar');
                         postAvatars.forEach(avatar => {
                             avatar.src = data.avatar;
                         });
                         
-                        // Hide loading
                         if (avatarLoading) {
                             avatarLoading.classList.add('d-none');
                         }
                         
-                        // Close modal
                         const modal = bootstrap.Modal.getInstance(avatarModalEl);
                         if (modal) modal.hide();
                         
-                        // Manual cleanup
                         avatarModalEl.classList.remove('show');
                         avatarModalEl.style.display = 'none';
                         avatarModalEl.setAttribute('aria-hidden', 'true');
@@ -1930,27 +1856,22 @@
                         document.body.style.overflow = '';
                         document.body.style.paddingRight = '';
                         
-                        // Success notification
                         alert('✅ Foto profil berhasil diubah!');
                         
-                        // Add XP if function exists
                         if (typeof addXP === 'function') {
                             await addXP(10, "Mengubah foto profil");
                         }
                         
-                        // Add activity if function exists
                         if (typeof addActivity === 'function') {
                             addActivity("Anda mengubah foto profil", "fas fa-camera", "text-info");
                         }
                         
-                        // Reload page
                         setTimeout(() => location.reload(), 500);
                         
                     } else {
                         console.error('❌ Upload failed:', data.message);
                         alert(data.message || 'Gagal mengubah foto profil');
                         
-                        // Hide loading
                         if (avatarLoading) {
                             avatarLoading.classList.add('d-none');
                         }
@@ -1959,7 +1880,6 @@
                     console.error('❌ Error:', error);
                     alert('Terjadi kesalahan: ' + error.message);
                     
-                    // Hide loading
                     if (avatarLoading) {
                         avatarLoading.classList.add('d-none');
                     }
@@ -1969,7 +1889,6 @@
                 }
             });
             
-            // Manual close buttons
             const closeBtn = document.getElementById('closeAvatarModal');
             const cancelBtn = document.getElementById('cancelAvatarBtn');
             
@@ -1981,7 +1900,6 @@
                         const modal = bootstrap.Modal.getInstance(avatarModalEl);
                         if (modal) modal.hide();
                         
-                        // Force cleanup
                         setTimeout(() => {
                             avatarModalEl.classList.remove('show');
                             avatarModalEl.style.display = 'none';
@@ -2000,7 +1918,6 @@
             console.log('=== AVATAR UPLOAD READY ===');
         });
 
-        // Add CSS animation
         const style = document.createElement('style');
         style.textContent = `
             @keyframes fadeIn {
