@@ -69,3 +69,5 @@ Logout:
 ●	Pilih "Logout"
 
 Tampilan website:
+1. Tampilan beranda
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/beranda.jpeg)
