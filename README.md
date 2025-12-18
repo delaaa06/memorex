@@ -26,14 +26,14 @@ Buka browser  (Google Chrome, Mozilla Firefox, Safari, dll.) lalu ketik alamat w
 5.	Membuat Postingan Pertama
 ●	Klik menu "Make a Memory"
 ●	Pilih jenis postingan:
-1)	Publik (semua orang bisa lihat)
-2)	Anonim (nama disembunyikan)
-3)	Privat (hanya Anda yang lihat)
+a)	Publik (semua orang bisa lihat)
+b)	Anonim (nama disembunyikan)
+c)	Privat (hanya Anda yang lihat)
 ●	Isi konten postingan:
-1)	Judul yang menarik
-2)	Deskripsi pengalaman/momen Anda
-3)	(Opsional) Upload gambar/video
-4)	Klik "Publish" atau "Bagikan"
+a)	Judul yang menarik
+b)	Deskripsi pengalaman/momen Anda
+c)	(Opsional) Upload gambar/video
+d)	Klik "Publish" atau "Bagikan"
 
 6.	Mengakses Fitur Khusus
 Hall of Shame:
@@ -102,6 +102,7 @@ Tampilan aktivitas
 ![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/aktivitas.jpeg)
 
 Tampilan feedback
+
 ![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/feedback.jpeg)
 
 Tampilan support
