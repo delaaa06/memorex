@@ -69,5 +69,43 @@ Logout:
 ●	Pilih "Logout"
 
 Tampilan website:
-1. Tampilan beranda
+Tampilan registrasi
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/regis_step_1.jpeg)
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/regis_step_2.jpeg)
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/regis_step_3.jpeg)
+
+Tampilan login
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/login.jpeg)
+
+Tampilan beranda
 ![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/beranda.jpeg)
+
+Tampilan make a memory
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/unggah_postingan.jpeg)
+
+Tampilan hall of shame
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/postingan_populer.jpeg)
+
+Tampilan search
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/search.jpeg)
+
+Tampilan detail postingan
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/detail_postingan.jpeg)
+
+Tampilan profile
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/profile.jpeg)
+
+Tampilan postingan
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/postingan.jpeg)
+
+Tampilan aktivitas
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/aktivitas.jpeg)
+
+Tampilan feedback
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/feedback.jpeg)
+
+Tampilan support
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/support.jpeg)
+
+Tampilan saweria
+![alt text](https://github.com/delaaa06/memorex/blob/main/Tampilan%20MemoreX/saweria.jpeg)
